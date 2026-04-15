@@ -1,0 +1,2282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Karka · AI Maths Companion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+  <style>
+    :root{
+      --bg:#060b16;--bg2:#0b1324;--panel:rgba(12,18,35,.88);--line:rgba(255,255,255,.08);
+      --text:#eef4ff;--muted:#95a4c4;--gold:#ffc857;--cyan:#67e8f9;--pink:#ff89c6;
+      --violet:#9d8cff;--green:#79f2b3;--shadow:0 30px 90px rgba(0,0,0,.35);
+      --orange:#ff9f47;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{font-family:'DM Sans',system-ui,sans-serif;color:var(--text);
+      background:radial-gradient(circle at 15% 10%,rgba(103,232,249,.14),transparent 22%),
+        radial-gradient(circle at 85% 12%,rgba(255,137,198,.10),transparent 18%),
+        radial-gradient(circle at 70% 80%,rgba(121,242,179,.08),transparent 22%),
+        linear-gradient(180deg,#050a14,#091020 45%,#060b16 100%);
+      overflow:hidden}
+    .hidden{display:none!important}
+
+    /* ===== LOGIN SCREEN ===== */
+    #loginScreen{
+      min-height:100vh;display:grid;grid-template-columns:1.08fr 0.92fr;
+      background:radial-gradient(circle at 14% 16%,rgba(103,232,249,.12),transparent 22%),
+        radial-gradient(circle at 72% 84%,rgba(255,200,87,.08),transparent 20%),
+        linear-gradient(180deg,#06101d,#081427 48%,#060b16 100%);
+    }
+    .login-left{
+      position:relative;padding:26px 44px 22px;display:flex;flex-direction:column;
+      gap:16px;overflow:hidden;border-right:1px solid var(--line);height:100vh;
+    }
+    .login-left::before{
+      content:"";position:absolute;inset:0;
+      background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+      background-size:44px 44px;
+      mask-image:linear-gradient(180deg,rgba(0,0,0,.6),transparent 92%);
+      pointer-events:none;
+    }
+    .brand-row{position:relative;z-index:2;display:flex;align-items:center;gap:12px;flex-shrink:0}
+    .brand-mark{
+      width:46px;height:46px;border-radius:15px;display:grid;place-items:center;
+      border:1px solid rgba(255,255,255,.1);
+      background:linear-gradient(135deg,rgba(103,232,249,.18),rgba(157,140,255,.15));
+      box-shadow:var(--shadow);overflow:hidden;padding:5px;
+    }
+    .brand-mark img{width:100%;height:100%;object-fit:contain;border-radius:11px}
+    .brand-copy h1{
+      margin:0;font-family:'Space Grotesk',sans-serif;font-size:1.1rem;letter-spacing:-.03em;
+      background:linear-gradient(180deg,#f6f8fb 0%,#dbe1e8 26%,#aab4bf 56%,#eef2f6 74%,#8f9aa6 100%);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    }
+    .brand-copy p{margin:3px 0 0;color:var(--muted);font-size:.80rem}
+
+    /* Hero: avatar inline with heading — flex row, text left, avatar right */
+    .hero{
+      position:relative;z-index:2;display:flex;gap:20px;align-items:stretch;
+      flex:1;min-height:0;
+    }
+    .hero-copy{flex:1;min-width:0;display:flex;flex-direction:column;}
+    .hero-copy .eyebrow{
+      display:inline-flex;padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(103,232,249,.18);background:rgba(103,232,249,.08);
+      color:var(--cyan);font-size:.74rem;font-weight:700;margin-bottom:10px;
+      align-self:flex-start;flex-shrink:0;
+    }
+    .hero-copy h2{
+      margin:0;font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(2.2rem,3.4vw,3.8rem);line-height:.95;letter-spacing:-.07em;flex-shrink:0;
+    }
+    .hero-copy .grad{
+      background:linear-gradient(135deg,#fff,#bcecff 34%,#ffd7a0 70%,#ff89c6 100%);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    }
+    .hero-copy p{margin:10px 0 0;color:var(--muted);line-height:1.6;font-size:.88rem;flex-shrink:0;}
+    .feature-grid{
+      position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:9px;
+      margin-top:12px;flex-shrink:0;
+    }
+    .feature{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.02));
+      border-radius:16px;padding:12px 13px;
+    }
+    .feature strong{display:block;font-size:.82rem;margin-bottom:4px}
+    .feature span{color:var(--muted);font-size:.75rem;line-height:1.45}
+
+    /* Avatar card: fixed width, stretches full hero height */
+    .hero-card{
+      position:relative;width:210px;flex-shrink:0;border-radius:24px;border:1px solid var(--line);
+      background:linear-gradient(180deg,rgba(19,27,49,.92),rgba(10,16,30,.96));
+      box-shadow:var(--shadow);overflow:hidden;display:flex;
+      align-items:flex-start;justify-content:center;padding-top:8px;
+    }
+    .hero-card::before{
+      content:"";position:absolute;inset:-12%;
+      background:radial-gradient(circle at 28% 22%,rgba(103,232,249,.12),transparent 22%),
+        radial-gradient(circle at 72% 26%,rgba(255,137,198,.09),transparent 18%),
+        radial-gradient(circle at 54% 78%,rgba(255,200,87,.08),transparent 18%);
+      filter:blur(16px);
+    }
+    .avatar-showcase{
+      position:relative;z-index:2;width:100%;height:100%;
+      display:flex;align-items:flex-start;justify-content:center;
+    }
+    .avatar-showcase img{
+      width:100%;max-width:196px;height:auto;
+      object-fit:contain;object-position:center top;display:block;
+    }
+    .login-right{
+      position:relative;display:flex;align-items:center;justify-content:center;
+      padding:24px 32px;background:linear-gradient(180deg,#050913,#050913 100%);
+      overflow-y:auto;
+    }
+    .auth-wrap{position:relative;width:min(460px,100%);padding-top:76px}
+    .signin-logo-float{
+      position:absolute;top:-96px;left:50%;transform:translateX(-50%);
+      width:180px;text-align:center;z-index:5;pointer-events:none;
+    }
+    .signin-logo-orbit{
+      width:128px;height:128px;margin:0 auto;border-radius:50%;
+      display:grid;place-items:center;
+      background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.18),rgba(103,232,249,.10) 44%,rgba(255,137,198,.07) 74%,rgba(255,255,255,.02) 100%);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:0 14px 36px rgba(0,0,0,.34),0 0 0 10px rgba(255,255,255,.025);
+      animation:welcomeFloat 4.8s ease-in-out infinite;overflow:hidden;position:relative;
+    }
+    .signin-logo-orbit::before{
+      content:"";position:absolute;inset:14px;border-radius:50%;
+      border:1px dashed rgba(255,255,255,.12);animation:spinRing 18s linear infinite;
+    }
+    .signin-logo-orbit::after{
+      content:"";position:absolute;width:18px;height:18px;border-radius:50%;
+      background:linear-gradient(135deg,rgba(255,200,87,.95),rgba(255,255,255,.85));
+      top:14px;right:28px;box-shadow:0 0 18px rgba(255,200,87,.45);
+      animation:spinDot 10s linear infinite;transform-origin:-54px 52px;
+    }
+    .signin-logo-img{
+      width:100px;height:100px;object-fit:contain;border-radius:50%;
+      position:relative;z-index:2;filter:drop-shadow(0 8px 20px rgba(0,0,0,.28));
+    }
+    .auth-card{
+      width:100%;padding:34px 30px 30px;border-radius:30px;border:1px solid var(--line);
+      background:linear-gradient(180deg,rgba(15,23,43,.96),rgba(8,12,24,.98));
+      box-shadow:var(--shadow);position:relative;
+    }
+    .auth-card h3{margin:12px 0 0;font-family:'Space Grotesk',sans-serif;font-size:2rem;letter-spacing:-.04em}
+    .auth-card p{margin:12px 0 0;color:var(--muted);line-height:1.65}
+    .field{margin-top:18px}
+    .field label{display:block;margin-bottom:8px;color:var(--muted);font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+    .field input{
+      width:100%;border-radius:16px;border:1px solid var(--line);
+      background:rgba(255,255,255,.03);color:var(--text);padding:14px 15px;
+      font-size:.98rem;outline:none;font-family:'DM Sans',sans-serif;
+    }
+    .field input:focus{border-color:rgba(103,232,249,.35)}
+    .error{
+      margin-top:14px;padding:11px 13px;border-radius:14px;
+      background:rgba(255,128,128,.10);border:1px solid rgba(255,128,128,.2);
+      color:#ffb5b5;font-size:.84rem;
+    }
+    .btn{border:none;border-radius:16px;padding:14px 16px;cursor:pointer;font-weight:800;font-family:'DM Sans',sans-serif;transition:transform .16s ease,opacity .16s ease}
+    .btn:hover{transform:translateY(-1px)}
+    .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .btn-primary{width:100%;margin-top:22px;background:linear-gradient(135deg,var(--gold),#ffe8b3);color:#231300}
+    .btn-secondary{width:100%;margin-top:10px;background:rgba(255,255,255,.05);color:var(--text);border:1px solid var(--line)}
+
+    /* ===== APP SCREEN ===== */
+    #appScreen{
+      height:100vh;display:grid;grid-template-columns:270px 1fr 340px;overflow:hidden;
+    }
+    .sidebar,.teacher-panel{
+      background:linear-gradient(180deg,rgba(6,12,23,.96),rgba(5,9,18,.98));overflow:auto;
+    }
+    .sidebar{border-right:1px solid var(--line)}
+    .teacher-panel{border-left:1px solid var(--line)}
+    .sidebar-header{
+      padding:18px 16px 14px;border-bottom:1px solid var(--line);display:flex;
+      align-items:center;gap:12px;position:sticky;top:0;backdrop-filter:blur(10px);
+      z-index:2;background:rgba(6,12,23,.92);
+    }
+    .sidebar-logo{
+      width:48px;height:48px;border-radius:16px;
+      background:linear-gradient(135deg,rgba(103,232,249,.18),rgba(255,137,198,.14));
+      display:grid;place-items:center;border:1px solid var(--line);overflow:hidden;padding:4px;
+    }
+    .sidebar-logo img{width:100%;height:100%;object-fit:contain;border-radius:12px}
+    .sidebar-brand-name{
+      font-family:'Space Grotesk',sans-serif;font-size:1.08rem;font-weight:700;
+      background:linear-gradient(180deg,#f6f8fb 0%,#dbe1e8 28%,#aab4bf 55%,#eef2f6 72%,#8f9aa6 100%);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    }
+    .sidebar-brand-sub{font-size:.75rem;color:var(--muted);margin-top:3px}
+    .student-badge{
+      margin:14px 14px 8px;border-radius:18px;border:1px solid var(--line);
+      background:rgba(255,255,255,.03);padding:12px 14px;display:flex;gap:10px;align-items:center;
+    }
+    .student-dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 14px rgba(121,242,179,.55)}
+    .student-info strong{display:block;font-size:.9rem}
+    .student-info span{font-size:.75rem;color:var(--muted)}
+    .chapter-nav{padding:8px 10px 14px}
+    .nav-section-label{color:rgba(255,255,255,.42);text-transform:uppercase;letter-spacing:.11em;font-size:.68rem;font-weight:800;padding:8px 4px 10px}
+    .chapter-item{
+      width:100%;margin-bottom:6px;border-radius:16px;border:1px solid transparent;
+      background:transparent;color:var(--muted);display:flex;gap:10px;align-items:center;
+      padding:12px 12px;cursor:pointer;transition:all .16s ease;text-align:left;
+    }
+    .chapter-item:hover{background:rgba(255,255,255,.035);border-color:var(--line);color:var(--text)}
+    .chapter-item.active{
+      background:linear-gradient(135deg,rgba(103,232,249,.12),rgba(157,140,255,.10));
+      border-color:rgba(103,232,249,.22);color:var(--text);
+    }
+    .ch-num{
+      width:24px;height:24px;border-radius:8px;display:grid;place-items:center;
+      background:rgba(255,255,255,.05);font-size:.72rem;font-weight:800;flex-shrink:0;
+    }
+    .chapter-item.active .ch-num{background:rgba(103,232,249,.18);color:var(--cyan)}
+    .ch-name{font-size:.82rem;line-height:1.3}
+    .sidebar-footer{
+      padding:14px;border-top:1px solid var(--line);position:sticky;bottom:0;
+      background:rgba(6,12,23,.92);backdrop-filter:blur(10px);
+    }
+    .logout-btn{
+      width:100%;border-radius:14px;padding:11px 14px;border:1px solid var(--line);
+      background:rgba(255,255,255,.03);color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main{
+      overflow:hidden;display:flex;flex-direction:column;
+      background:radial-gradient(circle at 15% 10%,rgba(103,232,249,.06),transparent 18%),
+        linear-gradient(180deg,#08101e,#07101d 45%,#060b16);
+    }
+    .main-header{
+      padding:18px 22px 14px;border-bottom:1px solid var(--line);display:flex;
+      align-items:center;justify-content:space-between;flex-shrink:0;
+    }
+    .chapter-breadcrumb{display:flex;align-items:center;gap:12px}
+    .chapter-badge{
+      border-radius:999px;padding:7px 11px;
+      background:rgba(103,232,249,.10);border:1px solid rgba(103,232,249,.18);
+      color:var(--cyan);font-size:.76rem;font-weight:800;
+    }
+    .chapter-title-main{font-family:'Space Grotesk',sans-serif;font-size:1.55rem;letter-spacing:-.04em}
+    .header-right{display:flex;align-items:center;gap:16px}
+
+    /* Session Timer */
+    .session-timer-wrap{
+      display:flex;align-items:center;gap:8px;
+      padding:8px 14px;border-radius:999px;
+      background:rgba(255,255,255,.04);border:1px solid var(--line);
+    }
+    .timer-dot{
+      width:8px;height:8px;border-radius:50%;background:var(--green);
+      box-shadow:0 0 12px rgba(121,242,179,.6);animation:pulse 2s infinite;
+    }
+    .timer-dot.orange{background:var(--orange);box-shadow:0 0 12px rgba(255,159,71,.6)}
+    .timer-dot.red{background:#ff6b6b;box-shadow:0 0 12px rgba(255,107,107,.6)}
+    #timerDisplay{font-family:'Space Grotesk',sans-serif;font-size:.94rem;font-weight:700;color:var(--text)}
+    #timerDisplay.orange-time{color:var(--orange)}
+    #timerDisplay.red-time{color:#ff6b6b}
+    @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.75);opacity:.45}}
+    @keyframes timerPulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+    /* Floating Logo */
+    .floating-logo-wrap{display:relative;display:flex;align-items:center;gap:10px}
+    .floating-logo-orbit{
+      position:relative;width:108px;height:108px;border-radius:50%;display:grid;
+      place-items:center;
+      background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.16),rgba(103,232,249,.08) 45%,rgba(255,137,198,.06) 72%,rgba(255,255,255,.02) 100%);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:0 14px 40px rgba(0,0,0,.32),0 0 0 10px rgba(255,255,255,.02);
+      animation:floatLogo 4.6s ease-in-out infinite;overflow:hidden;
+    }
+    .floating-logo-orbit::before{
+      content:"";position:absolute;inset:10px;border-radius:50%;
+      border:1px dashed rgba(255,255,255,.10);animation:spinSlow 16s linear infinite;
+    }
+    .floating-logo-orbit::after{
+      content:"";position:absolute;width:16px;height:16px;border-radius:50%;
+      background:linear-gradient(135deg,rgba(255,200,87,.95),rgba(255,255,255,.75));
+      top:8px;right:18px;box-shadow:0 0 18px rgba(255,200,87,.45);
+      animation:spinDot 10s linear infinite;transform-origin:-36px 36px;
+    }
+    .floating-logo-img{
+      width:84px;height:84px;object-fit:contain;filter:drop-shadow(0 6px 20px rgba(0,0,0,.28));
+      border-radius:50%;position:relative;z-index:2;
+    }
+    .steel-wordmark{
+      font-family:'Space Grotesk',sans-serif;font-size:1.08rem;font-weight:700;
+      letter-spacing:.12em;text-transform:uppercase;
+      background:linear-gradient(180deg,#f6f8fb 0%,#dbe1e8 28%,#aab4bf 55%,#eef2f6 72%,#8f9aa6 100%);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+      white-space:nowrap;
+    }
+    .steel-sub{font-size:.72rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:4px;text-align:right}
+
+    /* Visual board */
+    .visual-board{flex:1;padding:16px 18px 18px;display:flex;flex-direction:column;gap:12px;min-height:0}
+    .viz-tabs{display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .viz-tab{
+      padding:8px 14px;border-radius:12px;border:1px solid var(--line);
+      background:rgba(255,255,255,.03);color:var(--muted);cursor:pointer;font-weight:700;font-size:.82rem;font-family:'DM Sans',sans-serif;
+    }
+    .viz-tab.active{
+      background:linear-gradient(135deg,rgba(255,137,198,.12),rgba(103,232,249,.12));
+      border-color:rgba(255,255,255,.12);color:var(--text);
+    }
+    .viz-tab-spacer{flex:1}
+    .viz-stage{
+      flex:1;min-height:0;position:relative;overflow:hidden;border-radius:24px;
+      border:1px solid var(--line);
+      background:radial-gradient(circle at 20% 18%,rgba(103,232,249,.08),transparent 22%),
+        radial-gradient(circle at 80% 15%,rgba(255,137,198,.06),transparent 18%),
+        linear-gradient(180deg,rgba(10,16,30,.96),rgba(7,11,22,1));
+      box-shadow:var(--shadow);
+    }
+    #visualCanvas{position:absolute;inset:0;width:100%;height:100%}
+
+    /* Welcome Screen (Intake STATE 1) */
+    #welcomeScreen{
+      position:absolute;inset:0;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:22px;text-align:center;padding:40px;
+      background:radial-gradient(circle at 50% 30%,rgba(255,137,198,.07),transparent 40%),
+        linear-gradient(180deg,rgba(10,16,30,.98),rgba(7,11,22,1));
+      z-index:4;
+    }
+    .welcome-avatar-wrap{
+      position:relative;width:200px;height:200px;display:flex;
+      align-items:center;justify-content:center;
+    }
+    .welcome-glow{
+      position:absolute;top:0;left:0;right:0;bottom:0;border-radius:50%;
+      background:radial-gradient(circle,rgba(255,137,198,.24),transparent 60%);
+      filter:blur(12px);animation:floatGlow 3.5s ease-in-out infinite;
+    }
+    .welcome-avatar-img{
+      width:180px;height:220px;object-fit:contain;object-position:center top;
+      position:relative;z-index:2;border-radius:22px;
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 20px 40px rgba(0,0,0,.35);
+    }
+    .welcome-bubble{
+      background:linear-gradient(135deg,rgba(103,232,249,.10),rgba(157,140,255,.08));
+      border:1px solid rgba(103,232,249,.18);border-radius:22px;padding:18px 24px;
+      max-width:520px;
+    }
+    .welcome-bubble h2{
+      margin:0;font-family:'Space Grotesk',sans-serif;font-size:1.5rem;
+      letter-spacing:-.04em;color:var(--text);
+    }
+    .welcome-bubble p{margin:8px 0 0;color:var(--muted);font-size:.95rem;line-height:1.6}
+    .intake-indicator{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;
+      background:rgba(121,242,179,.08);border:1px solid rgba(121,242,179,.18);
+      color:var(--green);font-size:.78rem;font-weight:700;
+    }
+    .intake-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(121,242,179,.7);animation:pulse 1.5s infinite}
+
+    /* MCQ Overlay (STATE 2) */
+    #mcqOverlay{
+      position:absolute;inset:0;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:20px;padding:32px;
+      background:rgba(7,11,22,.88);backdrop-filter:blur(10px);
+      opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:6;
+    }
+    #mcqOverlay.visible{opacity:1;pointer-events:auto}
+    .mcq-tag{
+      padding:7px 12px;border-radius:999px;border:1px solid rgba(255,200,87,.25);
+      background:rgba(255,200,87,.08);color:var(--gold);font-size:.75rem;font-weight:800;
+      text-transform:uppercase;letter-spacing:.1em;
+    }
+    .mcq-question{
+      max-width:760px;font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(1.15rem,2vw,1.5rem);line-height:1.4;letter-spacing:-.02em;
+      text-align:center;color:var(--text);
+    }
+    .mcq-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:680px}
+    .mcq-btn{
+      padding:14px 18px;border-radius:16px;border:1px solid var(--line);
+      background:rgba(255,255,255,.04);color:var(--text);cursor:pointer;
+      font-size:.95rem;font-weight:600;font-family:'DM Sans',sans-serif;
+      text-align:left;transition:all .18s ease;display:flex;align-items:center;gap:10px;
+    }
+    .mcq-btn:hover:not(:disabled){background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16)}
+    .mcq-btn .opt-label{
+      width:28px;height:28px;border-radius:8px;display:grid;place-items:center;
+      background:rgba(255,255,255,.06);font-size:.8rem;font-weight:800;flex-shrink:0;
+    }
+    .mcq-btn.correct{background:rgba(121,242,179,.16);border-color:rgba(121,242,179,.4);color:var(--green)}
+    .mcq-btn.correct .opt-label{background:rgba(121,242,179,.3);color:var(--green)}
+    .mcq-btn.wrong{background:rgba(255,107,107,.14);border-color:rgba(255,107,107,.35);color:#ff8d8d}
+    .mcq-btn.wrong .opt-label{background:rgba(255,107,107,.25);color:#ff8d8d}
+    .mcq-voice-hint{color:var(--muted);font-size:.82rem;font-style:italic}
+
+    /* HOTS text area */
+    #hotsOverlay{
+      position:absolute;inset:0;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:18px;padding:40px;
+      background:rgba(7,11,22,.88);backdrop-filter:blur(10px);
+      opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:6;
+    }
+    #hotsOverlay.visible{opacity:1;pointer-events:auto}
+    .hots-tag{
+      padding:7px 12px;border-radius:999px;border:1px solid rgba(157,140,255,.25);
+      background:rgba(157,140,255,.08);color:var(--violet);font-size:.75rem;font-weight:800;text-transform:uppercase;
+    }
+    .hots-question{
+      max-width:640px;font-family:'Space Grotesk',sans-serif;font-size:clamp(1.2rem,2vw,1.6rem);
+      line-height:1.4;text-align:center;
+    }
+    .hots-hint{color:var(--muted);font-size:.86rem;max-width:480px;text-align:center}
+
+    /* Explaining banner */
+    .explaining-banner{
+      position:absolute;left:14px;right:14px;bottom:14px;border-radius:18px;
+      padding:12px 14px;border:1px solid rgba(255,255,255,.08);
+      background:rgba(8,13,24,.84);backdrop-filter:blur(10px);
+      display:flex;align-items:center;gap:12px;
+      opacity:0;transform:translateY(8px);transition:all .25s ease;z-index:5;
+    }
+    .explaining-banner.visible{opacity:1;transform:none}
+    .sound-wave{display:flex;gap:3px;align-items:center}
+    .sound-wave span{width:3px;border-radius:2px;background:var(--gold);display:block;animation:wave 1s ease-in-out infinite}
+    .sound-wave span:nth-child(1){height:8px}
+    .sound-wave span:nth-child(2){height:14px;animation-delay:.1s}
+    .sound-wave span:nth-child(3){height:9px;animation-delay:.18s}
+    .sound-wave span:nth-child(4){height:15px;animation-delay:.07s}
+    .sound-wave span:nth-child(5){height:7px;animation-delay:.14s}
+    @keyframes wave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.3)}}
+    .explaining-text{font-size:.86rem;line-height:1.45}
+    .explaining-text strong{color:var(--gold)}
+
+    /* Session end overlay */
+    #sessionEndOverlay{
+      position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:24px;text-align:center;padding:40px;
+      background:rgba(5,9,18,.94);backdrop-filter:blur(18px);
+      opacity:0;pointer-events:none;transition:opacity .4s ease;
+    }
+    #sessionEndOverlay.visible{opacity:1;pointer-events:auto}
+    .session-end-icon{font-size:4rem}
+    .session-end-title{
+      font-family:'Space Grotesk',sans-serif;font-size:2.6rem;letter-spacing:-.06em;
+      background:linear-gradient(135deg,var(--gold),var(--cyan));
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    }
+    .session-end-sub{color:var(--muted);font-size:1.05rem;max-width:420px;line-height:1.6}
+    .session-end-next{
+      margin-top:8px;padding:14px 28px;border-radius:16px;
+      background:linear-gradient(135deg,var(--gold),#ffe8b3);color:#231300;
+      font-weight:800;font-size:1rem;font-family:'DM Sans',sans-serif;border:none;cursor:pointer;
+    }
+
+    /* Teacher panel */
+    .teacher-panel-header{
+      padding:18px 16px 14px;border-bottom:1px solid var(--line);
+      position:sticky;top:0;z-index:2;background:rgba(6,12,23,.92);backdrop-filter:blur(10px);
+    }
+    .teacher-panel-header h3{margin:0;font-family:'Space Grotesk',sans-serif;font-size:1rem}
+    .teacher-panel-header span{font-size:.75rem;color:var(--muted)}
+    .avatar-section{
+      position:relative;padding:20px 18px 16px;border-bottom:1px solid var(--line);
+      display:flex;flex-direction:column;align-items:center;
+    }
+    .avatar-glow{
+      position:absolute;top:24px;width:140px;height:140px;border-radius:50%;
+      background:radial-gradient(circle,rgba(255,137,198,.18),transparent 60%);
+      filter:blur(6px);animation:floatGlow 3.5s ease-in-out infinite;
+    }
+    @keyframes floatGlow{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.12);opacity:1}}
+    .teacher-avatar-img{
+      width:192px;height:240px;object-fit:contain;object-position:center top;
+      display:block;border-radius:24px;position:relative;z-index:1;
+      border:1px solid rgba(255,255,255,.12);box-shadow:0 20px 40px rgba(0,0,0,.30);
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+    }
+    .teacher-name-block{text-align:center;margin-top:8px}
+    .teacher-name-block h4{margin:0;font-size:1.22rem;font-family:'Space Grotesk',sans-serif}
+    .teacher-name-block p{margin:4px 0 0;color:var(--muted);font-size:.8rem}
+    .teacher-status{
+      margin-top:8px;display:inline-flex;gap:6px;align-items:center;padding:6px 11px;
+      border-radius:999px;background:rgba(121,242,179,.08);border:1px solid rgba(121,242,179,.16);
+      color:var(--green);font-size:.75rem;font-weight:700;
+    }
+    .teacher-status::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(121,242,179,.6)}
+    .el-section{padding:14px 15px;border-bottom:1px solid var(--line)}
+    .el-section-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);font-weight:800;margin-bottom:10px}
+    #widget-container{min-height:64px}
+    .widget-placeholder-msg{
+      border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.03);
+      padding:14px;color:var(--muted);font-size:.84rem;line-height:1.6;
+    }
+    .info-scroll{padding:14px;display:flex;flex-direction:column;gap:12px}
+    .info-card{border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.03);padding:14px}
+    .info-card-label{color:rgba(255,255,255,.42);text-transform:uppercase;letter-spacing:.09em;font-size:.7rem;font-weight:800;margin-bottom:7px}
+    .info-card-value{font-size:.9rem;line-height:1.5}
+    .quota-bar-track{margin-top:10px;height:6px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
+    .quota-bar-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--gold),var(--pink));border-radius:99px;transition:width .5s ease}
+    .quota-legend{margin-top:6px;display:flex;justify-content:space-between;color:var(--muted);font-size:.74rem}
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes floatLogo{0%,100%{transform:translateY(0px) scale(1)}50%{transform:translateY(-8px) scale(1.025)}}
+    @keyframes spinSlow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+    @keyframes spinDot{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+    @keyframes welcomeFloat{0%,100%{transform:translateY(0px) scale(1)}50%{transform:translateY(-9px) scale(1.03)}}
+    @keyframes spinRing{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+    /* ===== RESPONSIVE ===== */
+    @media(max-width:1280px){
+      #appScreen{grid-template-columns:250px 1fr 310px}
+      #loginScreen{grid-template-columns:1fr}
+      .login-left{height:auto;min-height:100vh}
+      .hero-card{width:180px}
+    }
+    @media(max-width:1024px){
+      #appScreen{grid-template-columns:240px 1fr}
+      .teacher-panel{display:none}
+      .feature-grid{grid-template-columns:1fr}
+    }
+    @media(max-width:760px){
+      body{overflow:auto}
+      #loginScreen,#appScreen{grid-template-columns:1fr}
+      .login-left{padding:24px 20px;height:auto}
+      .sidebar{display:none}
+      .hero{flex-direction:column}
+      .hero-card{width:100%;height:260px}
+      .hero-copy h2{font-size:2.2rem}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ======== STATE 0: LOGIN SCREEN ======== -->
+<div id="loginScreen">
+  <section class="login-left">
+    <div class="brand-row">
+      <div class="brand-mark"><img src="logo_01.jpg" alt="Karka logo"></div>
+      <div class="brand-copy">
+        <h1>Karka · கற்க</h1>
+        <p>AI maths learning for Indian teens</p>
+      </div>
+    </div>
+    <div class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Voice + visual board + chapter practice</span>
+        <h2>Learn maths<br>with <span class="grad">Diya</span>, your smart study companion.</h2>
+        <p>Karka blends guided voice explanation, animated visuals, questions, and AI tutoring in one immersive learning board — built for CBSE Class 9 students.</p>
+        <div class="feature-grid">
+          <div class="feature"><strong>🎙️ Voice-first</strong><span>Speak naturally with Diya — she listens, explains, and adapts to your pace.</span></div>
+          <div class="feature"><strong>📊 Live visuals</strong><span>D3-powered animations appear as Diya explains — graphs, sets, geometry, stats.</span></div>
+          <div class="feature"><strong>✅ Smart MCQs</strong><span>Questions load automatically, feedback is instant. Your progress is tracked.</span></div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="avatar-showcase">
+          <img src="avatar_01.jpg" alt="Diya avatar">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="login-right">
+    <div class="auth-wrap">
+      <div class="signin-logo-float">
+        <div class="signin-logo-orbit">
+          <img class="signin-logo-img" src="logo_01.jpg" alt="Karka logo">
+        </div>
+      </div>
+      <div class="auth-card">
+        <h3>Student sign in</h3>
+        <p>Enter your Student ID and PIN to start your Karka learning session with Diya.</p>
+        <div class="field">
+          <label for="fStudentId">Student ID</label>
+          <input id="fStudentId" type="text" placeholder="e.g. priya_2025" autocomplete="username">
+        </div>
+        <div class="field">
+          <label for="fPin">PIN</label>
+          <input id="fPin" type="password" placeholder="4-digit PIN" autocomplete="current-password" maxlength="6">
+        </div>
+        <div id="authError" class="error hidden"></div>
+        <button class="btn btn-primary" id="loginBtn">Enter learning board →</button>
+        <button class="btn btn-secondary" id="demoBtn">Use demo student</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ======== STATES 1-3: APP SCREEN ======== -->
+<div id="appScreen" class="hidden">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo"><img src="logo_01.jpg" alt="Karka logo"></div>
+      <div>
+        <div class="sidebar-brand-name">Karka</div>
+        <div class="sidebar-brand-sub">Class 9 · AI Maths Tutor</div>
+      </div>
+    </div>
+    <div class="student-badge">
+      <div class="student-dot"></div>
+      <div class="student-info">
+        <strong id="sStudentName">Student</strong>
+        <span id="sStudentPlan">Student plan</span>
+      </div>
+    </div>
+    <nav class="chapter-nav">
+      <div class="nav-section-label">Chapters</div>
+      <div id="chapterList"></div>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">Log out</button>
+    </div>
+  </aside>
+
+  <!-- Main visual board -->
+  <main class="main">
+    <div class="main-header">
+      <div class="chapter-breadcrumb">
+        <span class="chapter-badge" id="chapterBadge">Chapter 1</span>
+        <span class="chapter-title-main" id="chapterTitle">Number Systems</span>
+      </div>
+      <div class="header-right">
+        <div class="session-timer-wrap">
+          <div class="timer-dot" id="timerDot"></div>
+          <span id="timerDisplay">--:--</span>
+        </div>
+        <div class="floating-logo-wrap">
+          <div class="floating-logo-orbit">
+            <img class="floating-logo-img" src="logo_01.jpg" alt="Karka logo">
+          </div>
+          <div>
+            <div class="steel-wordmark">Karka</div>
+            <div class="steel-sub">learn with clarity</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="visual-board">
+      <div class="viz-tabs">
+        <button class="viz-tab active" data-tab="visual">Visual</button>
+        <button class="viz-tab" data-tab="equation">Equations</button>
+        <button class="viz-tab" data-tab="steps">Steps</button>
+        <div class="viz-tab-spacer"></div>
+        <button class="viz-tab" id="replayBtn">↺ Replay</button>
+      </div>
+
+      <div class="viz-stage">
+        <!-- D3 canvas -->
+        <div id="visualCanvas"></div>
+
+        <!-- STATE 1: Intake welcome screen -->
+        <div id="welcomeScreen" class="hidden">
+          <div class="welcome-avatar-wrap">
+            <div class="welcome-glow"></div>
+            <img class="welcome-avatar-img" src="avatar_01.jpg" alt="Diya avatar">
+          </div>
+          <div class="welcome-bubble">
+            <h2>Hi! I'm Diya 🌟</h2>
+            <p>I'm your personal maths tutor. Let's get to know each other first — I'll ask you a few quick questions so I can teach you the way <em>you</em> learn best.</p>
+          </div>
+          <div class="intake-indicator">
+            <div class="intake-dot"></div>
+            First session · Setting up your profile
+          </div>
+        </div>
+
+        <!-- STATE 2a: MCQ card -->
+        <div id="mcqOverlay">
+          <div class="mcq-tag">Question from Diya</div>
+          <div class="mcq-question" id="mcqQuestion">Loading…</div>
+          <div class="mcq-options" id="mcqOptions"></div>
+          <div class="mcq-voice-hint">or speak your answer to Diya</div>
+        </div>
+
+        <!-- STATE 2b: HOTS open question -->
+        <div id="hotsOverlay">
+          <div class="hots-tag">Open Question — HOTS</div>
+          <div class="hots-question" id="hotsQuestion">Loading…</div>
+          <div class="hots-hint">Share your thinking with Diya — speak or type your answer</div>
+        </div>
+
+        <!-- Explaining banner -->
+        <div class="explaining-banner" id="explainingBanner">
+          <div class="sound-wave"><span></span><span></span><span></span><span></span><span></span></div>
+          <div class="explaining-text"><strong>Diya is explaining</strong> — <span id="explainingHint">visual incoming…</span></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Teacher panel (right) -->
+  <aside class="teacher-panel">
+    <div class="teacher-panel-header">
+      <h3>Teacher — Diya</h3>
+      <span>AI Maths Tutor · CBSE Class 9</span>
+    </div>
+    <div class="avatar-section">
+      <div class="avatar-glow"></div>
+      <img class="teacher-avatar-img" src="avatar_01.jpg" alt="Diya avatar">
+      <div class="teacher-name-block">
+        <h4>Diya</h4>
+        <p>Warm, clear, and always encouraging</p>
+        <span class="teacher-status" id="teacherStatus">Online · Ready</span>
+      </div>
+    </div>
+    <div class="el-section">
+      <div class="el-section-label">Voice Session</div>
+      <div id="widget-container">
+        <div class="widget-placeholder-msg" id="widgetPlaceholder">
+          Sign in to activate Diya's voice session. The ElevenLabs widget will appear here after login.
+        </div>
+      </div>
+    </div>
+    <div class="info-scroll">
+      <div class="info-card">
+        <div class="info-card-label">Current Chapter</div>
+        <div class="info-card-value" id="infoChapter">—</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Quota Remaining</div>
+        <div class="info-card-value" id="infoQuota">—</div>
+        <div class="quota-bar-track"><div class="quota-bar-fill" id="quotaFill"></div></div>
+        <div class="quota-legend"><span>0</span><span id="quotaMax">— mins</span></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Session Mode</div>
+        <div class="info-card-value" id="infoMode">—</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Last Visual</div>
+        <div class="info-card-value" id="infoLastVisual" style="color:var(--muted)">No visual yet</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- Session end overlay -->
+<div id="sessionEndOverlay">
+  <div class="session-end-icon">🎉</div>
+  <div class="session-end-title">Great work today!</div>
+  <div class="session-end-sub">Your session is complete. Diya has saved your progress. See you next time!</div>
+  <button class="session-end-next" onclick="location.reload()">Back to login</button>
+</div>
+
+<script>
+/* ============================================================
+   N8N WEBHOOK CONFIG — GANITAM FRONTEND CONTRACT v2
+   Base: https://coolvinoo.app.n8n.cloud
+   ============================================================ */
+const N8N = {
+  BASE: 'https://coolvinoo.app.n8n.cloud',
+  WF01_GET_STUDENT : '/webhook/student-state',   // GET ?id=
+  WF02_SESSION_START: '/webhook/session-start',   // POST
+  WF03_HEARTBEAT    : '/webhook/heartbeat',       // POST
+  WF04_LOAD_QUESTION: '/webhook/load-question',   // POST
+  WF05_SUBMIT_ANSWER: '/webhook/submit-answer',   // POST
+  WF06_VISUAL_EVENT : '/webhook/visual-event',    // POST
+  WF08_SAVE_INTAKE  : '/webhook/save-intake',     // POST
+};
+
+const AGENT_ID = 'agent_1901kp14wnx7ecab789827fkwg1p';
+
+/* ===== CHAPTERS ===== */
+const CHAPTERS = [
+  {num:1,  name:'Number Systems',                         short:'Number Systems'},
+  {num:2,  name:'Polynomials',                            short:'Polynomials'},
+  {num:3,  name:'Coordinate Geometry',                    short:'Coordinate Geometry'},
+  {num:4,  name:'Linear Equations in Two Variables',      short:'Linear Equations'},
+  {num:5,  name:"Introduction to Euclid's Geometry",      short:"Euclid's Geometry"},
+  {num:6,  name:'Lines and Angles',                       short:'Lines & Angles'},
+  {num:7,  name:'Triangles',                              short:'Triangles'},
+  {num:8,  name:'Quadrilaterals',                         short:'Quadrilaterals'},
+  {num:9,  name:'Areas of Parallelograms & Triangles',    short:'Areas (Para & Tri)'},
+  {num:10, name:'Circles',                                short:'Circles'},
+  {num:11, name:'Constructions',                          short:'Constructions'},
+  {num:12, name:"Heron's Formula",                        short:"Heron's Formula"},
+  {num:13, name:'Surface Areas and Volumes',              short:'Surface Areas & Vol.'},
+  {num:14, name:'Statistics',                             short:'Statistics'},
+  {num:15, name:'Probability',                            short:'Probability'},
+];
+
+/* ===== STUDENT STATE ===== */
+const S = {
+  studentId       : '',
+  studentName     : '',
+  pin             : '',
+  plan            : 'Student',
+  quotaTotal      : 120,
+  quotaRemaining  : 120,
+  activeChapterNum: 1,
+  activeChapterName: 'Number Systems',
+  totalSessions   : 0,
+  resumePrompt    : '',
+  learningStyle   : 'example-first',
+  mathsConfidence : 3,
+  weakChapters    : 'none',
+  sessionId            : '',
+  lastVisualTimestamp  : '',
+  currentState    : 0,   // 0=login, 1=intake, 2=question, 3=teaching
+  mcqStartTime    : 0,
+  activeWidget    : null,
+};
+
+/* ===== DEMO FALLBACK ===== */
+const DEMO = {
+  'priya_2025': {
+    student_id:'priya_2025', pin:'1234', student_name:'Priya',
+    plan:'Student', quota_mins_total:120, quota_mins_remaining:106,
+    active_chapter_num:1, active_chapter_name:'Number Systems',
+    total_sessions:0, resume_prompt:'', learning_style:'example-first',
+    maths_confidence:3, weak_chapters:'none',
+  },
+  'demo': {
+    student_id:'demo', pin:'0000', student_name:'Demo Student',
+    plan:'Demo', quota_mins_total:60, quota_mins_remaining:60,
+    active_chapter_num:1, active_chapter_name:'Number Systems',
+    total_sessions:5, resume_prompt:'Welcome back! Let us continue with Number Systems. Your last topic was rational numbers.',
+    learning_style:'visual', maths_confidence:4, weak_chapters:'Polynomials',
+  },
+};
+
+/* ============================================================
+   WEBHOOK HELPERS
+   ============================================================ */
+async function wfGet(path, params = {}, timeoutMs = 5000) {
+  const url = new URL(N8N.BASE + path);
+  Object.entries(params).forEach(([k,v]) => url.searchParams.set(k, v));
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const r = await fetch(url.toString(), { signal: controller.signal });
+    clearTimeout(timer);
+    if (!r.ok) return null;
+    const ct = r.headers.get('content-type') || '';
+    return ct.includes('json') ? await r.json() : await r.text();
+  } catch(e) {
+    clearTimeout(timer);
+    console.warn('WF GET failed (timeout or error):', path, e.name);
+    return null;
+  }
+}
+
+async function wfPost(path, body, signal) {
+  try {
+    await fetch(N8N.BASE + path, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body),
+      signal,
+    });
+  } catch(e) {
+    console.warn('WF POST failed (fire-and-forget):', path, e);
+  }
+}
+
+/* ============================================================
+   STATE 0 — LOGIN
+   ============================================================ */
+function showError(msg) {
+  const el = document.getElementById('authError');
+  el.textContent = msg;
+  el.classList.remove('hidden');
+}
+function clearError() {
+  document.getElementById('authError').classList.add('hidden');
+}
+
+document.getElementById('loginBtn').addEventListener('click', doLogin);
+document.getElementById('demoBtn').addEventListener('click', () => {
+  document.getElementById('fStudentId').value = 'priya_2025';
+  document.getElementById('fPin').value = '1234';
+  doLogin();
+});
+document.getElementById('fPin').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+async function doLogin() {
+  const id  = document.getElementById('fStudentId').value.trim().toLowerCase();
+  const pin = document.getElementById('fPin').value.trim();
+  if (!id || !pin) { showError('Please enter both Student ID and PIN.'); return; }
+
+  const loginBtn = document.getElementById('loginBtn');
+  loginBtn.disabled = true;
+  loginBtn.textContent = 'Checking…';
+  clearError();
+
+  // WF01 — GET /webhook/student-state?id={id}
+  let rec = await wfGet(N8N.WF01_GET_STUDENT, { id });
+
+  // n8n Sheets nodes return arrays — unwrap first element
+  if (Array.isArray(rec)) rec = rec[0] || null;
+
+  // Fallback to demo data if n8n unavailable or slow
+  if (!rec || typeof rec !== 'object' || !rec.student_id) {
+    console.log('[Karka] n8n unavailable — using demo fallback');
+    rec = DEMO[id];
+    if (!rec) {
+      showError('Student ID not found. Try demo / priya_2025.');
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Enter learning board →';
+      return;
+    }
+    if (rec.pin !== pin) {
+      showError('Invalid PIN.');
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Enter learning board →';
+      return;
+    }
+  } else {
+    // n8n responded — validate PIN
+    if (rec.pin && rec.pin !== pin) {
+      showError('Invalid Student ID or PIN.');
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Enter learning board →';
+      return;
+    }
+  }
+
+  // Populate student state
+  S.studentId        = id;
+  S.studentName      = rec.student_name || 'Student';
+  S.plan             = rec.plan || 'Student';
+  S.quotaTotal       = Number(rec.quota_mins_total) || 120;
+  S.quotaRemaining   = Number(rec.quota_mins_remaining) || 120;
+  S.activeChapterNum = Number(rec.active_chapter_num) || 1;
+  S.activeChapterName= rec.active_chapter_name || 'Number Systems';
+  S.totalSessions    = Number(rec.total_sessions) || 0;
+  S.resumePrompt     = rec.resume_prompt || '';
+  S.learningStyle    = rec.learning_style || 'example-first';
+  S.mathsConfidence  = Number(rec.maths_confidence) || 3;
+  S.weakChapters     = rec.weak_chapters || 'none';
+  S.sessionId           = `${id}_${Date.now()}`;
+  S.lastVisualTimestamp = rec.last_visual_timestamp || '';
+
+  launchApp();
+}
+
+/* ============================================================
+   LAUNCH APP — ROUTE TO STATE 1 OR 3
+   ============================================================ */
+function launchApp() {
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('appScreen').classList.remove('hidden');
+
+  // Populate sidebar
+  document.getElementById('sStudentName').textContent = S.studentName;
+  document.getElementById('sStudentPlan').textContent = S.plan + ' plan';
+  buildChapterList();
+  setActiveChapter(S.activeChapterNum, S.activeChapterName, false);
+  updateQuota();
+  startCountdownTimer();
+
+  if (S.totalSessions === 0) {
+    enterIntakeState();
+  } else {
+    enterTeachingState();
+  }
+
+}
+
+/* ============================================================
+   STATE 1 — INTAKE
+   ============================================================ */
+function enterIntakeState() {
+  S.currentState = 1;
+  document.getElementById('welcomeScreen').classList.remove('hidden');
+  document.getElementById('visualCanvas').style.display = 'none';
+  document.getElementById('infoMode').textContent = 'Intake · First Session';
+  document.getElementById('chapterTitle').textContent = 'Welcome, ' + S.studentName + '!';
+  document.getElementById('chapterBadge').textContent = 'New Student';
+  document.getElementById('teacherStatus').textContent = 'Intake Mode · Listening';
+
+  injectWidget();
+}
+
+/* ============================================================
+   STATE 3 — TEACHING
+   ============================================================ */
+function enterTeachingState() {
+  S.currentState = 3;
+  document.getElementById('welcomeScreen').classList.add('hidden');
+  document.getElementById('mcqOverlay').classList.remove('visible');
+  document.getElementById('hotsOverlay').classList.remove('visible');
+  const canvas = document.getElementById('visualCanvas');
+  canvas.style.display = 'block';
+  document.getElementById('infoMode').textContent = 'Teaching · Chapter ' + S.activeChapterNum;
+  document.getElementById('teacherStatus').textContent = 'Online · Teaching';
+
+  // requestAnimationFrame ensures canvas has real pixel dimensions before D3 reads them
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    renderVisualFor(S.activeChapterName);
+  }));
+
+  if (!S.activeWidget) injectWidget();
+}
+
+/* ============================================================
+   ELEVENLABS WIDGET INJECTION + CLIENT TOOL REGISTRATION
+
+   show_visual is a CLIENT TOOL — ElevenLabs calls the
+   registered JS function directly in the browser at 0ms.
+   No polling, no DOM sniffing, no postMessage.
+
+   All other tools are WEBHOOK TOOLS → ElevenLabs calls
+   n8n directly. Frontend has no involvement in those.
+   ============================================================ */
+function injectWidget() {
+  const container   = document.getElementById('widget-container');
+  const placeholder = document.getElementById('widgetPlaceholder');
+  if (placeholder) placeholder.remove();
+
+  const existing = container.querySelector('elevenlabs-convai');
+  if (existing) existing.remove();
+
+  const context = S.totalSessions === 0
+    ? `INTAKE MODE. Student name: ${S.studentName}. This is their first session. Follow the Intake Protocol KB document.`
+    : `${S.resumePrompt} Learning style: ${S.learningStyle}. Confidence: ${S.mathsConfidence}/5. Weak chapters: ${S.weakChapters}.`;
+
+  const widget = document.createElement('elevenlabs-convai');
+  widget.setAttribute('agent-id', AGENT_ID);
+  widget.setAttribute('dynamic-variables', JSON.stringify({
+    student_context : context,
+    student_id      : S.studentId,
+    student_name    : S.studentName,
+  }));
+
+  const handler = async (params) => {
+    handleShowVisual(params);
+    return { status: 'rendered' };
+  };
+
+  // ── CORRECT API (per ElevenLabs source): listen for 'elevenlabs-convai:call'
+  // This fires on the widget element BEFORE the session connects to ElevenLabs.
+  // Inject clientTools into event.detail.config here — this is the documented way.
+  widget.addEventListener('elevenlabs-convai:call', (event) => {
+    console.log('[Karka] elevenlabs-convai:call fired — injecting clientTools');
+    if (event.detail && event.detail.config) {
+      event.detail.config.clientTools = { show_visual: handler };
+    }
+    _showVisualRegistered = true;
+    _pendingVisuals.forEach(p => handleShowVisual(p));
+    _pendingVisuals.length = 0;
+    console.log('[Karka] show_visual injected via :call event ✓');
+  });
+
+  // Also set as property for any version that reads it directly
+  widget.clientTools = { show_visual: handler };
+
+  container.appendChild(widget);
+  S.activeWidget = widget;
+
+  customElements.whenDefined('elevenlabs-convai').then(() => {
+    const w = container.querySelector('elevenlabs-convai');
+    if (w) {
+      w.clientTools = { show_visual: handler };
+      S.activeWidget = w;
+    }
+    console.log('[Karka] elevenlabs-convai custom element defined');
+  });
+}
+
+// Queue holds any show_visual calls that arrive before registration completes
+const _pendingVisuals = [];
+let _showVisualRegistered = false;
+let _retryTimer = null;
+
+function retryRegisterShowVisual(widget) {
+  if (_showVisualRegistered) return;
+
+  if (widget && (widget.clientTools !== undefined)) {
+    try {
+      registerShowVisual(widget);
+      _showVisualRegistered = true;
+      if (_retryTimer) { clearInterval(_retryTimer); _retryTimer = null; }
+      console.log('[Karka] show_visual client tool registered ✓');
+      // Flush any calls that arrived before registration
+      _pendingVisuals.forEach(p => handleShowVisual(p));
+      _pendingVisuals.length = 0;
+    } catch(e) {
+      console.warn('[Karka] show_visual register threw:', e.message);
+      // Keep retrying — interval still running
+    }
+  }
+  // If clientTools not ready yet, interval fires again in 300ms — no cap, no bail-out
+}
+
+function startRetryLoop(widget) {
+  if (_retryTimer) return; // already running
+  _retryTimer = setInterval(() => retryRegisterShowVisual(widget), 300);
+}
+
+/* ============================================================
+   CLIENT TOOL: show_visual
+   ElevenLabs calls this function in the browser whenever
+   Diya wants to show a diagram, graph, or MCQ question.
+   Returns { status: 'rendered' } back to Diya immediately.
+   ============================================================ */
+// Core handler — called by the registered client tool AND by pending queue flush
+function handleShowVisual(params) {
+  const { topic, visual_type, content_hint, chapter_num, student_id } = params;
+  console.log('[Karka] show_visual handled:', { visual_type, content_hint, chapter_num });
+
+  if (visual_type === 'question'
+      || (content_hint && (content_hint.startsWith('MCQ|') || content_hint.startsWith('OPEN|')))) {
+    renderQuestionCard(content_hint, chapter_num);
+  } else {
+    showVisualCanvas();
+    S.currentState = 3;
+    const chNum  = Number(chapter_num) || S.activeChapterNum;
+    const ch     = CHAPTERS.find(c => c.num === chNum);
+    const chName = ch ? ch.name : S.activeChapterName;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      renderD3Scene(chNum, content_hint || '', chName);
+    }));
+  }
+
+  wfPost(N8N.WF06_VISUAL_EVENT, {
+    student_id  : student_id || S.studentId,
+    session_id  : S.sessionId,
+    topic, visual_type, content_hint, chapter_num,
+    timestamp   : new Date().toISOString(),
+  });
+
+  document.getElementById('infoLastVisual').textContent =
+    (topic || 'visual') + ' · Ch ' + (chapter_num || S.activeChapterNum);
+  flashBanner((topic || 'Visual') + ' — Diya is explaining');
+}
+
+function registerShowVisual(widget) {
+  const handler = async (params) => {
+    handleShowVisual(params);
+    return { status: 'rendered' };
+  };
+
+  // Try object assignment first (current @elevenlabs/convai-widget-embed API)
+  try {
+    widget.clientTools = { show_visual: handler };
+    console.log('[Karka] show_visual registered via object assignment ✓');
+    return;
+  } catch(e1) {
+    console.warn('[Karka] Object assignment failed:', e1.message);
+  }
+
+  // Fallback: .register() method (older widget versions)
+  try {
+    widget.clientTools.register('show_visual', handler);
+    console.log('[Karka] show_visual registered via .register() ✓');
+  } catch(e2) {
+    console.warn('[Karka] .register() also failed:', e2.message);
+    throw e2; // let retry loop know
+  }
+}
+
+// Helper: make visual canvas visible and hide other overlays
+function showVisualCanvas() {
+  document.getElementById('visualCanvas').style.display   = 'block';
+  document.getElementById('welcomeScreen').classList.add('hidden');
+  document.getElementById('mcqOverlay').classList.remove('visible');
+  document.getElementById('hotsOverlay').classList.remove('visible');
+}
+
+/* ============================================================
+   STATE 2 — QUESTION CARD
+   ============================================================ */
+function renderQuestionCard(content_hint, chapter_num) {
+  S.currentState = 2;
+  S.mcqStartTime = Date.now();
+
+  if (!content_hint) return;
+
+  if (content_hint.startsWith('MCQ|')) {
+    renderMCQ(content_hint, chapter_num);
+  } else if (content_hint.startsWith('OPEN|')) {
+    renderHOTS(content_hint);
+  }
+}
+
+function renderMCQ(content_hint, chapter_num) {
+  const parts = content_hint.split('|');
+  // parts[0]="MCQ", [1]=question, [2..5]=options, [6]="correct:X"
+  const question   = parts[1] || '';
+  const options    = parts.slice(2, 6);
+  const correctRaw = (parts[6] || 'correct:A').replace('correct:', '').trim();
+  const correctLetter = correctRaw.toUpperCase();
+
+  document.getElementById('mcqQuestion').textContent = question;
+
+  const optContainer = document.getElementById('mcqOptions');
+  optContainer.innerHTML = '';
+  const letters = ['A','B','C','D'];
+
+  options.forEach((opt, i) => {
+    const letter = letters[i];
+    const btn = document.createElement('button');
+    btn.className = 'mcq-btn';
+    btn.innerHTML = `<span class="opt-label">${letter}</span>${opt.replace(/^[A-D]\)?\s*/,'')}`;
+    btn.addEventListener('click', () => handleMCQClick(btn, letter, correctLetter, question, options, chapter_num));
+    optContainer.appendChild(btn);
+  });
+
+  document.getElementById('hotsOverlay').classList.remove('visible');
+  document.getElementById('mcqOverlay').classList.add('visible');
+}
+
+function handleMCQClick(clickedBtn, chosen, correct, question, options, chapter_num) {
+  // Disable all buttons
+  document.querySelectorAll('.mcq-btn').forEach(b => b.disabled = true);
+
+  const isCorrect = chosen === correct;
+  clickedBtn.classList.add(isCorrect ? 'correct' : 'wrong');
+
+  if (!isCorrect) {
+    // Highlight the correct one in green
+    document.querySelectorAll('.mcq-btn').forEach(b => {
+      const lbl = b.querySelector('.opt-label').textContent.trim();
+      if (lbl === correct) b.classList.add('correct');
+    });
+  }
+
+  const responseTimeSecs = Math.round((Date.now() - S.mcqStartTime) / 1000);
+
+  // WF05 submit-answer (async)
+  wfPost(N8N.WF05_SUBMIT_ANSWER, {
+    student_id     : S.studentId,
+    session_id     : S.sessionId,
+    chapter_num    : chapter_num || S.activeChapterNum,
+    chapter_name   : S.activeChapterName,
+    question_text  : question,
+    student_answer : chosen,
+    correct        : isCorrect,
+    score          : isCorrect ? 1 : 0,
+    response_time_secs: responseTimeSecs,
+  });
+
+  // Return to teaching after 4 seconds
+  setTimeout(() => {
+    document.getElementById('mcqOverlay').classList.remove('visible');
+    S.currentState = 3;
+  }, 4000);
+}
+
+function renderHOTS(content_hint) {
+  const question = content_hint.replace('OPEN|', '');
+  document.getElementById('hotsQuestion').textContent = question;
+  document.getElementById('mcqOverlay').classList.remove('visible');
+  document.getElementById('hotsOverlay').classList.add('visible');
+}
+
+/* ============================================================
+   SESSION COUNTDOWN TIMER
+   ============================================================ */
+let timerInterval = null;
+let timerSecsLeft = 0;
+
+function startCountdownTimer() {
+  timerSecsLeft = S.quotaRemaining * 60;
+  timerInterval = setInterval(tickTimer, 1000);
+  renderTimer();
+}
+
+function tickTimer() {
+  if (timerSecsLeft <= 0) {
+    clearInterval(timerInterval);
+    endSession({ triggered_by: 'timer' });
+    return;
+  }
+  timerSecsLeft--;
+  renderTimer();
+}
+
+function renderTimer() {
+  const mins = Math.floor(timerSecsLeft / 60);
+  const secs = timerSecsLeft % 60;
+  const display = document.getElementById('timerDisplay');
+  const dot     = document.getElementById('timerDot');
+
+  display.textContent = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+
+  if (timerSecsLeft <= 0) {
+    display.className = 'red-time';
+    dot.className = 'timer-dot red';
+  } else if (timerSecsLeft <= 300) {
+    display.className = 'orange-time';
+    dot.className = 'timer-dot orange';
+    display.style.animation = 'timerPulse 1s ease-in-out infinite';
+  } else {
+    display.className = '';
+    dot.className = 'timer-dot';
+    display.style.animation = '';
+  }
+}
+
+/* ============================================================
+   SESSION END
+   ============================================================ */
+function endSession(params = {}) {
+  if (timerInterval) clearInterval(timerInterval);
+
+  const sessionDurationMins = Math.round((S.quotaRemaining * 60 - timerSecsLeft) / 60);
+
+  // WF03 heartbeat
+  wfPost(N8N.WF03_HEARTBEAT, {
+    student_id          : S.studentId,
+    session_id          : S.sessionId,
+    session_duration_mins: sessionDurationMins,
+    triggered_by        : params.triggered_by || 'manual',
+  });
+
+  // Show end overlay
+  document.getElementById('sessionEndOverlay').classList.add('visible');
+
+  // Disable widget mic if available
+  if (S.activeWidget && typeof S.activeWidget.endSession === 'function') {
+    try { S.activeWidget.endSession(); } catch(e) {}
+  }
+}
+
+/* ============================================================
+   CHAPTER NAVIGATION
+   ============================================================ */
+function buildChapterList() {
+  const container = document.getElementById('chapterList');
+  container.innerHTML = '';
+  CHAPTERS.forEach(ch => {
+    const btn = document.createElement('button');
+    btn.className = 'chapter-item';
+    btn.dataset.num = ch.num;
+    btn.innerHTML = `<span class="ch-num">${ch.num}</span><span class="ch-name">${ch.short}</span>`;
+    btn.onclick = () => setActiveChapter(ch.num, ch.name, true);
+    container.appendChild(btn);
+  });
+}
+
+function setActiveChapter(num, name, renderVisual = true) {
+  S.activeChapterNum  = num;
+  S.activeChapterName = name;
+  document.getElementById('chapterBadge').textContent   = `Chapter ${num}`;
+  document.getElementById('chapterTitle').textContent   = name;
+  document.getElementById('infoChapter').textContent    = `Chapter ${num} · ${name}`;
+  document.getElementById('infoMode').textContent       = `Teaching · Chapter ${num}`;
+  document.querySelectorAll('.chapter-item').forEach(el =>
+    el.classList.toggle('active', +el.dataset.num === num)
+  );
+  if (renderVisual && S.currentState >= 3) {
+    document.getElementById('mcqOverlay').classList.remove('visible');
+    document.getElementById('hotsOverlay').classList.remove('visible');
+    requestAnimationFrame(() => renderVisualFor(name));
+  }
+}
+
+function updateQuota() {
+  const r = S.quotaRemaining;
+  const t = S.quotaTotal;
+  document.getElementById('infoQuota').textContent = `${r} mins remaining`;
+  document.getElementById('quotaMax').textContent  = `of ${t} mins`;
+  document.getElementById('quotaFill').style.width = `${Math.max(0, Math.min(100,(r/t)*100))}%`;
+}
+
+/* ============================================================
+   D3 VISUAL SCENE ROUTING
+   ============================================================ */
+/* ============================================================
+   D3 SCENE ROUTER
+   Comprehensive content_hint keyword → drawing function map.
+   Covers all 15 CBSE Class 9 chapters and sub-scenes.
+   content_hint keywords come directly from Diya's tool call.
+   ============================================================ */
+
+// Helper: create a fresh SVG on the visualCanvas
+function freshSVG() {
+  const host = document.getElementById('visualCanvas');
+  host.innerHTML = '';
+  const w = host.clientWidth  || 860;
+  const h = host.clientHeight || 560;
+  const svg = d3.select(host).append('svg')
+    .attr('viewBox', `0 0 ${w} ${h}`)
+    .attr('width','100%').attr('height','100%')
+    .attr('preserveAspectRatio','xMidYMid meet');
+  return { svg, w, h };
+}
+
+function renderD3Scene(chapter_num, content_hint, chapterName) {
+  const { svg, w, h } = freshSVG();
+  const hint = (content_hint || '').toLowerCase();
+  const name = (chapterName  || S.activeChapterName).toLowerCase();
+  const num  = Number(chapter_num) || S.activeChapterNum;
+
+  // ── Chapter 1: Number Systems ──
+  if (num === 1 || name.includes('number')) {
+    if (hint.includes('irrational') || hint.includes('√2') || hint.includes('pi') || hint.includes('3.14') || hint.includes('e ='))
+      drawNumberSystems(svg, w, h, 'irrational');
+    else if (hint.includes('number line') || hint.includes('density') || hint.includes('between'))
+      drawNumberSystems(svg, w, h, 'numberline');
+    else if (hint.includes('rational') || hint.includes('p/q') || hint.includes('terminating') || hint.includes('recurring'))
+      drawNumberSystems(svg, w, h, 'rational');
+    else
+      drawNumberSystems(svg, w, h, 'overview');
+  }
+  // ── Chapter 2: Polynomials ──
+  else if (num === 2 || name.includes('polynomial')) {
+    if (hint.includes('zero') || hint.includes('root') || hint.includes('factor') || hint.includes('x ='))
+      drawPolynomials(svg, w, h, 'roots');
+    else if (hint.includes('degree') || hint.includes('linear') || hint.includes('quadratic') || hint.includes('cubic'))
+      drawPolynomials(svg, w, h, 'degree');
+    else
+      drawPolynomials(svg, w, h, 'roots');
+  }
+  // ── Chapter 3: Coordinate Geometry ──
+  else if (num === 3 || name.includes('coordinate')) {
+    if (hint.includes('distance') || hint.includes('length'))
+      drawCoordinateGeometry(svg, w, h, 'distance');
+    else if (hint.includes('midpoint') || hint.includes('mid point'))
+      drawCoordinateGeometry(svg, w, h, 'midpoint');
+    else if (hint.includes('quadrant') || hint.includes('plot') || hint.includes('origin'))
+      drawCoordinateGeometry(svg, w, h, 'quadrants');
+    else
+      drawCoordinateGeometry(svg, w, h, 'overview');
+  }
+  // ── Chapter 4: Linear Equations ──
+  else if (num === 4 || name.includes('linear')) {
+    if (hint.includes('solution') || hint.includes('intersection') || hint.includes('simultaneous'))
+      drawLinearEquations(svg, w, h, 'solution');
+    else if (hint.includes('slope') || hint.includes('gradient') || hint.includes('intercept'))
+      drawLinearEquations(svg, w, h, 'slope');
+    else
+      drawLinearEquations(svg, w, h, 'graph');
+  }
+  // ── Chapter 5: Euclid's Geometry ──
+  else if (num === 5 || name.includes('euclid')) {
+    drawEuclid(svg, w, h);
+  }
+  // ── Chapter 6: Lines and Angles ──
+  else if (num === 6 || name.includes('lines') || name.includes('angle')) {
+    if (hint.includes('parallel') || hint.includes('transversal') || hint.includes('alternate') || hint.includes('corresponding'))
+      drawLinesAngles(svg, w, h, 'transversal');
+    else if (hint.includes('vertical') || hint.includes('supplementary') || hint.includes('complementary'))
+      drawLinesAngles(svg, w, h, 'angle_pairs');
+    else
+      drawLinesAngles(svg, w, h, 'overview');
+  }
+  // ── Chapter 7: Triangles ──
+  else if (num === 7 || name.includes('triangle')) {
+    if (hint.includes('pythagoras') || hint.includes('hypotenuse') || hint.includes('right angle') || hint.includes('a² + b²'))
+      drawTriangles(svg, w, h, 'pythagoras');
+    else if (hint.includes('congruent') || hint.includes('sss') || hint.includes('sas') || hint.includes('asa') || hint.includes('rhs'))
+      drawTriangles(svg, w, h, 'congruence');
+    else if (hint.includes('similar') || hint.includes('proportion'))
+      drawTriangles(svg, w, h, 'similarity');
+    else if (hint.includes('median') || hint.includes('altitude') || hint.includes('centroid'))
+      drawTriangles(svg, w, h, 'centres');
+    else
+      drawTriangles(svg, w, h, 'overview');
+  }
+  // ── Chapter 8: Quadrilaterals ──
+  else if (num === 8 || name.includes('quadrilateral')) {
+    if (hint.includes('parallelogram') || hint.includes('opposite side'))
+      drawQuadrilaterals(svg, w, h, 'parallelogram');
+    else if (hint.includes('rhombus') || hint.includes('diagonal'))
+      drawQuadrilaterals(svg, w, h, 'rhombus');
+    else
+      drawQuadrilaterals(svg, w, h, 'overview');
+  }
+  // ── Chapter 9: Areas ──
+  else if (num === 9 || name.includes('areas')) {
+    drawAreas(svg, w, h);
+  }
+  // ── Chapter 10: Circles ──
+  else if (num === 10 || name.includes('circle')) {
+    if (hint.includes('chord') || hint.includes('arc') || hint.includes('subtend'))
+      drawCircles(svg, w, h, 'chord');
+    else if (hint.includes('tangent') || hint.includes('secant'))
+      drawCircles(svg, w, h, 'tangent');
+    else if (hint.includes('angle') || hint.includes('inscribed') || hint.includes('central'))
+      drawCircles(svg, w, h, 'angles');
+    else
+      drawCircles(svg, w, h, 'overview');
+  }
+  // ── Chapter 11: Constructions ──
+  else if (num === 11 || name.includes('construction')) {
+    drawConstructions(svg, w, h);
+  }
+  // ── Chapter 12: Heron's Formula ──
+  else if (num === 12 || name.includes('heron')) {
+    drawHeron(svg, w, h);
+  }
+  // ── Chapter 13: Surface Areas & Volumes ──
+  else if (num === 13 || name.includes('surface')) {
+    if (hint.includes('cone') || hint.includes('slant'))
+      drawSurfaces(svg, w, h, 'cone');
+    else if (hint.includes('sphere') || hint.includes('ball'))
+      drawSurfaces(svg, w, h, 'sphere');
+    else if (hint.includes('cuboid') || hint.includes('box') || hint.includes('cube'))
+      drawSurfaces(svg, w, h, 'cuboid');
+    else
+      drawSurfaces(svg, w, h, 'cylinder'); // default cylinder
+  }
+  // ── Chapter 14: Statistics ──
+  else if (num === 14 || name.includes('statistic')) {
+    if (hint.includes('median') || hint.includes('mode'))
+      drawStatistics(svg, w, h, 'median');
+    else if (hint.includes('histogram') || hint.includes('frequency'))
+      drawStatistics(svg, w, h, 'histogram');
+    else
+      drawStatistics(svg, w, h, 'mean');
+  }
+  // ── Chapter 15: Probability ──
+  else if (num === 15 || name.includes('probability')) {
+    if (hint.includes('tree') || hint.includes('event') || hint.includes('sample space') || hint.includes('outcome'))
+      drawProbability(svg, w, h, 'tree');
+    else
+      drawProbability(svg, w, h, 'spinner');
+  }
+  // ── Fallback ──
+  else {
+    drawPlaceholder(svg, w, h, chapterName || S.activeChapterName);
+  }
+
+  document.getElementById('infoLastVisual').textContent = (chapterName || 'visual');
+  flashBanner((chapterName || 'Visual') + ' ready');
+}
+
+// Chapter click / replay — route by chapter name only
+function renderVisualFor(chapterName) {
+  const { svg, w, h } = freshSVG();
+  const c = (chapterName || '').toLowerCase();
+  const num = S.activeChapterNum;
+  if (c.includes('number'))           drawNumberSystems(svg, w, h, 'overview');
+  else if (c.includes('polynomial'))  drawPolynomials(svg, w, h, 'roots');
+  else if (c.includes('coordinate'))  drawCoordinateGeometry(svg, w, h, 'overview');
+  else if (c.includes('linear'))      drawLinearEquations(svg, w, h, 'graph');
+  else if (c.includes('euclid'))      drawEuclid(svg, w, h);
+  else if (c.includes('lines') || c.includes('angle')) drawLinesAngles(svg, w, h, 'overview');
+  else if (c.includes('triangle'))    drawTriangles(svg, w, h, 'overview');
+  else if (c.includes('quadrilateral')) drawQuadrilaterals(svg, w, h, 'overview');
+  else if (c.includes('areas'))       drawAreas(svg, w, h);
+  else if (c.includes('circle'))      drawCircles(svg, w, h, 'overview');
+  else if (c.includes('construction')) drawConstructions(svg, w, h);
+  else if (c.includes('heron'))       drawHeron(svg, w, h);
+  else if (c.includes('surface'))     drawSurfaces(svg, w, h, 'cylinder');
+  else if (c.includes('statistic'))   drawStatistics(svg, w, h, 'mean');
+  else if (c.includes('probability')) drawProbability(svg, w, h, 'spinner');
+  else drawPlaceholder(svg, w, h, chapterName);
+  document.getElementById('infoLastVisual').textContent = chapterName + ' overview';
+}
+
+function drawPlaceholder(svg, w, h, chapter) {
+  svgTitle(svg, w, chapter);
+  svg.append('rect').attr('x',80).attr('y',70).attr('width',w-160).attr('height',h-140)
+    .attr('rx',28).attr('fill','rgba(103,232,249,.04)').attr('stroke','rgba(103,232,249,.14)');
+  svg.append('text').attr('x',w/2).attr('y',h/2).attr('text-anchor','middle')
+    .attr('fill','#eef4ff').attr('font-size','22px').attr('font-weight',800).text(chapter);
+  svg.append('text').attr('x',w/2).attr('y',h/2+32).attr('text-anchor','middle')
+    .attr('fill','#95a4c4').attr('font-size','14px').text('Diya will explain this shortly…');
+}
+
+function svgTitle(svg, w, text) {
+  svg.append('text').attr('x',w/2).attr('y',30)
+    .attr('text-anchor','middle').attr('fill','#ecf4ff')
+    .attr('font-size','15px').attr('font-weight',800).text(text);
+}
+
+function animatePath(path) {
+  const len = path.node().getTotalLength();
+  path.attr('stroke-dasharray',len).attr('stroke-dashoffset',len)
+    .transition().duration(1100).ease(d3.easeCubicOut).attr('stroke-dashoffset',0);
+}
+
+/* ── Ch 1: Number Systems ── */
+function drawNumberSystems(svg, w, h, scene = 'overview') {
+  if (scene === 'overview') {
+    svgTitle(svg, w, 'Number Systems · N ⊂ W ⊂ Z ⊂ Q ⊂ ℝ');
+    const cx=w/2, cy=h/2+10;
+    const sets=[
+      {r:168,c:'rgba(103,232,249,.8)',f:'rgba(103,232,249,.04)',label:'ℝ Real',    lx:cx-16,ly:cy-158},
+      {r:130,c:'rgba(255,200,87,.8)', f:'rgba(255,200,87,.05)', label:'Q Rational',lx:cx+110,ly:cy-96},
+      {r:94, c:'rgba(255,137,198,.8)',f:'rgba(255,137,198,.05)',label:'Z Integer', lx:cx+80, ly:cy-58},
+      {r:60, c:'rgba(121,242,179,.9)',f:'rgba(121,242,179,.07)',label:'W Whole',   lx:cx+46, ly:cy-22},
+      {r:28, c:'rgba(157,140,255,.9)',f:'rgba(157,140,255,.10)',label:'N',         lx:cx,    ly:cy+5},
+    ];
+    sets.forEach((s,i) => {
+      svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',0)
+        .attr('fill',s.f).attr('stroke',s.c).attr('stroke-width',1.8)
+        .transition().delay(i*120).duration(500).attr('r',s.r);
+      svg.append('text').attr('x',s.lx).attr('y',s.ly).attr('fill',s.c)
+        .attr('font-size','12px').attr('font-weight',700)
+        .attr('text-anchor',s.label==='N'?'middle':'start').attr('opacity',0)
+        .text(s.label).transition().delay(i*120+400).duration(300).attr('opacity',1);
+    });
+    [['√2',cx-118,cy-58],['π',cx-95,cy+52],['e',cx-128,cy+8]].forEach(([t,x,y])=>{
+      svg.append('circle').attr('cx',x).attr('cy',y).attr('r',20)
+        .attr('fill','rgba(255,200,87,.09)').attr('stroke','rgba(255,200,87,.7)').attr('stroke-width',1.5);
+      svg.append('text').attr('x',x).attr('y',y+5).attr('text-anchor','middle')
+        .attr('fill','#ffd68a').attr('font-size','15px').attr('font-weight',800).text(t);
+    });
+  }
+  else if (scene === 'irrational') {
+    svgTitle(svg, w, 'Irrational Numbers · Cannot be written as p/q');
+    const xScale = d3.scaleLinear().domain([-1,5]).range([60,w-60]);
+    const yMid   = h/2;
+    // Number line
+    svg.append('line').attr('x1',60).attr('x2',w-60).attr('y1',yMid).attr('y2',yMid)
+      .attr('stroke','#dfe7f3').attr('stroke-width',3);
+    // Ticks 0-4
+    [0,1,2,3,4].forEach(n => {
+      svg.append('line').attr('x1',xScale(n)).attr('x2',xScale(n))
+        .attr('y1',yMid-10).attr('y2',yMid+10).attr('stroke','#dfe7f3').attr('stroke-width',2);
+      svg.append('text').attr('x',xScale(n)).attr('y',yMid+28)
+        .attr('text-anchor','middle').attr('fill','#95a4c4').attr('font-size','13px').text(n);
+    });
+    // Irrational markers
+    const irr = [
+      {val:Math.sqrt(2), label:'√2≈1.414', col:'#ffc857'},
+      {val:Math.PI,      label:'π≈3.14',   col:'#67e8f9'},
+      {val:Math.E,       label:'e≈2.718',  col:'#ff89c6'},
+    ];
+    irr.forEach((d,i) => {
+      const x = xScale(d.val);
+      svg.append('circle').attr('cx',x).attr('cy',yMid).attr('r',0).attr('fill',d.col)
+        .transition().delay(i*200+300).duration(400).attr('r',10);
+      svg.append('text').attr('x',x).attr('y',yMid-22).attr('text-anchor','middle')
+        .attr('fill',d.col).attr('font-size','13px').attr('font-weight',700).attr('opacity',0)
+        .text(d.label).transition().delay(i*200+600).duration(300).attr('opacity',1);
+    });
+    svg.append('text').attr('x',w/2).attr('y',h-50).attr('text-anchor','middle')
+      .attr('fill','#95a4c4').attr('font-size','13px')
+      .text('These points exist on the number line but cannot be expressed as fractions');
+  }
+  else if (scene === 'numberline') {
+    svgTitle(svg, w, 'Number Line · Density of Real Numbers');
+    const xScale = d3.scaleLinear().domain([0,3]).range([80,w-80]);
+    const yMid   = h/2;
+    svg.append('line').attr('x1',80).attr('x2',w-80).attr('y1',yMid).attr('y2',yMid)
+      .attr('stroke','#67e8f9').attr('stroke-width',3);
+    [0,1,2,3].forEach(n => {
+      svg.append('line').attr('x1',xScale(n)).attr('x2',xScale(n))
+        .attr('y1',yMid-12).attr('y2',yMid+12).attr('stroke','#67e8f9').attr('stroke-width',2);
+      svg.append('text').attr('x',xScale(n)).attr('y',yMid+30)
+        .attr('text-anchor','middle').attr('fill','#dfe7f3').attr('font-size','14px').attr('font-weight',700).text(n);
+    });
+    const pts=[{v:0.5,l:'1/2',c:'#79f2b3'},{v:1.41,l:'√2',c:'#ffc857'},{v:1.73,l:'√3',c:'#ff89c6'},{v:2.5,l:'5/2',c:'#9d8cff'}];
+    pts.forEach((p,i)=>{
+      svg.append('circle').attr('cx',xScale(p.v)).attr('cy',yMid).attr('r',0).attr('fill',p.c)
+        .transition().delay(200+i*150).duration(350).attr('r',9);
+      svg.append('text').attr('x',xScale(p.v)).attr('y',yMid-(i%2===0?25:45))
+        .attr('text-anchor','middle').attr('fill',p.c).attr('font-size','13px').attr('font-weight',700)
+        .attr('opacity',0).text(p.l).transition().delay(400+i*150).duration(300).attr('opacity',1);
+    });
+    svg.append('text').attr('x',w/2).attr('y',h-50).attr('text-anchor','middle')
+      .attr('fill','#95a4c4').attr('font-size','13px')
+      .text('Between any two real numbers, infinitely many real numbers exist');
+  }
+  else {
+    svgTitle(svg, w, 'Rational Numbers · p/q form where q ≠ 0');
+    const items=[['1/2','0.5 — terminates'],['1/3','0.333… — recurring'],['7/4','1.75 — terminates'],['2/7','0.285714… — recurring']];
+    items.forEach(([frac,dec],i)=>{
+      const y=100+i*90;
+      svg.append('rect').attr('x',120).attr('y',y).attr('width',220).attr('height',60)
+        .attr('rx',14).attr('fill','rgba(103,232,249,.08)').attr('stroke','rgba(103,232,249,.2)');
+      svg.append('text').attr('x',230).attr('y',y+36).attr('text-anchor','middle')
+        .attr('fill','#67e8f9').attr('font-size','22px').attr('font-weight',800).text(frac);
+      svg.append('text').attr('x',460).attr('y',y+36).attr('text-anchor','middle')
+        .attr('fill','#dfe7f3').attr('font-size','16px').text('= '+dec);
+    });
+  }
+}
+
+/* ── Ch 2: Polynomials ── */
+function drawPolynomials(svg, w, h, scene = 'roots') {
+  if (scene === 'roots') {
+    svgTitle(svg, w, 'Polynomials · y = x² − 3x − 4  (zeros at x = −1, 4)');
+    const x=d3.scaleLinear().domain([-3,6]).range([60,w-44]);
+    const y=d3.scaleLinear().domain([-12,16]).range([h-50,50]);
+    svg.append('g').attr('transform',`translate(0,${y(0)})`).call(d3.axisBottom(x).ticks(7))
+      .selectAll('text').attr('fill','#95a4c4');
+    svg.append('g').attr('transform',`translate(${x(0)},0)`).call(d3.axisLeft(y).ticks(6))
+      .selectAll('text').attr('fill','#95a4c4');
+    const lineGen=d3.line().x(d=>x(d.xv)).y(d=>y(d.yv)).curve(d3.curveCatmullRom);
+    const data=d3.range(-3,6.05,.06).map(v=>({xv:v,yv:v*v-3*v-4}));
+    const path=svg.append('path').datum(data).attr('fill','none')
+      .attr('stroke','#67e8f9').attr('stroke-width',3.5).attr('d',lineGen);
+    animatePath(path);
+    [-1,4].forEach(r=>{
+      svg.append('circle').attr('cx',x(r)).attr('cy',y(0)).attr('r',0).attr('fill','#ffc857')
+        .transition().delay(900).duration(300).attr('r',9);
+      svg.append('text').attr('x',x(r)).attr('y',y(0)-18).attr('text-anchor','middle')
+        .attr('fill','#fff').attr('font-size','12px').attr('font-weight',700)
+        .attr('opacity',0).text(`zero: x=${r}`).transition().delay(1100).duration(300).attr('opacity',1);
+    });
+  } else {
+    svgTitle(svg, w, 'Polynomials · Degree determines shape');
+    const x=d3.scaleLinear().domain([-4,4]).range([60,w-40]);
+    const y=d3.scaleLinear().domain([-8,12]).range([h-50,50]);
+    svg.append('g').attr('transform',`translate(0,${y(0)})`).call(d3.axisBottom(x).ticks(7))
+      .selectAll('text').attr('fill','#95a4c4');
+    svg.append('g').attr('transform',`translate(${x(0)},0)`).call(d3.axisLeft(y).ticks(6))
+      .selectAll('text').attr('fill','#95a4c4');
+    const lineGen=d3.line().x(d=>x(d.xv)).y(d=>y(d.yv));
+    const curves=[
+      {fn:v=>2*v-1,    col:'#67e8f9',label:'Linear: 2x−1'},
+      {fn:v=>v*v-3,    col:'#ffc857',label:'Quadratic: x²−3'},
+      {fn:v=>0.3*v*v*v,col:'#ff89c6',label:'Cubic: 0.3x³'},
+    ];
+    curves.forEach((c,i)=>{
+      const data=d3.range(-4,4.1,.1).map(v=>({xv:v,yv:c.fn(v)}));
+      const path=svg.append('path').datum(data).attr('fill','none')
+        .attr('stroke',c.col).attr('stroke-width',2.8).attr('d',lineGen);
+      animatePath(path);
+      svg.append('text').attr('x',w-180).attr('y',80+i*22)
+        .attr('fill',c.col).attr('font-size','12px').attr('font-weight',600).text(c.label);
+    });
+  }
+}
+
+/* ── Ch 3: Coordinate Geometry ── */
+function drawCoordinateGeometry(svg, w, h, scene = 'overview') {
+  const xScale=d3.scaleLinear().domain([-7,7]).range([50,w-50]);
+  const yScale=d3.scaleLinear().domain([-5,5]).range([h-50,50]);
+  const axisX=()=>svg.append('g').attr('transform',`translate(0,${yScale(0)})`).call(d3.axisBottom(xScale)).selectAll('text').attr('fill','#95a4c4');
+  const axisY=()=>svg.append('g').attr('transform',`translate(${xScale(0)},0)`).call(d3.axisLeft(yScale)).selectAll('text').attr('fill','#95a4c4');
+
+  if (scene === 'distance') {
+    svgTitle(svg, w, 'Distance Formula · d = √[(x₂−x₁)² + (y₂−y₁)²]');
+    axisX(); axisY();
+    const A={x:-3,y:-2}, B={x:4,y:3};
+    svg.append('line').attr('x1',xScale(A.x)).attr('y1',yScale(A.y)).attr('x2',xScale(B.x)).attr('y2',yScale(B.y))
+      .attr('stroke','#67e8f9').attr('stroke-width',3).attr('stroke-dasharray','8 4');
+    svg.append('line').attr('x1',xScale(A.x)).attr('y1',yScale(A.y)).attr('x2',xScale(B.x)).attr('y2',yScale(A.y))
+      .attr('stroke','#ffc857').attr('stroke-width',2).attr('stroke-dasharray','5 3');
+    svg.append('line').attr('x1',xScale(B.x)).attr('y1',yScale(A.y)).attr('x2',xScale(B.x)).attr('y2',yScale(B.y))
+      .attr('stroke','#79f2b3').attr('stroke-width',2).attr('stroke-dasharray','5 3');
+    [[A,'A','#ff89c6'],[B,'B','#ffc857']].forEach(([p,l,c])=>{
+      svg.append('circle').attr('cx',xScale(p.x)).attr('cy',yScale(p.y)).attr('r',8).attr('fill',c);
+      svg.append('text').attr('x',xScale(p.x)+12).attr('y',yScale(p.y)-10).attr('fill',c).attr('font-size','14px').attr('font-weight',700).text(`${l}(${p.x},${p.y})`);
+    });
+    const d=Math.sqrt((B.x-A.x)**2+(B.y-A.y)**2);
+    svg.append('text').attr('x',w/2).attr('y',h-35).attr('text-anchor','middle')
+      .attr('fill','#67e8f9').attr('font-size','15px').attr('font-weight',700)
+      .text(`d = √(7²+5²) = √74 ≈ ${d.toFixed(2)}`);
+  }
+  else if (scene === 'midpoint') {
+    svgTitle(svg, w, 'Midpoint Formula · M = ((x₁+x₂)/2, (y₁+y₂)/2)');
+    axisX(); axisY();
+    const A={x:-4,y:-3}, B={x:4,y:3}, M={x:0,y:0};
+    svg.append('line').attr('x1',xScale(A.x)).attr('y1',yScale(A.y)).attr('x2',xScale(B.x)).attr('y2',yScale(B.y))
+      .attr('stroke','#67e8f9').attr('stroke-width',3);
+    [[A,'A','#ff89c6'],[B,'B','#ffc857'],[M,'M (midpoint)','#79f2b3']].forEach(([p,l,c])=>{
+      svg.append('circle').attr('cx',xScale(p.x)).attr('cy',yScale(p.y)).attr('r',p===M?10:7).attr('fill',c);
+      svg.append('text').attr('x',xScale(p.x)+14).attr('y',yScale(p.y)-10).attr('fill',c).attr('font-size','13px').attr('font-weight',700).text(l);
+    });
+  }
+  else if (scene === 'quadrants') {
+    svgTitle(svg, w, 'Coordinate Geometry · Four Quadrants');
+    axisX(); axisY();
+    [['I',[3.5,2.5]],['II',[-3.5,2.5]],['III',[-3.5,-2.5]],['IV',[3.5,-2.5]]].forEach(([l,[px,py]])=>{
+      svg.append('text').attr('x',xScale(px)).attr('y',yScale(py)).attr('text-anchor','middle')
+        .attr('fill','rgba(255,255,255,.15)').attr('font-size','30px').attr('font-weight',800).text(l);
+    });
+    const pt={x:3,y:4}; // but scaled to fit
+    const spt={x:3,y:2};
+    svg.append('line').attr('x1',xScale(spt.x)).attr('x2',xScale(spt.x)).attr('y1',yScale(0)).attr('y2',yScale(spt.y))
+      .attr('stroke','#79f2b3').attr('stroke-dasharray','5 4').attr('stroke-width',1.5);
+    svg.append('line').attr('x1',xScale(0)).attr('x2',xScale(spt.x)).attr('y1',yScale(spt.y)).attr('y2',yScale(spt.y))
+      .attr('stroke','#79f2b3').attr('stroke-dasharray','5 4').attr('stroke-width',1.5);
+    svg.append('circle').attr('cx',xScale(spt.x)).attr('cy',yScale(spt.y)).attr('r',10).attr('fill','#ff89c6');
+    svg.append('text').attr('x',xScale(spt.x)+14).attr('y',yScale(spt.y)-12)
+      .attr('fill','#eef4ff').attr('font-size','16px').attr('font-weight',700).text('(3, 2)');
+  }
+  else {
+    svgTitle(svg, w, 'Coordinate Geometry · Cartesian Plane');
+    axisX(); axisY();
+    const points=[{x:3,y:2,c:'#ff89c6',l:'(3,2)'},{x:-3,y:1,c:'#79f2b3',l:'(−3,1)'},{x:2,y:-3,c:'#ffc857',l:'(2,−3)'}];
+    points.forEach(p=>{
+      svg.append('circle').attr('cx',xScale(p.x)).attr('cy',yScale(p.y)).attr('r',0).attr('fill',p.c)
+        .transition().delay(300).duration(400).attr('r',9);
+      svg.append('text').attr('x',xScale(p.x)+13).attr('y',yScale(p.y)-10)
+        .attr('fill',p.c).attr('font-size','13px').attr('font-weight',700).attr('opacity',0)
+        .text(p.l).transition().delay(600).duration(300).attr('opacity',1);
+    });
+  }
+}
+
+/* ── Ch 4: Linear Equations ── */
+function drawLinearEquations(svg, w, h, scene = 'graph') {
+  const xScale=d3.scaleLinear().domain([-8,8]).range([60,w-50]);
+  const yScale=d3.scaleLinear().domain([-7,7]).range([h-50,50]);
+  svg.append('g').attr('transform',`translate(0,${yScale(0)})`).call(d3.axisBottom(xScale).ticks(8)).selectAll('text').attr('fill','#95a4c4');
+  svg.append('g').attr('transform',`translate(${xScale(0)},0)`).call(d3.axisLeft(yScale).ticks(8)).selectAll('text').attr('fill','#95a4c4');
+  const lineGen=d3.line().x(d=>xScale(d.xv)).y(d=>yScale(d.yv));
+
+  if (scene === 'solution') {
+    svgTitle(svg, w, 'Linear Equations · Finding the Solution Point');
+    const lines=[{m:1,b:1,col:'#67e8f9',lbl:'y = x + 1'},{m:-1,b:3,col:'#ffc857',lbl:'y = −x + 3'}];
+    lines.forEach(({m,b,col,lbl})=>{
+      const data=d3.range(-8,8.1,.2).map(v=>({xv:v,yv:m*v+b}));
+      const path=svg.append('path').datum(data).attr('fill','none').attr('stroke',col).attr('stroke-width',3.5).attr('d',lineGen);
+      animatePath(path);
+    });
+    // intersection at x=1, y=2
+    svg.append('circle').attr('cx',xScale(1)).attr('cy',yScale(2)).attr('r',0).attr('fill','#79f2b3')
+      .transition().delay(1000).duration(400).attr('r',12);
+    svg.append('text').attr('x',xScale(1)+16).attr('y',yScale(2)-14).attr('fill','#79f2b3')
+      .attr('font-size','14px').attr('font-weight',700).attr('opacity',0)
+      .text('Solution (1, 2)').transition().delay(1200).duration(400).attr('opacity',1);
+  } else if (scene === 'slope') {
+    svgTitle(svg, w, 'Slope & Intercept · y = mx + c');
+    const data=d3.range(-8,8.1,.2).map(v=>({xv:v,yv:1.5*v+2}));
+    const path=svg.append('path').datum(data).attr('fill','none').attr('stroke','#67e8f9').attr('stroke-width',3.5).attr('d',lineGen);
+    animatePath(path);
+    svg.append('circle').attr('cx',xScale(0)).attr('cy',yScale(2)).attr('r',10).attr('fill','#ffc857');
+    svg.append('text').attr('x',xScale(0)+14).attr('y',yScale(2)-12).attr('fill','#ffc857').attr('font-size','13px').attr('font-weight',700).text('y-intercept (c=2)');
+    // slope triangle
+    svg.append('line').attr('x1',xScale(2)).attr('y1',yScale(1.5*2+2)).attr('x2',xScale(4)).attr('y2',yScale(1.5*2+2))
+      .attr('stroke','#79f2b3').attr('stroke-width',2).attr('stroke-dasharray','5 3');
+    svg.append('line').attr('x1',xScale(4)).attr('y1',yScale(1.5*2+2)).attr('x2',xScale(4)).attr('y2',yScale(1.5*4+2))
+      .attr('stroke','#ff89c6').attr('stroke-width',2).attr('stroke-dasharray','5 3');
+    svg.append('text').attr('x',xScale(3)).attr('y',yScale(1.5*3)+20).attr('text-anchor','middle')
+      .attr('fill','#79f2b3').attr('font-size','12px').attr('font-weight',700).text('run=2');
+    svg.append('text').attr('x',xScale(4)+30).attr('y',yScale(1.5*3.5)).attr('text-anchor','start')
+      .attr('fill','#ff89c6').attr('font-size','12px').attr('font-weight',700).text('rise=3');
+    svg.append('text').attr('x',w/2).attr('y',h-30).attr('text-anchor','middle')
+      .attr('fill','#95a4c4').attr('font-size','13px').text('slope m = rise/run = 3/2 = 1.5');
+  } else {
+    svgTitle(svg, w, 'Linear Equations in Two Variables · Graph');
+    const lines=[{m:0.8,b:1,col:'#67e8f9',lbl:'y = 0.8x + 1'},{m:-1.2,b:2,col:'#ffc857',lbl:'y = −1.2x + 2'}];
+    lines.forEach(({m,b,col,lbl},i)=>{
+      const data=d3.range(-8,8.1,.2).map(v=>({xv:v,yv:m*v+b}));
+      const path=svg.append('path').datum(data).attr('fill','none').attr('stroke',col).attr('stroke-width',3).attr('d',lineGen);
+      animatePath(path);
+      svg.append('text').attr('x',w-180).attr('y',75+i*22).attr('fill',col).attr('font-size','12px').attr('font-weight',600).text(lbl);
+    });
+  }
+}
+
+/* ── Ch 5: Euclid's Geometry ── */
+function drawEuclid(svg, w, h) {
+  svgTitle(svg, w, "Euclid's Geometry · Postulates and Definitions");
+  svg.append('rect').attr('x',70).attr('y',65).attr('width',w-140).attr('height',h-130)
+    .attr('rx',24).attr('fill','rgba(103,232,249,.03)').attr('stroke','rgba(103,232,249,.12)');
+  const A={x:w/2-160,y:h/2+30}, B={x:w/2+130,y:h/2-20};
+  const path=svg.append('line').attr('x1',A.x).attr('y1',A.y).attr('x2',A.x).attr('y2',A.y)
+    .attr('stroke','#67e8f9').attr('stroke-width',4);
+  path.transition().duration(900).attr('x2',B.x).attr('y2',B.y);
+  [[A,'A','#79f2b3'],[B,'B','#ffc857']].forEach(([p,l,c])=>{
+    svg.append('circle').attr('cx',p.x).attr('cy',p.y).attr('r',0).attr('fill',c)
+      .transition().delay(800).duration(300).attr('r',10);
+    svg.append('text').attr('x',p.x+(l==='A'?-22:14)).attr('y',p.y-14)
+      .attr('fill',c).attr('font-size','16px').attr('font-weight',700).text(l);
+  });
+  const postulates = [
+    'Postulate 1: A straight line may be drawn from any point to any point.',
+    'Postulate 2: A line segment can be extended indefinitely.',
+    'Postulate 3: A circle can be drawn with any centre and radius.',
+  ];
+  postulates.forEach((p,i)=>{
+    svg.append('text').attr('x',w/2).attr('y',h-90+i*24).attr('text-anchor','middle')
+      .attr('fill',i===0?'#67e8f9':'#95a4c4').attr('font-size','12px').text(p);
+  });
+}
+
+/* ── Ch 6: Lines & Angles ── */
+function drawLinesAngles(svg, w, h, scene = 'overview') {
+  if (scene === 'transversal') {
+    svgTitle(svg, w, 'Lines & Angles · Parallel Lines and Transversal');
+    const y1=h*0.34, y2=h*0.67, cx=w/2;
+    svg.append('line').attr('x1',80).attr('x2',w-80).attr('y1',y1).attr('y2',y1).attr('stroke','#dfe7f3').attr('stroke-width',4);
+    svg.append('line').attr('x1',80).attr('x2',w-80).attr('y1',y2).attr('y2',y2).attr('stroke','#dfe7f3').attr('stroke-width',4);
+    // parallel markers
+    [[cx-80,y1],[cx-80,y2]].forEach(([x,y])=>{
+      svg.append('text').attr('x',x).attr('y',y-8).attr('text-anchor','middle')
+        .attr('fill','#95a4c4').attr('font-size','13px').text('//');
+    });
+    svg.append('line').attr('x1',cx-200).attr('y1',y1-160).attr('x2',cx+200).attr('y2',y2+100).attr('stroke','#67e8f9').attr('stroke-width',4);
+    const arcFn=d3.arc();
+    svg.append('path').attr('d',arcFn({innerRadius:0,outerRadius:52,startAngle:0.22,endAngle:0.95}))
+      .attr('transform',`translate(${cx},${y1})`).attr('fill','rgba(255,200,87,.22)');
+    svg.append('path').attr('d',arcFn({innerRadius:0,outerRadius:52,startAngle:0.22,endAngle:0.95}))
+      .attr('transform',`translate(${cx},${y2})`).attr('fill','rgba(103,232,249,.22)');
+    svg.append('text').attr('x',cx+60).attr('y',y1-10).attr('fill','#ffc857').attr('font-size','12px').attr('font-weight',700).text('Corresponding angles equal');
+    svg.append('text').attr('x',cx+60).attr('y',y2+30).attr('fill','#67e8f9').attr('font-size','12px').attr('font-weight',700).text('Alternate angles equal');
+  }
+  else if (scene === 'angle_pairs') {
+    svgTitle(svg, w, 'Lines & Angles · Angle Pairs');
+    const cx=w/2, cy=h/2;
+    svg.append('line').attr('x1',80).attr('x2',w-80).attr('y1',cy).attr('y2',cy).attr('stroke','#dfe7f3').attr('stroke-width',4);
+    svg.append('line').attr('x1',cx).attr('y1',80).attr('x2',cx).attr('y2',h-80).attr('stroke','#dfe7f3').attr('stroke-width',4);
+    const arcFn=d3.arc();
+    const arcs=[
+      {start:0,end:Math.PI/2,col:'#ffc857',label:'90°',lx:cx+50,ly:cy-40},
+      {start:Math.PI/2,end:Math.PI,col:'#67e8f9',label:'90°',lx:cx-60,ly:cy-40},
+    ];
+    arcs.forEach(a=>{
+      svg.append('path').attr('d',arcFn({innerRadius:0,outerRadius:60,startAngle:a.start,endAngle:a.end}))
+        .attr('transform',`translate(${cx},${cy})`).attr('fill',a.col.replace(')',', 0.2)').replace('rgb','rgba'));
+      svg.append('text').attr('x',a.lx).attr('y',a.ly).attr('text-anchor','middle')
+        .attr('fill',a.col).attr('font-size','14px').attr('font-weight',700).text(a.label);
+    });
+    svg.append('text').attr('x',w/2).attr('y',h-35).attr('text-anchor','middle')
+      .attr('fill','#95a4c4').attr('font-size','13px').text('Vertically opposite angles are equal');
+  }
+  else {
+    svgTitle(svg, w, 'Lines & Angles · Types of Angles');
+    const types=[{a:45,label:'Acute < 90°',col:'#79f2b3'},{a:90,label:'Right = 90°',col:'#67e8f9'},{a:135,label:'Obtuse > 90°',col:'#ffc857'},{a:180,label:'Straight = 180°',col:'#ff89c6'}];
+    const spacing=w/(types.length+1);
+    types.forEach(({a,label,col},i)=>{
+      const cx=spacing*(i+1), cy=h/2+20, r=70;
+      const rad=(180-a)*Math.PI/180;
+      svg.append('line').attr('x1',cx).attr('y1',cy).attr('x2',cx+r).attr('y2',cy).attr('stroke',col).attr('stroke-width',3);
+      svg.append('line').attr('x1',cx).attr('y1',cy).attr('x2',cx+r*Math.cos(rad)).attr('y2',cy-r*Math.sin(rad)).attr('stroke',col).attr('stroke-width',3);
+      svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',5).attr('fill',col);
+      svg.append('text').attr('x',cx).attr('y',cy+40).attr('text-anchor','middle').attr('fill',col).attr('font-size','12px').attr('font-weight',700).text(label);
+    });
+  }
+}
+
+/* ── Ch 7: Triangles ── */
+function drawTriangles(svg, w, h, scene = 'overview') {
+  if (scene === 'pythagoras') {
+    svgTitle(svg, w, 'Pythagoras Theorem · a² + b² = c²');
+    const ox=180, oy=h-100, base=280, ht=260;
+    // right-angle triangle
+    const pts=[[ox,oy],[ox+base,oy],[ox,oy-ht]];
+    const pathD=d3.line().curve(d3.curveLinearClosed);
+    svg.append('path').attr('d',pathD(pts)).attr('fill','rgba(103,232,249,.10)').attr('stroke','#67e8f9').attr('stroke-width',3.5);
+    // right angle box
+    svg.append('rect').attr('x',ox).attr('y',oy-28).attr('width',28).attr('height',28)
+      .attr('fill','none').attr('stroke','#79f2b3').attr('stroke-width',2);
+    // labels
+    const labels=[['a',ox-28,(oy-ht/2),'#ffc857'],['b',(ox+base/2),oy+22,'#ff89c6'],['c',(ox+base/2+30),(oy-ht/2),'#67e8f9']];
+    labels.forEach(([l,x,y,c])=>svg.append('text').attr('x',x).attr('y',y).attr('text-anchor','middle').attr('fill',c).attr('font-size','20px').attr('font-weight',800).text(l));
+    // formula box
+    const fbox={x:w-280,y:120};
+    svg.append('rect').attr('x',fbox.x).attr('y',fbox.y).attr('width',220).attr('height',130)
+      .attr('rx',16).attr('fill','rgba(255,255,255,.04)').attr('stroke','rgba(255,255,255,.1)');
+    [['a² + b² = c²',fbox.x+110,fbox.y+42,'#eef4ff',18],
+     ['e.g. 3² + 4² = 5²',fbox.x+110,fbox.y+72,'#95a4c4',13],
+     ['  9  + 16  = 25  ✓',fbox.x+110,fbox.y+96,'#79f2b3',13],
+     ['(3,4,5) Pythagorean triple',fbox.x+110,fbox.y+120,'#ffc857',12]
+    ].forEach(([t,x,y,c,fs])=>svg.append('text').attr('x',x).attr('y',y).attr('text-anchor','middle').attr('fill',c).attr('font-size',`${fs}px`).attr('font-weight',fs===18?800:500).text(t));
+  }
+  else if (scene === 'congruence') {
+    svgTitle(svg, w, 'Triangle Congruence · SSS, SAS, ASA, RHS');
+    const criteria=[
+      {rule:'SSS',desc:'All 3 sides equal',col:'#67e8f9'},
+      {rule:'SAS',desc:'2 sides + included angle',col:'#ffc857'},
+      {rule:'ASA',desc:'2 angles + included side',col:'#79f2b3'},
+      {rule:'RHS',desc:'Right, Hypotenuse, Side',col:'#ff89c6'},
+    ];
+    const spacing=w/(criteria.length+1);
+    criteria.forEach(({rule,desc,col},i)=>{
+      const cx=spacing*(i+1), cy=h/2;
+      svg.append('rect').attr('x',cx-60).attr('y',cy-70).attr('width',120).attr('height',120)
+        .attr('rx',16).attr('fill',col.replace('#','rgba(').replace(/$/,', 0.08)')).attr('stroke',col).attr('stroke-width',1.5);
+      // mini triangle
+      const tp=[[cx,cy-55],[cx-40,cy+30],[cx+40,cy+30]];
+      svg.append('path').attr('d',d3.line().curve(d3.curveLinearClosed)(tp))
+        .attr('fill',col.replace('#','rgba(').replace(/$/,', 0.15)')).attr('stroke',col).attr('stroke-width',2);
+      svg.append('text').attr('x',cx).attr('y',cy+62).attr('text-anchor','middle').attr('fill',col).attr('font-size','15px').attr('font-weight',800).text(rule);
+      svg.append('text').attr('x',cx).attr('y',cy+82).attr('text-anchor','middle').attr('fill','#95a4c4').attr('font-size','11px').text(desc);
+    });
+  }
+  else if (scene === 'centres') {
+    svgTitle(svg, w, 'Triangles · Medians and Centroid');
+    const pts=[[w/2,80],[w/2-180,h-90],[w/2+180,h-90]];
+    const pathD=d3.line().curve(d3.curveLinearClosed);
+    svg.append('path').attr('d',pathD(pts)).attr('fill','rgba(121,242,179,.08)').attr('stroke','#79f2b3').attr('stroke-width',3);
+    // midpoints and medians
+    const mids=[[0,1],[1,2],[0,2]].map(([a,b])=>[(pts[a][0]+pts[b][0])/2,(pts[a][1]+pts[b][1])/2]);
+    [0,1,2].forEach(i=>{
+      svg.append('line').attr('x1',pts[i][0]).attr('y1',pts[i][1])
+        .attr('x2',mids[(i+1)%3][0]).attr('y2',mids[(i+1)%3][1])
+        .attr('stroke','rgba(255,200,87,.6)').attr('stroke-width',2).attr('stroke-dasharray','6 4');
+    });
+    const G=[(pts[0][0]+pts[1][0]+pts[2][0])/3,(pts[0][1]+pts[1][1]+pts[2][1])/3];
+    svg.append('circle').attr('cx',G[0]).attr('cy',G[1]).attr('r',10).attr('fill','#ffc857');
+    svg.append('text').attr('x',G[0]+16).attr('y',G[1]-10).attr('fill','#ffc857').attr('font-size','14px').attr('font-weight',700).text('G (Centroid)');
+  }
+  else {
+    svgTitle(svg, w, 'Triangles · Properties and Relationships');
+    const pts=[[w/2,90],[w/2-170,h-90],[w/2+170,h-90]];
+    const pathD=d3.line().curve(d3.curveLinearClosed);
+    svg.append('path').attr('d',pathD(pts)).attr('fill','rgba(121,242,179,.10)').attr('stroke','#79f2b3').attr('stroke-width',3.5);
+    pts.forEach((p,i)=>svg.append('circle').attr('cx',p[0]).attr('cy',p[1]).attr('r',9).attr('fill',i===0?'#ffc857':'#67e8f9'));
+    [['A',pts[0][0]-20,pts[0][1]-16],['B',pts[1][0]-24,pts[1][1]+10],['C',pts[2][0]+10,pts[2][1]+10]].forEach(([l,x,y])=>
+      svg.append('text').attr('x',x).attr('y',y).attr('fill','#fff').attr('font-size','16px').attr('font-weight',700).text(l)
+    );
+    svg.append('text').attr('x',w/2).attr('y',h-30).attr('text-anchor','middle')
+      .attr('fill','#95a4c4').attr('font-size','13px').text('Sum of all angles = 180°');
+  }
+}
+
+/* ── Ch 8: Quadrilaterals ── */
+function drawQuadrilaterals(svg, w, h, scene = 'overview') {
+  svgTitle(svg, w, scene==='rhombus'?'Rhombus · Diagonals bisect at right angles':'Quadrilaterals · Parallelogram Properties');
+  const pts=scene==='rhombus'
+    ?[[w/2,90],[w/2+160,h/2],[w/2,h-90],[w/2-160,h/2]]
+    :[[w/2-170,h/2-80],[w/2+90,h/2-80],[w/2+170,h/2+80],[w/2-90,h/2+80]];
+  const pathD=d3.line().curve(d3.curveLinearClosed);
+  svg.append('path').attr('d',pathD(pts)).attr('fill','rgba(103,232,249,.10)').attr('stroke','#67e8f9').attr('stroke-width',3.5);
+  // diagonals
+  svg.append('line').attr('x1',pts[0][0]).attr('y1',pts[0][1]).attr('x2',pts[2][0]).attr('y2',pts[2][1])
+    .attr('stroke','rgba(255,200,87,.6)').attr('stroke-width',2).attr('stroke-dasharray','7 5');
+  svg.append('line').attr('x1',pts[1][0]).attr('y1',pts[1][1]).attr('x2',pts[3][0]).attr('y2',pts[3][1])
+    .attr('stroke','rgba(255,137,198,.6)').attr('stroke-width',2).attr('stroke-dasharray','7 5');
+  svg.append('text').attr('x',w/2).attr('y',h-30).attr('text-anchor','middle')
+    .attr('fill','#95a4c4').attr('font-size','13px')
+    .text(scene==='rhombus'?'Diagonals bisect each other at 90°':'Opposite sides parallel and equal');
+}
+
+/* ── Ch 9: Areas ── */
+function drawAreas(svg, w, h) {
+  svgTitle(svg, w, 'Areas · Parallelogram = base × height');
+  const para=[[160,h-130],[440,h-130],[550,110],[270,110]];
+  const tri= [[160,h-130],[440,h-130],[300,110]];
+  const pathD=d3.line().curve(d3.curveLinearClosed);
+  svg.append('path').attr('d',pathD(para)).attr('fill','rgba(121,242,179,.10)').attr('stroke','#79f2b3').attr('stroke-width',3.5);
+  svg.append('path').attr('d',pathD(tri)).attr('fill','rgba(255,200,87,.14)').attr('stroke','#ffc857').attr('stroke-width',3);
+  svg.append('line').attr('x1',300).attr('y1',110).attr('x2',300).attr('y2',h-130)
+    .attr('stroke','#ff89c6').attr('stroke-dasharray','7 5').attr('stroke-width',2.5);
+  svg.append('text').attr('x',310).attr('y',h/2+10).attr('fill','#ff89c6').attr('font-size','13px').attr('font-weight',700).text('h');
+  const info=[['Parallelogram = b × h','#79f2b3',h-30],['Triangle = ½ × b × h','#ffc857',h-10]];
+  info.forEach(([t,c,y])=>svg.append('text').attr('x',w/2).attr('y',y).attr('text-anchor','middle').attr('fill',c).attr('font-size','13px').attr('font-weight',600).text(t));
+}
+
+/* ── Ch 10: Circles ── */
+function drawCircles(svg, w, h, scene = 'overview') {
+  const cx=w/2, cy=h/2+10, r=160;
+  svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',0)
+    .attr('fill','rgba(103,232,249,.05)').attr('stroke','#67e8f9').attr('stroke-width',3.5)
+    .transition().duration(700).attr('r',r);
+  svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',5).attr('fill','#fff');
+
+  if (scene === 'chord') {
+    svgTitle(svg, w, 'Circles · Chord and Arc');
+    const a1=-0.8, a2=1.2;
+    const p1={x:cx+r*Math.cos(a1),y:cy+r*Math.sin(a1)};
+    const p2={x:cx+r*Math.cos(a2),y:cy+r*Math.sin(a2)};
+    svg.append('line').attr('x1',p1.x).attr('y1',p1.y).attr('x2',p2.x).attr('y2',p2.y)
+      .attr('stroke','#ffc857').attr('stroke-width',3);
+    svg.append('text').attr('x',(p1.x+p2.x)/2+15).attr('y',(p1.y+p2.y)/2)
+      .attr('fill','#ffc857').attr('font-size','13px').attr('font-weight',700).text('Chord');
+    const arcPath=d3.arc()({innerRadius:r-2,outerRadius:r+2,startAngle:a1+Math.PI/2,endAngle:a2+Math.PI/2});
+    svg.append('path').attr('d',arcPath).attr('transform',`translate(${cx},${cy})`).attr('fill','#ff89c6');
+    svg.append('text').attr('x',cx+r+20).attr('y',cy-20).attr('fill','#ff89c6').attr('font-size','13px').attr('font-weight',700).text('Arc');
+  }
+  else if (scene === 'tangent') {
+    svgTitle(svg, w, 'Circles · Tangent is perpendicular to radius');
+    const tx=cx+r, ty=cy;
+    svg.append('line').attr('x1',cx).attr('y1',cy).attr('x2',tx).attr('y2',ty)
+      .attr('stroke','#ffc857').attr('stroke-width',2.5);
+    svg.append('line').attr('x1',tx).attr('y1',ty-100).attr('x2',tx).attr('y2',ty+100)
+      .attr('stroke','#79f2b3').attr('stroke-width',3.5);
+    svg.append('rect').attr('x',tx-20).attr('y',ty-20).attr('width',20).attr('height',20)
+      .attr('fill','none').attr('stroke','#79f2b3').attr('stroke-width',2);
+    svg.append('text').attr('x',tx+20).attr('y',ty-60).attr('fill','#79f2b3').attr('font-size','13px').attr('font-weight',700).text('Tangent');
+    svg.append('text').attr('x',cx+50).attr('y',cy-15).attr('fill','#ffc857').attr('font-size','13px').text('Radius ⊥ Tangent at point of contact');
+  }
+  else if (scene === 'angles') {
+    svgTitle(svg, w, 'Circles · Angle at Centre = 2 × Inscribed Angle');
+    const t=Math.PI*0.6;
+    const p1={x:cx+r,y:cy}, p2={x:cx+r*Math.cos(t),y:cy-r*Math.sin(t)};
+    const p3={x:cx+r*Math.cos(t/2+0.4),y:cy+r*Math.sin(t/2+0.4)};
+    [[cx,cy,p1.x,p1.y],[cx,cy,p2.x,p2.y]].forEach(a=>
+      svg.append('line').attr('x1',a[0]).attr('y1',a[1]).attr('x2',a[2]).attr('y2',a[3]).attr('stroke','#ffc857').attr('stroke-width',2.5)
+    );
+    [[p1.x,p1.y,p2.x,p2.y],[p1.x,p1.y,p3.x,p3.y],[p2.x,p2.y,p3.x,p3.y]].forEach(a=>
+      svg.append('line').attr('x1',a[0]).attr('y1',a[1]).attr('x2',a[2]).attr('y2',a[3]).attr('stroke','#dce8ff').attr('stroke-width',2)
+    );
+    svg.append('text').attr('x',cx+14).attr('y',cy-14).attr('fill','#ffc857').attr('font-size','13px').attr('font-weight',700).text('2θ');
+    svg.append('text').attr('x',p3.x+14).attr('y',p3.y).attr('fill','#67e8f9').attr('font-size','13px').attr('font-weight',700).text('θ');
+  }
+  else {
+    svgTitle(svg, w, 'Circles · Parts and Properties');
+    svg.append('text').attr('x',cx+r+18).attr('y',cy).attr('fill','#67e8f9').attr('font-size','13px').attr('font-weight',700).text('Radius');
+    svg.append('line').attr('x1',cx).attr('y1',cy).attr('x2',cx+r).attr('y2',cy).attr('stroke','#ffc857').attr('stroke-width',2.5);
+    svg.append('line').attr('x1',cx-r).attr('y1',cy).attr('x2',cx+r).attr('y2',cy).attr('stroke','#ff89c6').attr('stroke-width',2).attr('stroke-dasharray','6 4');
+    svg.append('text').attr('x',cx).attr('y',cy+20).attr('text-anchor','middle').attr('fill','#ff89c6').attr('font-size','12px').attr('font-weight',700).text('Diameter = 2r');
+  }
+}
+
+/* ── Ch 11: Constructions ── */
+function drawConstructions(svg, w, h) {
+  svgTitle(svg, w, 'Constructions · Perpendicular Bisector');
+  const a={x:w/2-165,y:h/2}, b={x:w/2+165,y:h/2};
+  const line=svg.append('line').attr('x1',a.x).attr('y1',a.y).attr('x2',a.x).attr('y2',a.y).attr('stroke','#dfe7f3').attr('stroke-width',4);
+  line.transition().duration(800).attr('x2',b.x).attr('y2',b.y);
+  [a,b].forEach((p,i)=>svg.append('circle').attr('cx',p.x).attr('cy',p.y).attr('r',0).attr('fill',i?'#ffc857':'#67e8f9').transition().delay(700).duration(300).attr('r',10));
+  const arcFn=d3.arc();
+  [a,b].forEach((p,i)=>{
+    svg.append('path').attr('d',arcFn({innerRadius:186,outerRadius:187,startAngle:i===0?-1.15:2.0,endAngle:i===0?1.15:4.3}))
+      .attr('transform',`translate(${p.x},${p.y})`).attr('fill','none').attr('stroke',i?'rgba(255,200,87,.8)':'rgba(103,232,249,.8)').attr('stroke-width',2.5).attr('opacity',0)
+      .transition().delay(900+i*200).duration(400).attr('opacity',1);
+  });
+  const bisect=svg.append('line').attr('x1',w/2).attr('y1',h/2).attr('x2',w/2).attr('y2',h/2).attr('stroke','#79f2b3').attr('stroke-dasharray','7 5').attr('stroke-width',3.5);
+  bisect.transition().delay(1300).duration(600).attr('y1',h/2-180).attr('y2',h/2+180);
+}
+
+/* ── Ch 12: Heron's Formula ── */
+function drawHeron(svg, w, h) {
+  svgTitle(svg, w, "Heron's Formula · Area without height");
+  const pts=[[w/2-20,90],[w/2-175,h-110],[w/2+165,h-110]];
+  const pathD=d3.line().curve(d3.curveLinearClosed);
+  const path=svg.append('path').attr('d',pathD(pts)).attr('fill','rgba(255,200,87,.10)').attr('stroke','#ffc857').attr('stroke-width',3.5);
+  pts.forEach((p,i)=>svg.append('circle').attr('cx',p[0]).attr('cy',p[1]).attr('r',8).attr('fill','#67e8f9'));
+  // side labels
+  const sides=[['a=5',pts[0],pts[1]],['b=6',pts[1],pts[2]],['c=7',pts[0],pts[2]]];
+  sides.forEach(([l,p1,p2])=>{
+    const mx=(p1[0]+p2[0])/2, my=(p1[1]+p2[1])/2;
+    svg.append('text').attr('x',mx+(mx>w/2?14:-28)).attr('y',my).attr('fill','#95a4c4').attr('font-size','13px').attr('font-weight',700).text(l);
+  });
+  // formula box
+  const fx=w-290, fy=100;
+  svg.append('rect').attr('x',fx).attr('y',fy).attr('width',240).attr('height',160).attr('rx',18)
+    .attr('fill','rgba(255,255,255,.04)').attr('stroke','rgba(255,255,255,.1)');
+  [['s = (a+b+c)/2',fy+38,'#dce8ff',14],
+   ['s = (5+6+7)/2 = 9',fy+62,'#95a4c4',13],
+   ['Area = √[s(s−a)(s−b)(s−c)]',fy+90,'#dce8ff',13],
+   ['= √[9×4×3×2]',fy+114,'#95a4c4',13],
+   ['= √216 ≈ 14.7 sq units',fy+140,'#ffd68a',15],
+  ].forEach(([t,y,c,fs])=>svg.append('text').attr('x',fx+120).attr('y',y).attr('text-anchor','middle').attr('fill',c).attr('font-size',`${fs}px`).attr('font-weight',fs===15?700:500).text(t));
+}
+
+/* ── Ch 13: Surface Areas & Volumes ── */
+function drawSurfaces(svg, w, h, scene = 'cylinder') {
+  if (scene === 'cone') {
+    svgTitle(svg, w, 'Cone · CSA = πrl · TSA = πr(l+r)');
+    const cx=w/2, btm=h-80, ht=240, r=100;
+    svg.append('ellipse').attr('cx',cx).attr('cy',btm).attr('rx',r).attr('ry',34)
+      .attr('fill','rgba(255,137,198,.15)').attr('stroke','#ff89c6').attr('stroke-width',3);
+    svg.append('line').attr('x1',cx-r).attr('y1',btm).attr('x2',cx).attr('y2',btm-ht).attr('stroke','#dfe7f3').attr('stroke-width',3);
+    svg.append('line').attr('x1',cx+r).attr('y1',btm).attr('x2',cx).attr('y2',btm-ht).attr('stroke','#dfe7f3').attr('stroke-width',3);
+    const slant=Math.sqrt(r*r+ht*ht);
+    svg.append('line').attr('x1',cx).attr('y1',btm-ht).attr('x2',cx).attr('y2',btm)
+      .attr('stroke','rgba(255,200,87,.7)').attr('stroke-width',2).attr('stroke-dasharray','6 4');
+    svg.append('text').attr('x',cx+12).attr('y',btm-ht/2).attr('fill','#ffc857').attr('font-size','14px').attr('font-weight',700).text('h');
+    svg.append('text').attr('x',cx+r/2+14).attr('y',btm-ht/2+20).attr('fill','#67e8f9').attr('font-size','14px').attr('font-weight',700).text(`l≈${Math.round(slant/10)*10/100}`);
+  }
+  else if (scene === 'sphere') {
+    svgTitle(svg, w, 'Sphere · SA = 4πr² · V = (4/3)πr³');
+    const cx=w/2, cy=h/2;
+    svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',0).attr('fill','rgba(157,140,255,.12)')
+      .attr('stroke','#9d8cff').attr('stroke-width',3.5).transition().duration(700).attr('r',150);
+    svg.append('ellipse').attr('cx',cx).attr('cy',cy).attr('rx',150).attr('ry',42)
+      .attr('fill','none').attr('stroke','rgba(157,140,255,.4)').attr('stroke-width',2).attr('stroke-dasharray','6 4');
+    svg.append('line').attr('x1',cx).attr('y1',cy).attr('x2',cx+150).attr('y2',cy).attr('stroke','#ffc857').attr('stroke-width',2.5);
+    svg.append('text').attr('x',cx+80).attr('y',cy-12).attr('fill','#ffc857').attr('font-size','14px').attr('font-weight',700).text('r');
+  }
+  else if (scene === 'cuboid') {
+    svgTitle(svg, w, 'Cuboid · SA = 2(lb + bh + lh)');
+    const x0=w/2-120,y0=h/2-80,W=200,H=140,D=70;
+    [[x0,y0,x0+W,y0,x0+W,y0+H,x0,y0+H],[x0+D,y0-D,x0+W+D,y0-D,x0+W,y0,x0,y0],
+     [x0+W,y0,x0+W+D,y0-D,x0+W+D,y0-D+H,x0+W,y0+H]].forEach((pts,i)=>{
+      const path=`M${pts[0]},${pts[1]}L${pts[2]},${pts[3]}L${pts[4]},${pts[5]}L${pts[6]},${pts[7]}Z`;
+      svg.append('path').attr('d',path).attr('fill',`rgba(103,232,249,${0.04+i*0.03})`).attr('stroke','#67e8f9').attr('stroke-width',2);
+    });
+  }
+  else { // cylinder default
+    svgTitle(svg, w, 'Cylinder · CSA = 2πrh · TSA = 2πr(h+r)');
+    const cx=w/2, top=100, ht=220, r=100;
+    svg.append('ellipse').attr('cx',cx).attr('cy',top).attr('rx',r).attr('ry',34).attr('fill','rgba(103,232,249,.18)').attr('stroke','#67e8f9').attr('stroke-width',3);
+    svg.append('rect').attr('x',cx-r).attr('y',top).attr('width',r*2).attr('height',ht).attr('fill','rgba(121,242,179,.10)').attr('stroke','#dfe7f3').attr('stroke-width',2.5);
+    svg.append('ellipse').attr('cx',cx).attr('cy',top+ht).attr('rx',r).attr('ry',34).attr('fill','rgba(103,232,249,.10)').attr('stroke','#67e8f9').attr('stroke-width',3);
+    svg.append('line').attr('x1',cx).attr('y1',top).attr('x2',cx).attr('y2',top+ht).attr('stroke','rgba(255,200,87,.7)').attr('stroke-dasharray','6 4').attr('stroke-width',2);
+    svg.append('text').attr('x',cx+12).attr('y',top+ht/2).attr('fill','#ffc857').attr('font-size','14px').attr('font-weight',700).text('h');
+    svg.append('line').attr('x1',cx).attr('y1',top).attr('x2',cx+r).attr('y2',top).attr('stroke','#ff89c6').attr('stroke-width',2.5);
+    svg.append('text').attr('x',cx+r/2).attr('y',top-12).attr('text-anchor','middle').attr('fill','#ff89c6').attr('font-size','14px').attr('font-weight',700).text('r');
+  }
+}
+
+/* ── Ch 14: Statistics ── */
+function drawStatistics(svg, w, h, scene = 'mean') {
+  const vals=[12,18,9,14,21,16,11,19];
+  const mean=vals.reduce((a,b)=>a+b,0)/vals.length;
+
+  if (scene === 'histogram') {
+    svgTitle(svg, w, 'Statistics · Frequency Histogram');
+    const bins=[{range:'0–5',freq:4},{range:'5–10',freq:7},{range:'10–15',freq:12},{range:'15–20',freq:9},{range:'20–25',freq:6}];
+    const x=d3.scaleBand().domain(bins.map(b=>b.range)).range([80,w-60]).padding(.06);
+    const y=d3.scaleLinear().domain([0,15]).range([h-70,70]);
+    svg.append('g').attr('transform',`translate(0,${h-70})`).call(d3.axisBottom(x)).selectAll('text').attr('fill','#95a4c4').attr('font-size','11px');
+    svg.append('g').attr('transform','translate(80,0)').call(d3.axisLeft(y).ticks(5)).selectAll('text').attr('fill','#95a4c4');
+    svg.selectAll('.hbar').data(bins).join('rect')
+      .attr('x',d=>x(d.range)).attr('y',h-70).attr('width',x.bandwidth()).attr('height',0)
+      .attr('rx',6).attr('fill','rgba(103,232,249,.82)')
+      .transition().delay((_,i)=>i*100).duration(500).attr('y',d=>y(d.freq)).attr('height',d=>y(0)-y(d.freq));
+  }
+  else if (scene === 'median') {
+    svgTitle(svg, w, 'Statistics · Mean, Median, Mode');
+    const sorted=[...vals].sort((a,b)=>a-b);
+    const x=d3.scaleBand().domain(sorted.map((_,i)=>i)).range([80,w-60]).padding(.1);
+    const y=d3.scaleLinear().domain([0,24]).range([h-80,80]);
+    svg.append('g').attr('transform',`translate(0,${h-80})`).call(d3.axisBottom(x).tickFormat((_,i)=>sorted[i])).selectAll('text').attr('fill','#95a4c4');
+    svg.append('g').attr('transform','translate(80,0)').call(d3.axisLeft(y).ticks(5)).selectAll('text').attr('fill','#95a4c4');
+    const midIdx=[3,4]; // median between index 3 and 4 for 8 values
+    svg.selectAll('.sbar').data(sorted).join('rect')
+      .attr('x',(_,i)=>x(i)).attr('y',d=>y(d)).attr('width',x.bandwidth()).attr('height',d=>y(0)-y(d)).attr('rx',8)
+      .attr('fill',(_,i)=>midIdx.includes(i)?'#ffc857':'rgba(103,232,249,.7)').attr('opacity',0)
+      .transition().delay((_,i)=>i*80).duration(400).attr('opacity',1);
+    const med=(sorted[3]+sorted[4])/2;
+    svg.append('text').attr('x',w/2).attr('y',h-25).attr('text-anchor','middle')
+      .attr('fill','#ffc857').attr('font-size','13px').attr('font-weight',700).text(`Median = (${sorted[3]}+${sorted[4]})/2 = ${med}`);
+  }
+  else { // mean bars
+    svgTitle(svg, w, 'Statistics · Bar Graph and Mean');
+    const x=d3.scaleBand().domain(d3.range(vals.length)).range([80,w-60]).padding(.18);
+    const y=d3.scaleLinear().domain([0,24]).range([h-70,70]);
+    svg.append('g').attr('transform',`translate(0,${h-70})`).call(d3.axisBottom(x).tickFormat(i=>`S${+i+1}`)).selectAll('text').attr('fill','#95a4c4');
+    svg.append('g').attr('transform','translate(80,0)').call(d3.axisLeft(y).ticks(5)).selectAll('text').attr('fill','#95a4c4');
+    svg.selectAll('.bar').data(vals).join('rect')
+      .attr('x',(_,i)=>x(i)).attr('y',h-70).attr('width',x.bandwidth()).attr('height',0).attr('rx',9)
+      .attr('fill','rgba(103,232,249,.86)')
+      .transition().delay((_,i)=>i*80).duration(500).attr('y',d=>y(d)).attr('height',d=>y(0)-y(d));
+    const meanLine=svg.append('line').attr('x1',80).attr('x2',80).attr('y1',y(mean)).attr('y2',y(mean))
+      .attr('stroke','#ffc857').attr('stroke-dasharray','8 5').attr('stroke-width',2.5);
+    meanLine.transition().delay(800).duration(500).attr('x2',w-60);
+    svg.append('text').attr('x',w-54).attr('y',y(mean)-8).attr('fill','#ffc857').attr('font-size','12px').attr('font-weight',700).text(`Mean=${mean.toFixed(1)}`);
+  }
+}
+
+/* ── Ch 15: Probability ── */
+function drawProbability(svg, w, h, scene = 'spinner') {
+  if (scene === 'tree') {
+    svgTitle(svg, w, 'Probability · Sample Space (Coin Toss)');
+    const root={x:120,y:h/2};
+    const branches=[{y:h/2-110,label:'H',prob:'1/2',col:'#67e8f9'},{y:h/2+110,label:'T',prob:'1/2',col:'#ffc857'}];
+    const leaves=[[-80,'HH','1/4','#79f2b3'],[0,'HT','1/4','#9d8cff'],[0,'TH','1/4','#9d8cff'],[80,'TT','1/4','#ff89c6']];
+    branches.forEach((b,bi)=>{
+      svg.append('line').attr('x1',root.x).attr('y1',root.y).attr('x2',root.x+160).attr('y2',b.y)
+        .attr('stroke',b.col).attr('stroke-width',2.5);
+      svg.append('circle').attr('cx',root.x+160).attr('cy',b.y).attr('r',20).attr('fill',b.col.replace('#','rgba(').replace(/$/,', 0.2)'));
+      svg.append('text').attr('x',root.x+160).attr('y',b.y+5).attr('text-anchor','middle').attr('fill',b.col).attr('font-size','15px').attr('font-weight',800).text(b.label);
+      svg.append('text').attr('x',root.x+80).attr('y',b.y+(bi===0?-10:18)).attr('text-anchor','middle').attr('fill',b.col).attr('font-size','12px').text(b.prob);
+      // second level
+      const lPair=bi===0?leaves.slice(0,2):leaves.slice(2,4);
+      lPair.forEach(([dy,lbl,prob,col])=>{
+        const ly=b.y+dy/2;
+        svg.append('line').attr('x1',root.x+160).attr('y1',b.y).attr('x2',root.x+330).attr('y2',ly)
+          .attr('stroke',col).attr('stroke-width',1.8);
+        svg.append('text').attr('x',root.x+330+14).attr('y',ly+5).attr('fill',col).attr('font-size','14px').attr('font-weight',700).text(lbl);
+        svg.append('text').attr('x',root.x+330+55).attr('y',ly+5).attr('fill','#95a4c4').attr('font-size','12px').text(prob);
+      });
+    });
+    svg.append('circle').attr('cx',root.x).attr('cy',root.y).attr('r',10).attr('fill','#dfe7f3');
+  }
+  else {
+    svgTitle(svg, w, 'Probability · Spinner and Bar Chart');
+    const cx=210, cy=h/2, r=125;
+    const pie=d3.pie().value(1)(['Red','Blue','Green','Yellow']);
+    const arc=d3.arc().innerRadius(0).outerRadius(r);
+    const colors=['#ff8d8d','#67e8f9','#79f2b3','#ffc857'];
+    svg.selectAll('.slice').data(pie).join('path')
+      .attr('transform',`translate(${cx},${cy})`).attr('d',arc)
+      .attr('fill',(_,i)=>colors[i]).attr('opacity',0)
+      .transition().delay((_,i)=>i*120).duration(400).attr('opacity',1);
+    svg.append('line').attr('x1',cx).attr('y1',cy).attr('x2',cx+4).attr('y2',cy-r-22)
+      .attr('stroke','#fff').attr('stroke-width',5).attr('stroke-linecap','round');
+    // bar chart
+    const xb=d3.scaleBand().domain(['R','B','G','Y']).range([400,w-50]).padding(.2);
+    const yb=d3.scaleLinear().domain([0,30]).range([h-70,70]);
+    svg.append('g').attr('transform',`translate(0,${h-70})`).call(d3.axisBottom(xb)).selectAll('text').attr('fill','#95a4c4');
+    svg.append('g').attr('transform','translate(400,0)').call(d3.axisLeft(yb).ticks(5)).selectAll('text').attr('fill','#95a4c4');
+    [28,24,26,22].forEach((v,i)=>{
+      svg.append('rect').attr('x',xb(['R','B','G','Y'][i])).attr('y',h-70).attr('width',xb.bandwidth()).attr('height',0).attr('rx',8)
+        .attr('fill',colors[i]).attr('opacity',0.85)
+        .transition().delay(400+i*100).duration(500).attr('y',yb(v)).attr('height',yb(0)-yb(v));
+    });
+  }
+}
+</script>
+</body>
+</html>
