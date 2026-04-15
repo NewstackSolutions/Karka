@@ -884,17 +884,6 @@ if (teacherSvgMarkup) document.getElementById('intakeAvatarWrap').innerHTML=teac
 const loginBtnEl = document.getElementById('loginBtn');
 if (loginBtnEl) loginBtnEl.addEventListener('click', doLogin);
 
-const demoBtnEl = document.getElementById('demoBtn');
-if (demoBtnEl) {
-  demoBtnEl.addEventListener('click', ()=>{
-    const idEl = document.getElementById('fStudentId');
-    const pinEl = document.getElementById('fPin');
-    if (idEl) idEl.value='priya_2025';
-    if (pinEl) pinEl.value='1234';
-    doLogin();
-  });
-}
-
 const fPinEl = document.getElementById('fPin');
 if (fPinEl) fPinEl.addEventListener('keydown', e=>e.key==='Enter' && doLogin());
 
