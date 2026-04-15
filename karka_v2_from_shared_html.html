@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Karka · AI Maths Tutor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+  <style>
+    :root {
+      --ink:      #06101e;
+      --ink2:     #0a1628;
+      --ink3:     #0f2040;
+      --panel:    rgba(10, 20, 38, 0.92);
+      --glass:    rgba(255,255,255,0.03);
+      --border:   rgba(201,149,26,0.22);
+      --border2:  rgba(255,255,255,0.07);
+      --gold:     #c9951a;
+      --gold-lt:  #e8b84b;
+      --gold-glow:rgba(201,149,26,0.2);
+      --emerald:  #3a8f5c;
+      --cream:    #f0e8d8;
+      --text:     #d8cfc0;
+      --muted:    #7a8a9d;
+      --cyan:     #4fd1c5;
+      --danger:   #e05c5c;
+      --shadow:   0 24px 80px rgba(0,0,0,0.55);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      background: var(--ink);
+      overflow: hidden;
+    }
+    .hidden { display: none !important; }
+
+    /* ─────────────────────────────────────────────
+       LOGIN SCREEN
+    ───────────────────────────────────────────── */
+    #loginScreen {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+    .login-left {
+      background:
+        radial-gradient(ellipse at 25% 18%, rgba(201,149,26,0.14), transparent 45%),
+        radial-gradient(ellipse at 75% 80%, rgba(58,143,92,0.09), transparent 40%),
+        linear-gradient(160deg, #06101e 0%, #091828 50%, #06101e 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 60px 52px; position: relative; overflow: hidden;
+    }
+    .login-left::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(201,149,26,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,149,26,0.035) 1px, transparent 1px);
+      background-size: 52px 52px;
+    }
+    .login-logo-block {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center; gap: 28px;
+      text-align: center;
+    }
+    /* Circular logo frame — bigger, logo fully contained */
+    .logo-circle-frame {
+      width: 240px; height: 240px; border-radius: 50%;
+      position: relative;
+      animation: logoFloat 4.5s ease-in-out infinite;
+      flex-shrink: 0;
+      box-shadow:
+        0 0 0 2px rgba(201,149,26,0.6),
+        0 0 0 8px rgba(201,149,26,0.08),
+        0 0 60px rgba(201,149,26,0.38),
+        0 0 110px rgba(201,149,26,0.12);
+      background: radial-gradient(circle at 45% 40%, #0e1e36, #06101e 75%);
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .login-logo {
+      /* contain so the full medallion shows, no cropping */
+      width: 92%; height: 92%;
+      object-fit: contain;
+      border-radius: 0;
+    }
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-11px); }
+    }
+    .logo-fallback {
+      width: 100%; height: 100%; border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, rgba(201,149,26,0.18), #06101e 70%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+    }
+    .logo-fallback span:first-child {
+      font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; color: var(--gold-lt);
+    }
+    .logo-fallback span:last-child { font-size: 0.85rem; color: var(--muted); letter-spacing: 0.16em; }
+
+    /* KARKA — refined steel, italic serif, dramatic */
+    .login-brand h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem; font-weight: 700; font-style: italic;
+      letter-spacing: 0.14em; line-height: 1;
+      background: linear-gradient(170deg,
+        #f0f5f9 0%,
+        #c8dce8 15%,
+        #ffffff 30%,
+        #a8c4d8 48%,
+        #e4eef5 62%,
+        #7ca4bc 78%,
+        #d0e2ed 100%
+      );
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      filter: drop-shadow(0 2px 12px rgba(160,200,225,0.22));
+    }
+    .login-brand .tamil {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; font-style: italic; color: rgba(201,149,26,0.7);
+      margin-top: 6px; letter-spacing: 0.08em;
+    }
+    .login-divider {
+      width: 140px; height: 1px; margin: 12px auto;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .login-brand .tagline {
+      color: rgba(200,210,220,0.65); font-size: 0.92rem;
+      line-height: 1.7; max-width: 300px; font-weight: 300;
+    }
+
+    /* Feature tiles — more impact */
+    .login-features {
+      position: relative; z-index: 1; display: grid; gap: 12px;
+      width: 100%; max-width: 420px; margin-top: 32px;
+    }
+    .feature-pill {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 16px 18px; border-radius: 16px;
+      border: 1px solid rgba(201,149,26,0.2);
+      background: linear-gradient(135deg, rgba(201,149,26,0.07), rgba(255,255,255,0.02));
+      backdrop-filter: blur(4px);
+    }
+    .feature-pill .icon {
+      width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+      background: linear-gradient(135deg, rgba(201,149,26,0.28), rgba(201,149,26,0.10));
+      border: 1px solid rgba(201,149,26,0.25);
+      display: grid; place-items: center; font-size: 1.15rem;
+      margin-top: 1px;
+    }
+    .feature-pill .text strong {
+      display: block; font-size: 0.96rem; font-weight: 600;
+      color: var(--cream); letter-spacing: -0.01em; margin-bottom: 4px;
+    }
+    .feature-pill .text span {
+      display: block; font-size: 0.82rem; color: rgba(200,210,220,0.6);
+      line-height: 1.55;
+    }
+
+    /* Auth card — more elegant */
+    .login-right {
+      display: flex; align-items: center; justify-content: center; padding: 40px;
+      border-left: 1px solid var(--border);
+      background: linear-gradient(180deg, #07121f 0%, #040b16 100%);
+    }
+    .auth-card {
+      width: min(420px, 100%); padding: 38px 36px; border-radius: 28px;
+      background: linear-gradient(180deg, rgba(10,20,36,0.97), rgba(6,12,24,0.99));
+      border: 1px solid rgba(201,149,26,0.2);
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 60px rgba(0,0,0,0.4);
+    }
+    .auth-card h2 {
+      font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; font-weight: 600;
+      font-style: italic; letter-spacing: -0.01em; color: var(--cream); line-height: 1.1;
+    }
+    .auth-card > p { margin-top: 8px; color: rgba(180,195,210,0.6); font-size: 0.9rem; line-height: 1.65; }
+    .form-field { margin-top: 20px; }
+    .form-field label {
+      display: block; font-size: 0.72rem; font-weight: 600; color: rgba(150,170,190,0.55);
+      text-transform: uppercase; letter-spacing: 0.11em; margin-bottom: 8px;
+    }
+    .form-field input {
+      width: 100%; padding: 14px 16px; border-radius: 14px;
+      border: 1px solid rgba(201,149,26,0.14); background: rgba(255,255,255,0.025);
+      color: var(--cream); font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-style: italic; outline: none;
+      transition: border-color 200ms, background 200ms;
+    }
+    .form-field input:focus { border-color: rgba(201,149,26,0.4); background: rgba(201,149,26,0.04); }
+    .form-field input::placeholder { color: rgba(122,138,157,0.35); font-style: italic; }
+    .auth-error {
+      margin-top: 14px; padding: 11px 15px; border-radius: 12px;
+      background: rgba(224,92,92,0.1); border: 1px solid rgba(224,92,92,0.22);
+      color: #ff9999; font-size: 0.84rem;
+    }
+    .auth-btn {
+      width: 100%; padding: 15px; border-radius: 14px; border: none;
+      cursor: pointer; font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-weight: 700; font-style: italic;
+      letter-spacing: 0.04em; transition: transform 140ms, box-shadow 140ms, opacity 140ms;
+    }
+    .auth-btn.primary {
+      margin-top: 24px;
+      background: linear-gradient(135deg, var(--gold-lt) 0%, var(--gold) 60%, #9e7210 100%);
+      color: #05100a; box-shadow: 0 8px 32px rgba(201,149,26,0.32);
+    }
+    .auth-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(201,149,26,0.42); }
+    .auth-btn.primary:disabled { opacity: 0.6; cursor: wait; }
+
+    /* ─────────────────────────────────────────────
+       APP SHELL
+    ───────────────────────────────────────────── */
+    #appScreen {
+      height: 100vh; display: grid;
+      grid-template-columns: 252px 1fr 336px; overflow: hidden;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      background: linear-gradient(180deg, #050c1a, #060f1e);
+      border-right: 1px solid var(--border2);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .sidebar-header {
+      padding: 16px 14px 12px; border-bottom: 1px solid var(--border2);
+      display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+    }
+    .sidebar-logo { width: 46px; height: 46px; object-fit: contain; filter: drop-shadow(0 0 10px rgba(201,149,26,0.35)); }
+    .sidebar-logo-fallback {
+      width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
+      background: linear-gradient(135deg, rgba(201,149,26,0.25), rgba(201,149,26,0.08));
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--gold-lt);
+    }
+    .sidebar-brand-name {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 700;
+      font-style: italic; letter-spacing: 0.04em; line-height: 1;
+      background: linear-gradient(135deg, var(--gold-lt), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .sidebar-brand-sub { font-size: 0.7rem; color: var(--muted); margin-top: 3px; letter-spacing: 0.02em; }
+
+    .student-badge {
+      margin: 10px 12px 4px; padding: 9px 12px; border-radius: 12px;
+      background: rgba(201,149,26,0.07); border: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+    }
+    .student-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--emerald); box-shadow: 0 0 8px rgba(58,143,92,0.7); flex-shrink: 0;
+    }
+    .student-info strong { display: block; font-size: 0.84rem; color: var(--cream); font-weight: 500; }
+    .student-info span { font-size: 0.72rem; color: var(--muted); }
+
+    .chapter-nav { flex: 1; overflow-y: auto; padding: 6px 10px; }
+    .chapter-nav::-webkit-scrollbar { width: 3px; }
+    .chapter-nav::-webkit-scrollbar-track { background: transparent; }
+    .chapter-nav::-webkit-scrollbar-thumb { background: rgba(201,149,26,0.2); border-radius: 3px; }
+    .nav-section-label {
+      font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em;
+      color: rgba(122,138,157,0.45); padding: 8px 4px 6px; font-weight: 600;
+    }
+    .chapter-item {
+      width: 100%; text-align: left; padding: 9px 11px; border-radius: 11px;
+      border: 1px solid transparent; background: transparent; color: var(--muted);
+      cursor: pointer; transition: all 150ms; display: flex; align-items: center;
+      gap: 9px; margin-bottom: 2px; font-family: 'DM Sans', sans-serif;
+    }
+    .chapter-item:hover { background: rgba(255,255,255,0.03); color: var(--text); border-color: var(--border2); }
+    .chapter-item.active {
+      background: linear-gradient(135deg, rgba(201,149,26,0.14), rgba(201,149,26,0.05));
+      border-color: var(--border); color: var(--gold-lt);
+    }
+    .ch-num {
+      width: 20px; height: 20px; border-radius: 6px;
+      background: rgba(255,255,255,0.05); display: grid; place-items: center;
+      font-size: 0.68rem; font-weight: 700; flex-shrink: 0; color: var(--muted);
+    }
+    .chapter-item.active .ch-num { background: rgba(201,149,26,0.22); color: var(--gold-lt); }
+    .ch-name { font-size: 0.8rem; line-height: 1.3; font-family: 'DM Sans', sans-serif; }
+
+    .sidebar-footer { padding: 10px 12px; border-top: 1px solid var(--border2); flex-shrink: 0; }
+    .logout-btn {
+      width: 100%; padding: 9px; border-radius: 11px; border: 1px solid var(--border2);
+      background: transparent; color: var(--muted); cursor: pointer;
+      font-size: 0.9rem; font-family: 'Cormorant Garamond', serif; font-style: italic;
+      letter-spacing: 0.02em; transition: all 140ms;
+    }
+    .logout-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.14); }
+
+    /* MAIN */
+    .main {
+      display: flex; flex-direction: column; overflow: hidden;
+      background:
+        radial-gradient(ellipse at 18% 8%, rgba(201,149,26,0.06), transparent 40%),
+        linear-gradient(180deg, #071220, #060f1c);
+    }
+    .main-header {
+      padding: 15px 22px 12px; border-bottom: 1px solid var(--border2);
+      display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+    }
+    .chapter-breadcrumb { display: flex; align-items: center; gap: 10px; }
+    .chapter-badge {
+      padding: 4px 10px; border-radius: 999px;
+      background: rgba(201,149,26,0.12); border: 1px solid var(--border);
+      color: var(--gold-lt); font-size: 0.73rem; font-weight: 600; letter-spacing: 0.02em;
+    }
+    .chapter-title-main {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 600;
+      font-style: italic; color: var(--cream); letter-spacing: -0.01em;
+    }
+    .header-right { display: flex; align-items: center; gap: 14px; }
+    .session-timer {
+      display: flex; align-items: center; gap: 6px;
+      color: var(--muted); font-size: 0.82rem;
+    }
+    .timer-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--emerald);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(0.75); }
+    }
+
+    /* VISUAL BOARD */
+    .visual-board { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: 14px 18px 12px; gap: 12px; }
+    .viz-tabs { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .viz-tab {
+      padding: 6px 13px; border-radius: 9px; border: 1px solid var(--border2);
+      background: transparent; color: var(--muted); cursor: pointer;
+      font-size: 0.78rem; font-weight: 500; font-family: 'DM Sans', sans-serif; transition: all 140ms;
+    }
+    .viz-tab:hover { color: var(--text); border-color: rgba(255,255,255,0.14); }
+    .viz-tab.active { background: rgba(201,149,26,0.12); border-color: var(--border); color: var(--gold-lt); }
+    .viz-tab-spacer { flex: 1; }
+
+    .viz-stage {
+      flex: 1; position: relative; border-radius: 18px; overflow: hidden;
+      border: 1px solid var(--border2);
+      background:
+        radial-gradient(ellipse at top left, rgba(201,149,26,0.05), transparent 40%),
+        linear-gradient(180deg, rgba(7,14,25,0.97), rgba(5,10,20,1));
+    }
+    #visualCanvas { width: 100%; height: 100%; position: absolute; inset: 0; }
+
+    /* Question overlay */
+    .question-overlay {
+      position: absolute; inset: 0; border-radius: 18px;
+      background: rgba(6,12,22,0.93); border: 1px solid rgba(201,149,26,0.28);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 36px; gap: 18px; opacity: 0; pointer-events: none;
+      transition: opacity 300ms; z-index: 10;
+    }
+    .question-overlay.visible { opacity: 1; pointer-events: auto; }
+    .question-tag {
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--gold); font-weight: 700;
+      border: 1px solid var(--border); padding: 4px 12px; border-radius: 999px;
+      background: rgba(201,149,26,0.08);
+    }
+    .question-display {
+      font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 600;
+      text-align: center; line-height: 1.45; color: var(--cream); letter-spacing: -0.01em;
+    }
+
+    /* Explaining banner */
+    .explaining-banner {
+      position: absolute; bottom: 14px; left: 14px; right: 14px;
+      padding: 10px 14px; border-radius: 13px;
+      background: rgba(5,10,18,0.88); border: 1px solid var(--border);
+      backdrop-filter: blur(8px); display: flex; align-items: center; gap: 11px;
+      opacity: 0; transform: translateY(6px); transition: all 280ms; pointer-events: none; z-index: 5;
+    }
+    .explaining-banner.visible { opacity: 1; transform: translateY(0); }
+    .sound-wave { display: flex; gap: 3px; align-items: center; flex-shrink: 0; }
+    .sound-wave span {
+      display: block; width: 3px; background: var(--gold); border-radius: 2px;
+      animation: waveBar 1.1s ease-in-out infinite;
+    }
+    .sound-wave span:nth-child(1) { height: 7px; animation-delay: 0s; }
+    .sound-wave span:nth-child(2) { height: 13px; animation-delay: 0.14s; }
+    .sound-wave span:nth-child(3) { height: 9px; animation-delay: 0.28s; }
+    .sound-wave span:nth-child(4) { height: 15px; animation-delay: 0.07s; }
+    .sound-wave span:nth-child(5) { height: 7px; animation-delay: 0.21s; }
+    @keyframes waveBar {
+      0%,100% { transform: scaleY(1); }
+      50% { transform: scaleY(0.28); }
+    }
+    .explaining-text { font-size: 0.84rem; color: var(--text); line-height: 1.4; }
+    .explaining-text strong { color: var(--gold-lt); }
+
+    /* TEACHER PANEL */
+    .teacher-panel {
+      border-left: 1px solid var(--border2);
+      background: linear-gradient(180deg, #060f1c, #04090f);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .teacher-panel-header {
+      padding: 14px 16px 10px; border-bottom: 1px solid var(--border2); flex-shrink: 0;
+    }
+    .teacher-panel-header h3 {
+      font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; font-weight: 600;
+      color: var(--cream);
+    }
+    .teacher-panel-header span { font-size: 0.72rem; color: var(--muted); }
+
+    .avatar-section {
+      position: relative; display: flex; flex-direction: column; align-items: center;
+      padding: 20px 18px 14px; border-bottom: 1px solid var(--border2); flex-shrink: 0;
+    }
+    .avatar-glow {
+      position: absolute; top: 24px; width: 116px; height: 116px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,149,26,0.18), transparent 70%);
+      animation: glowBreath 3.2s ease-in-out infinite; pointer-events: none;
+    }
+    @keyframes glowBreath {
+      0%,100% { transform: scale(1); opacity: 0.65; }
+      50% { transform: scale(1.18); opacity: 1; }
+    }
+    .teacher-svg { width: 108px; height: 128px; position: relative; z-index: 1; }
+    .teacher-name-block { margin-top: 10px; text-align: center; }
+    .teacher-name-block h4 {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--cream);
+    }
+    .teacher-name-block p { font-size: 0.76rem; color: var(--muted); margin-top: 2px; }
+    .teacher-status {
+      margin-top: 7px; display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px; border-radius: 999px;
+      border: 1px solid var(--border); background: rgba(58,143,92,0.1);
+      color: #6ddba0; font-size: 0.72rem; font-weight: 500;
+    }
+    .teacher-status::before {
+      content: ''; width: 5px; height: 5px; border-radius: 50%;
+      background: #6ddba0; box-shadow: 0 0 6px rgba(109,219,160,0.6);
+    }
+
+    /* ElevenLabs slot */
+    .el-section {
+      padding: 13px 14px; border-bottom: 1px solid var(--border2); flex-shrink: 0;
+    }
+    .el-section-label {
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
+      color: rgba(122,138,157,0.5); font-weight: 600; margin-bottom: 9px;
+    }
+
+    /* Info cards */
+    .info-scroll {
+      flex: 1; overflow-y: auto; padding: 12px 12px 12px;
+      display: flex; flex-direction: column; gap: 9px;
+    }
+    .info-scroll::-webkit-scrollbar { width: 3px; }
+    .info-scroll::-webkit-scrollbar-thumb { background: rgba(201,149,26,0.15); border-radius: 3px; }
+    .info-card {
+      padding: 11px 13px; border-radius: 13px;
+      border: 1px solid var(--border2); background: rgba(255,255,255,0.02);
+    }
+    .info-card-label {
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em;
+      color: rgba(122,138,157,0.45); font-weight: 600; margin-bottom: 5px;
+    }
+    .info-card-value { font-size: 0.88rem; color: var(--text); font-weight: 500; line-height: 1.4; }
+
+    .quota-bar-track { height: 4px; border-radius: 4px; background: rgba(255,255,255,0.06); margin-top: 8px; overflow: hidden; }
+    .quota-bar-fill {
+      height: 100%; border-radius: 4px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-lt));
+      transition: width 600ms ease;
+    }
+    .quota-legend {
+      display: flex; justify-content: space-between;
+      margin-top: 4px; font-size: 0.72rem; color: var(--muted);
+    }
+
+    /* ─────────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────────── */
+    @media (max-width: 1280px) {
+      #appScreen { grid-template-columns: 240px 1fr 300px; }
+    }
+    @media (max-width: 1000px) {
+      #appScreen { grid-template-columns: 220px 1fr; }
+      .teacher-panel { display: none; }
+    }
+    @media (max-width: 720px) {
+      #loginScreen { grid-template-columns: 1fr; }
+      .login-left { display: none; }
+      #appScreen { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+    }
+
+    /* ElevenLabs widget override */
+    elevenlabs-convai {
+      --elevenlabs-convai-button-color: #c9951a;
+      display: block;
+    }
+  
+    .intake-screen,.session-end-overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;z-index:7}
+    .intake-screen.visible,.session-end-overlay.visible{display:flex}
+    .intake-backdrop,.session-end-backdrop{position:absolute;inset:0;background:rgba(6,12,22,0.9);backdrop-filter:blur(10px)}
+    .intake-card,.session-end-card{position:relative;z-index:1;max-width:520px;padding:28px;border:1px solid rgba(201,149,26,0.24);border-radius:22px;background:rgba(10,20,38,0.84);box-shadow:var(--shadow);text-align:center}
+    .intake-card h3,.session-end-card h3{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--cream);margin-bottom:10px}
+    .intake-card p,.session-end-card p{color:var(--text);line-height:1.7;font-size:.98rem}
+    .intake-avatar-wrap{width:150px;height:150px;margin:0 auto 16px;border-radius:50%;overflow:hidden;border:1px solid var(--border);box-shadow:0 0 0 10px rgba(255,255,255,0.02)}
+    .intake-avatar-wrap .teacher-svg{width:100%;height:100%}
+    .mcq-options{display:grid;gap:10px;width:100%;max-width:520px;margin-top:8px}
+    .mcq-option{width:100%;padding:14px 16px;border-radius:14px;border:1px solid var(--border2);background:rgba(255,255,255,0.03);color:var(--cream);font:500 0.98rem 'DM Sans',sans-serif;text-align:left;cursor:pointer;transition:.18s}
+    .mcq-option:hover{border-color:var(--border);background:rgba(201,149,26,0.07)}
+    .mcq-option.correct{background:rgba(58,143,92,0.18);border-color:rgba(58,143,92,0.65);color:#dff5e7}
+    .mcq-option.wrong{background:rgba(224,92,92,0.18);border-color:rgba(224,92,92,0.65);color:#ffe3e3}
+    .voice-hint{font-size:.86rem;color:var(--muted);margin-top:8px}
+    .hots-input{width:min(560px,100%);min-height:120px;border-radius:16px;border:1px solid var(--border2);background:rgba(255,255,255,0.03);color:var(--cream);padding:14px 16px;font:400 0.95rem 'DM Sans',sans-serif;resize:vertical}
+    .timer-warning{color:#f0a94b !important;animation:pulse 1.8s infinite}
+    .timer-danger{color:#ff8d8d !important;animation:pulse 1s infinite}
+    .widget-live{min-height:320px}
+
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════ LOGIN ════════════════════════════ -->
+<div id="loginScreen">
+  <section class="login-left">
+    <div class="login-logo-block">
+      <div class="logo-circle-frame">
+        <img src="logo3 - transparent.jfif" alt="Karka" class="login-logo"
+             onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex'">
+        <div id="logoFallback" class="logo-fallback" style="display:none">
+          <span>கற்க</span><span>KARKA</span>
+        </div>
+      </div>
+      <div class="login-brand">
+        <h1>Karka</h1>
+        <div class="tamil">கற்க · Learn. Explore. Master.</div>
+        <div class="login-divider"></div>
+        <p class="tagline">AI voice tutoring for CBSE Class 9 Mathematics.<br>Learn with Diya — your personal maths guide.</p>
+      </div>
+    </div>
+
+    <div class="login-features">
+      <div class="feature-pill">
+        <div class="icon">🎙️</div>
+        <div class="text">
+          <strong>Voice-first learning</strong>
+          <span>Converse with Diya in English. Real-time voice responses.</span>
+        </div>
+      </div>
+      <div class="feature-pill">
+        <div class="icon">📐</div>
+        <div class="text">
+          <strong>Live animated visuals</strong>
+          <span>D3-powered diagrams appear as Diya explains each concept.</span>
+        </div>
+      </div>
+      <div class="feature-pill">
+        <div class="icon">📚</div>
+        <div class="text">
+          <strong>15-chapter knowledge base</strong>
+          <span>Full NCERT Class 9 curriculum with HOTS question banks.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="login-right">
+    <div class="auth-card">
+      <h2>Student sign in</h2>
+      <p>Enter your Student ID and PIN to begin your session with Diya.</p>
+
+      <div class="form-field">
+        <label for="fStudentId">Student ID</label>
+        <input id="fStudentId" type="text" placeholder="e.g. priya_2025" autocomplete="username">
+      </div>
+
+      <div class="form-field">
+        <label for="fPin">PIN</label>
+        <input id="fPin" type="password" placeholder="4-digit PIN" maxlength="8" autocomplete="current-password">
+      </div>
+
+      <div id="authError" class="auth-error hidden"></div>
+
+      <button class="auth-btn primary" id="loginBtn">Enter learning board →</button>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════════════════════ APP ════════════════════════════ -->
+<div id="appScreen" class="hidden">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="logo3 - transparent.jfif" alt="" class="sidebar-logo"
+           onerror="this.outerHTML='<div class=\'sidebar-logo-fallback\'>க</div>'">
+      <div>
+        <div class="sidebar-brand-name">Karka</div>
+        <div class="sidebar-brand-sub">Class 9 · AI Maths Tutor</div>
+      </div>
+    </div>
+
+    <div class="student-badge">
+      <div class="student-dot"></div>
+      <div class="student-info">
+        <strong id="sStudentName">Student</strong>
+        <span id="sStudentPlan">—</span>
+      </div>
+    </div>
+
+    <nav class="chapter-nav">
+      <div class="nav-section-label">Chapters</div>
+      <div id="chapterList"></div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">↩ Log out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="main-header">
+      <div class="chapter-breadcrumb">
+        <span class="chapter-badge" id="chapterBadge">Chapter 1</span>
+        <span class="chapter-title-main" id="chapterTitle">Number Systems</span>
+      </div>
+      <div class="header-right">
+        <div class="session-timer">
+          <div class="timer-dot"></div>
+          <span id="timerDisplay">00:00</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="visual-board">
+      <div class="viz-tabs">
+        <button class="viz-tab active" data-tab="visual">Visual</button>
+        <button class="viz-tab" data-tab="equation">Equations</button>
+        <button class="viz-tab" data-tab="steps">Steps</button>
+        <button class="viz-tab hidden" data-tab="question" id="questionTab">❓ Question</button>
+        <div class="viz-tab-spacer"></div>
+        <button class="viz-tab" id="replayBtn">↺ Replay</button>
+      </div>
+
+      <div class="viz-stage">
+        <div id="visualCanvas"></div>
+
+        <div class="question-overlay" id="questionOverlay">
+          <div class="question-tag">Question from Diya</div>
+          <div class="question-display" id="questionText">Waiting for question…</div>
+          <div id="questionBody"></div>
+        </div>
+
+        <div class="intake-screen" id="intakeScreen">
+          <div class="intake-backdrop"></div>
+          <div class="intake-card">
+            <div class="intake-avatar-wrap" id="intakeAvatarWrap"></div>
+            <h3>Hi! I'm Diya.</h3>
+            <p>Let's get to know each other first. We'll set your goals, understand your learning style, and then begin your chapter journey together.</p>
+          </div>
+        </div>
+
+        <div class="session-end-overlay" id="sessionEndOverlay">
+          <div class="session-end-backdrop"></div>
+          <div class="session-end-card">
+            <h3>Session complete!</h3>
+            <p>Great work today. See you next session.</p>
+          </div>
+        </div>
+
+        <div class="explaining-banner" id="explainingBanner">
+          <div class="sound-wave">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="explaining-text">
+            <strong>Diya is explaining</strong> — <span id="explainingHint">visual incoming…</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- TEACHER PANEL -->
+  <aside class="teacher-panel">
+    <div class="teacher-panel-header">
+      <h3>Teacher — Diya</h3>
+      <span>AI Maths Tutor · CBSE Class 9</span>
+    </div>
+
+    <div class="avatar-section">
+      <div class="avatar-glow"></div>
+
+      <!-- Semi-human teacher SVG avatar -->
+      <svg class="teacher-svg" viewBox="0 0 108 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Decorative halo ring -->
+        <circle cx="54" cy="43" r="32" stroke="url(#haloG)" stroke-width="0.8" stroke-dasharray="3.5 2.8" opacity="0.45"/>
+        <circle cx="54" cy="43" r="28" stroke="url(#haloG)" stroke-width="0.4" opacity="0.2"/>
+        <!-- Body / attire base -->
+        <path d="M24 118 Q28 92 54 84 Q80 92 84 118 Z" fill="url(#bodyG)" opacity="0.92"/>
+        <!-- Saree border suggestion -->
+        <path d="M24 118 Q28 95 54 87" stroke="url(#sareeG)" stroke-width="2" fill="none" opacity="0.6"/>
+        <!-- Blouse suggestion -->
+        <path d="M40 84 Q54 78 68 84 L65 96 Q54 92 43 96 Z" fill="url(#blouseG)" opacity="0.85"/>
+        <!-- Neck -->
+        <rect x="49" y="72" width="10" height="13" rx="4" fill="#c8a070"/>
+        <!-- Head -->
+        <ellipse cx="54" cy="52" rx="19" ry="21" fill="url(#skinG)"/>
+        <!-- Jaw refinement -->
+        <path d="M38 55 Q38 70 54 73 Q70 70 70 55" fill="url(#skinG)"/>
+        <!-- Hair — full -->
+        <ellipse cx="54" cy="34" rx="21" ry="18" fill="url(#hairG)"/>
+        <!-- Hair bun -->
+        <ellipse cx="54" cy="26" rx="9" ry="8" fill="url(#hairG)"/>
+        <circle cx="54" cy="24" r="4" fill="#3a1a06"/>
+        <!-- Hair parting highlight -->
+        <line x1="54" y1="31" x2="54" y2="40" stroke="rgba(255,220,160,0.15)" stroke-width="1.5"/>
+        <!-- Bindi -->
+        <circle cx="54" cy="43" r="2.8" fill="var(--gold)" opacity="0.95"/>
+        <circle cx="54" cy="43" r="1.2" fill="#ff4444" opacity="0.7"/>
+        <!-- Eyebrows -->
+        <path d="M44 47 Q47.5 45 51 47" stroke="#3a1a06" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        <path d="M57 47 Q60.5 45 64 47" stroke="#3a1a06" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        <!-- Eyes -->
+        <ellipse cx="47.5" cy="51" rx="3.8" ry="2.8" fill="#1a0a04"/>
+        <ellipse cx="60.5" cy="51" rx="3.8" ry="2.8" fill="#1a0a04"/>
+        <circle cx="48.5" cy="50.2" r="1.1" fill="white" opacity="0.65"/>
+        <circle cx="61.5" cy="50.2" r="1.1" fill="white" opacity="0.65"/>
+        <!-- Eyeliner -->
+        <path d="M43.5 51.5 Q47.5 48.5 51.5 51.5" stroke="#1a0a04" stroke-width="0.8" fill="none"/>
+        <path d="M56.5 51.5 Q60.5 48.5 64.5 51.5" stroke="#1a0a04" stroke-width="0.8" fill="none"/>
+        <!-- Nose suggestion -->
+        <path d="M52 55 Q54 58 56 55" stroke="#b08060" stroke-width="1" fill="none" opacity="0.5"/>
+        <!-- Smile -->
+        <path d="M48 62 Q54 67 60 62" stroke="#a07050" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        <!-- Earrings (jhumka style) -->
+        <circle cx="35.5" cy="57" r="3.5" fill="url(#earG)" stroke="rgba(201,149,26,0.4)" stroke-width="0.5"/>
+        <line x1="35.5" y1="60.5" x2="35.5" y2="66" stroke="url(#earG)" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="35.5" cy="66" r="2" fill="var(--gold)"/>
+        <circle cx="72.5" cy="57" r="3.5" fill="url(#earG)" stroke="rgba(201,149,26,0.4)" stroke-width="0.5"/>
+        <line x1="72.5" y1="60.5" x2="72.5" y2="66" stroke="url(#earG)" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="72.5" cy="66" r="2" fill="var(--gold)"/>
+        <!-- Necklace suggestion -->
+        <path d="M43 82 Q54 88 65 82" stroke="url(#earG)" stroke-width="1" fill="none" opacity="0.5"/>
+        <!-- Book -->
+        <rect x="16" y="95" width="24" height="18" rx="3" fill="url(#bookG)" opacity="0.88"/>
+        <rect x="16" y="95" width="12" height="18" rx="3" fill="url(#bookG2)" opacity="0.88"/>
+        <line x1="28" y1="95" x2="28" y2="113" stroke="rgba(0,0,0,0.25)" stroke-width="1"/>
+        <!-- Pen / chalk -->
+        <rect x="72" y="86" width="18" height="4" rx="2" fill="var(--cream)" transform="rotate(-32, 81, 88)" opacity="0.8"/>
+        <circle cx="72" cy="90" r="2" fill="var(--gold)" opacity="0.7" transform="rotate(-32,72,90)"/>
+        <!-- Formula hint on book -->
+        <text x="19" y="106" fill="rgba(255,255,255,0.5)" font-size="4" font-weight="700">∑x²</text>
+        <text x="19" y="111" fill="rgba(255,255,255,0.35)" font-size="3.5">n</text>
+
+        <defs>
+          <linearGradient id="haloG" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#c9951a"/>
+            <stop offset="100%" stop-color="#e8b84b"/>
+          </linearGradient>
+          <linearGradient id="skinG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#d4a878"/>
+            <stop offset="100%" stop-color="#c8906a"/>
+          </linearGradient>
+          <linearGradient id="hairG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#2e1a0c"/>
+            <stop offset="100%" stop-color="#1a0d06"/>
+          </linearGradient>
+          <linearGradient id="bodyG" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#3a1e72"/>
+            <stop offset="100%" stop-color="#1a0e3a"/>
+          </linearGradient>
+          <linearGradient id="blouseG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#502090"/>
+            <stop offset="100%" stop-color="#2a1050"/>
+          </linearGradient>
+          <linearGradient id="sareeG" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#c9951a" stop-opacity="0.7"/>
+            <stop offset="100%" stop-color="#e8b84b" stop-opacity="0.3"/>
+          </linearGradient>
+          <linearGradient id="earG" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#e8b84b"/>
+            <stop offset="100%" stop-color="#c9951a"/>
+          </linearGradient>
+          <linearGradient id="bookG" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#3a8f5c"/>
+            <stop offset="100%" stop-color="#2a6840"/>
+          </linearGradient>
+          <linearGradient id="bookG2" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#2a6840"/>
+            <stop offset="100%" stop-color="#1a4828"/>
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <div class="teacher-name-block">
+        <h4>Diya</h4>
+        <p>Your AI Maths Teacher</p>
+        <span class="teacher-status">Online · Ready</span>
+      </div>
+    </div>
+
+    <!-- ElevenLabs voice widget -->
+    <div class="el-section">
+      <div class="el-section-label">Voice Session</div>
+      <div id="elWidgetSlot" class="widget-live"></div>
+    </div>
+
+    <!-- Session info -->
+    <div class="info-scroll">
+      <div class="info-card">
+        <div class="info-card-label">Current Chapter</div>
+        <div class="info-card-value" id="infoChapter">—</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-label">Quota Remaining</div>
+        <div class="info-card-value" id="infoQuota">— mins</div>
+        <div class="quota-bar-track">
+          <div class="quota-bar-fill" id="quotaFill" style="width:100%"></div>
+        </div>
+        <div class="quota-legend">
+          <span>0</span>
+          <span id="quotaMax">—</span>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-label">Time on Chapter</div>
+        <div class="info-card-value" id="infoChapterTime">Just started</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-label">Last Visual</div>
+        <div class="info-card-value" id="infoLastVisual" style="color:var(--muted); font-size:0.82rem">No visual yet</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script>
+const AGENT_ID='agent_1901kp14wnx7ecab789827fkwg1p';
+const WF={
+  studentState:'https://coolvinoo.app.n8n.cloud/webhook/student-state',
+  sessionStart:'https://coolvinoo.app.n8n.cloud/webhook/session-start',
+  heartbeat:'https://coolvinoo.app.n8n.cloud/webhook/heartbeat',
+  loadQuestion:'https://coolvinoo.app.n8n.cloud/webhook/load-question',
+  submitAnswer:'https://coolvinoo.app.n8n.cloud/webhook/submit-answer',
+  visualEvent:'https://coolvinoo.app.n8n.cloud/webhook/visual-event',
+  saveIntake:'https://coolvinoo.app.n8n.cloud/webhook/save-intake',
+  endSession:'https://coolvinoo.app.n8n.cloud/webhook/end-session'
+};
+const CHAPTERS=[
+  { num:1,name:'Number Systems',short:'Number Systems' },
+  { num:2,name:'Polynomials',short:'Polynomials' },
+  { num:3,name:'Coordinate Geometry',short:'Coordinate Geometry' },
+  { num:4,name:'Linear Equations in Two Variables',short:'Linear Equations' },
+  { num:5,name:"Introduction to Euclid's Geometry",short:"Euclid's Geometry" },
+  { num:6,name:'Lines and Angles',short:'Lines & Angles' },
+  { num:7,name:'Triangles',short:'Triangles' },
+  { num:8,name:'Quadrilaterals',short:'Quadrilaterals' },
+  { num:9,name:'Areas of Parallelograms & Triangles',short:'Areas (Para & Tri)' },
+  { num:10,name:'Circles',short:'Circles' },
+  { num:11,name:'Constructions',short:'Constructions' },
+  { num:12,name:"Heron's Formula",short:"Heron's Formula" },
+  { num:13,name:'Surface Areas and Volumes',short:'Surface Areas & Vol.' },
+  { num:14,name:'Statistics',short:'Statistics' },
+  { num:15,name:'Probability',short:'Probability' },
+];
+const S={
+  pageState:0, studentId:'', studentName:'', studentData:null, plan:'Student',
+  quotaTotal:120, quotaUsed:0, quotaRemaining:120, activeChapterNum:1, activeChapterName:'Number Systems',
+  sessionId:'', sessionStart:0, chapterStart:0, currentQuestion:null, currentQuestionShownAt:0,
+  lastSceneHint:'overview', lastSceneVisualType:'overview', lastD3Args:null,
+  sessionTimer:null, chapterTimer:null, heartbeatTimer:null, widget:null, widgetReady:false, ended:false,
+};
+
+const teacherSvgMarkup=document.querySelector('.teacher-svg')?.outerHTML || '';
+if (teacherSvgMarkup) document.getElementById('intakeAvatarWrap').innerHTML=teacherSvgMarkup;
+
+document.getElementById('loginBtn').addEventListener('click', doLogin);
+document.getElementById('demoBtn').addEventListener('click', ()=>{document.getElementById('fStudentId').value='priya_2025';document.getElementById('fPin').value='1234';doLogin();});
+document.getElementById('fPin').addEventListener('keydown', e=>e.key==='Enter' && doLogin());
+document.getElementById('logoutBtn').addEventListener('click', ()=>hardClose());
+document.querySelectorAll('.viz-tab[data-tab]').forEach(btn=>btn.addEventListener('click', ()=>activateTab(btn.dataset.tab)));
+document.getElementById('replayBtn').addEventListener('click', ()=>{ if(S.lastD3Args) renderD3Scene(S.lastD3Args.chapter_num,S.lastD3Args.content_hint,S.lastD3Args.visual_type); });
+
+function showError(msg){ const el=document.getElementById('authError'); el.textContent=msg; el.classList.remove('hidden'); }
+function clearError(){ document.getElementById('authError').classList.add('hidden'); }
+function qs(id){return document.getElementById(id);}
+async function getJSON(url){ const r=await fetch(url); if(!r.ok) throw new Error(`Server returned ${r.status}`); return await r.json(); }
+async function postJSON(url,payload,keepalive=false){ const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive}); if(!r.ok) throw new Error(`Server returned ${r.status}`); const ct=r.headers.get('content-type')||''; return ct.includes('application/json')?await r.json():{ok:true}; }
+
+async function doLogin(){
+  const id=qs('fStudentId').value.trim(); const pin=qs('fPin').value.trim();
+  if(!id||!pin) return showError('Please enter your Student ID and PIN.');
+  const btn=qs('loginBtn'); btn.textContent='Signing in…'; btn.disabled=true; clearError();
+  try{
+    const d=await getJSON(`${WF.studentState}?id=${encodeURIComponent(id)}`);
+    if(d.error) throw new Error(d.error);
+    if(d.pin && String(d.pin)!==String(pin)) throw new Error('Invalid PIN.');
+    if(!d.student_name) throw new Error('Student not found. Check your Student ID.');
+    populateState(id,d);
+    launchApp();
+  }catch(err){
+    showError(err.message||'Sign in failed.'); btn.textContent='Enter learning board →'; btn.disabled=false;
+  }
+}
+function populateState(id,d){
+  S.studentId=id; S.studentName=d.student_name; S.studentData=d; S.plan=d.plan||'Student';
+  S.quotaTotal=parseFloat(d.quota_mins_total)||120; S.quotaUsed=parseFloat(d.quota_mins_used)||0; S.quotaRemaining=parseFloat(d.quota_mins_remaining)||120;
+  S.activeChapterNum=parseInt(d.active_chapter_num)||1; S.activeChapterName=d.active_chapter_name||CHAPTERS[0].name;
+  S.sessionId=''; S.sessionStart=Date.now(); S.chapterStart=Date.now(); S.ended=false;
+}
+function launchApp(){
+  qs('loginScreen').classList.add('hidden'); qs('appScreen').classList.remove('hidden');
+  qs('sStudentName').textContent=S.studentName; qs('sStudentPlan').textContent=S.plan+' plan';
+  buildChapterList(); updateQuota(); startSessionTimer(); startChapterTimer(); startHeartbeat();
+  if((S.studentData.total_sessions||0)===0){ transitionToIntake(); } else { transitionToTeaching(false); }
+  injectWidget(S.studentData);
+}
+function buildChapterList(){ const c=qs('chapterList'); c.innerHTML=''; CHAPTERS.forEach(ch=>{ const btn=document.createElement('button'); btn.className='chapter-item'; btn.dataset.num=ch.num; btn.innerHTML=`<span class="ch-num">${ch.num}</span><span class="ch-name">${ch.short}</span>`; btn.addEventListener('click',()=>setActiveChapter(ch.num,ch.name,true)); c.appendChild(btn); }); }
+function setActiveChapter(num,name,log=false){ S.activeChapterNum=num; S.activeChapterName=name; S.chapterStart=Date.now(); qs('chapterBadge').textContent=`Chapter ${num}`; qs('chapterTitle').textContent=name; qs('infoChapter').textContent=`Ch. ${num} · ${name}`; document.querySelectorAll('.chapter-item').forEach(el=>el.classList.toggle('active', +el.dataset.num===num)); if(log) sendVisualLog({student_id:S.studentId, topic:name, visual_type:'chapter_switch', content_hint:'manual_switch', chapter_num:num}); if(S.pageState===3) renderD3Scene(num,'overview','overview'); }
+function updateQuota(){ const pct=S.quotaTotal>0?(S.quotaRemaining/S.quotaTotal)*100:100; qs('infoQuota').textContent=`${Math.max(0,Math.round(S.quotaRemaining))} mins remaining`; qs('quotaFill').style.width=`${Math.max(0,Math.min(100,pct))}%`; qs('quotaMax').textContent=`of ${S.quotaTotal} mins`; }
+function startSessionTimer(){ clearInterval(S.sessionTimer); const el=qs('timerDisplay'); const tick=()=>{ const total=Math.max(0,Math.round(S.quotaRemaining*60 - ((Date.now()-S.sessionStart)/1000))); const mm=String(Math.floor(total/60)).padStart(2,'0'); const ss=String(total%60).padStart(2,'0'); el.textContent=`${mm}:${ss}`; el.classList.remove('timer-warning','timer-danger'); if(total<=300 && total>0) el.classList.add('timer-warning'); if(total<=0 && !S.ended) { el.classList.add('timer-danger'); onTimerEnded(); } }; tick(); S.sessionTimer=setInterval(tick,1000); }
+function startChapterTimer(){ clearInterval(S.chapterTimer); const el=qs('infoChapterTime'); S.chapterTimer=setInterval(()=>{ const s=Math.round((Date.now()-S.chapterStart)/1000); const m=Math.floor(s/60); el.textContent=m<1?`${s}s on this chapter`:`${m} min${m>1?'s':''} on this chapter`; },5000); }
+function startHeartbeat(){ clearInterval(S.heartbeatTimer); S.heartbeatTimer=setInterval(async()=>{ if(!S.studentId||S.ended) return; try{ await postJSON(WF.heartbeat,{student_id:S.studentId,session_id:S.sessionId,session_duration_mins:Math.round((Date.now()-S.sessionStart)/60000),quota_mins_used:Math.round((Date.now()-S.sessionStart)/60000)}); }catch(_ ){} },60000); }
+async function onTimerEnded(){ if(S.ended) return; S.ended=true; qs('sessionEndOverlay').classList.add('visible'); try{ await postJSON(WF.heartbeat,{student_id:S.studentId,session_id:S.sessionId,session_duration_mins:Math.round((Date.now()-S.sessionStart)/60000)}); }catch(_ ){} try{ await postJSON(WF.endSession,{student_id:S.studentId,session_id:S.sessionId,session_duration_mins:Math.round((Date.now()-S.sessionStart)/60000),last_chapter:S.activeChapterName}, true); }catch(_ ){} disableWidgetMic(); }
+function hardClose(){ try{ navigator.sendBeacon(WF.endSession, new Blob([JSON.stringify({student_id:S.studentId,session_id:S.sessionId,session_duration_mins:Math.round((Date.now()-S.sessionStart)/60000),last_chapter:S.activeChapterName})], {type:'application/json'})); }catch(_ ){} clearInterval(S.sessionTimer); clearInterval(S.chapterTimer); clearInterval(S.heartbeatTimer); qs('appScreen').classList.add('hidden'); qs('loginScreen').classList.remove('hidden'); qs('loginBtn').textContent='Enter learning board →'; qs('loginBtn').disabled=false; qs('fStudentId').value=''; qs('fPin').value=''; qs('questionOverlay').classList.remove('visible'); qs('intakeScreen').classList.remove('visible'); qs('sessionEndOverlay').classList.remove('visible'); const slot=qs('elWidgetSlot'); if(slot) slot.innerHTML=''; S.widget=null; S.widgetReady=false; }
+window.addEventListener('beforeunload', ()=>{ if(S.studentId){ try{ navigator.sendBeacon(WF.endSession, new Blob([JSON.stringify({student_id:S.studentId,session_id:S.sessionId,session_duration_mins:Math.round((Date.now()-S.sessionStart)/60000),last_chapter:S.activeChapterName})], {type:'application/json'})); }catch(_ ){} } });
+
+function transitionToIntake(){ S.pageState=1; activateTab('visual'); qs('questionOverlay').classList.remove('visible'); qs('intakeScreen').classList.add('visible'); qs('visualCanvas').innerHTML=''; qs('infoLastVisual').textContent='Intake welcome'; qs('explainingHint').textContent='Getting to know you first'; }
+function transitionToTeaching(useCurrent=true){ S.pageState=3; qs('intakeScreen').classList.remove('visible'); qs('questionOverlay').classList.remove('visible'); activateTab('visual'); renderD3Scene(S.activeChapterNum, useCurrent?S.lastSceneHint:'overview', useCurrent?S.lastSceneVisualType:'overview'); }
+function activateTab(tab){ document.querySelectorAll('.viz-tab[data-tab]').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab)); if(tab==='question') qs('questionOverlay').classList.add('visible'); else if(S.pageState!==2) qs('questionOverlay').classList.remove('visible'); }
+
+function injectWidget(studentData){ const slot=qs('elWidgetSlot'); slot.innerHTML=''; const widget=document.createElement('elevenlabs-convai'); widget.setAttribute('agent-id', AGENT_ID); const context=(studentData.total_sessions===0?`INTAKE MODE. Student name: ${studentData.student_name}. This is their first session. Follow the Intake Protocol KB document.`:(studentData.resume_prompt||'')+` Learning style: ${studentData.learning_style||'example-first'}. Confidence: ${studentData.maths_confidence||3}/5. Weak chapters: ${studentData.weak_chapters||'none'}.`); widget.setAttribute('dynamic-variables', JSON.stringify({student_context:context, student_id:studentData.student_id||S.studentId, student_name:studentData.student_name||S.studentName})); slot.appendChild(widget); S.widget=widget; widget.addEventListener('ready', async ()=>{ S.widgetReady=true; registerAllClientTools(widget, studentData); try{ const res=await postJSON(WF.sessionStart,{student_id:S.studentId,student_name:S.studentName,active_chapter_num:S.activeChapterNum,active_chapter_name:S.activeChapterName}); if(res && res.session_id) S.sessionId=res.session_id; }catch(_ ){} }); }
+function disableWidgetMic(){ try{ S.widget?.setAttribute('conversation-ended','true'); }catch(_ ){} }
+function registerAllClientTools(widget,studentData){
+  if(!widget?.clientTools?.register) return;
+  widget.clientTools.register('show_visual', async (params)=>{ const {topic,visual_type,content_hint,chapter_num,student_id}=params||{}; if(visual_type==='question' || String(content_hint||'').startsWith('MCQ|') || String(content_hint||'').startsWith('OPEN|')){ renderQuestionCard(content_hint, params||{}); } else { renderD3Scene(chapter_num||S.activeChapterNum, content_hint||topic||'overview', visual_type||'overview'); } fetch(WF.visualEvent,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ student_id: student_id||S.studentId, topic, visual_type, content_hint, chapter_num: chapter_num||S.activeChapterNum, session_id:S.sessionId })}).catch(()=>{}); return {status:'rendered'}; });
+  widget.clientTools.register('save_intake', async (params)=>{ fetch(WF.saveIntake,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(params)}).catch(()=>{}); transitionToTeaching(false); return {status:'saved'}; });
+  widget.clientTools.register('log_session', async (params)=>{ fetch(WF.sessionStart,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(params)}).catch(()=>{}); return {status:'logged'}; });
+  widget.clientTools.register('end_session', async (params)=>{ await postJSON(WF.endSession, Object.assign({student_id:S.studentId,session_id:S.sessionId,last_chapter:S.activeChapterName}, params||{})).catch(()=>{}); onTimerEnded(); return {status:'ended'}; });
+  widget.clientTools.register('load_question', async (params)=>{ fetch(WF.loadQuestion,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(params)}).catch(()=>{}); return {status:'loaded'}; });
+  widget.clientTools.register('heartbeat', async (params)=>{ fetch(WF.heartbeat,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(params)}).catch(()=>{}); return {status:'logged'}; });
+}
+
+function renderQuestionCard(content_hint, meta={}){
+  S.pageState=2; activateTab('question'); qs('questionOverlay').classList.add('visible'); qs('questionTab').classList.remove('hidden');
+  qs('questionBody').innerHTML='';
+  if((content_hint||'').startsWith('MCQ|')){
+    const parts=content_hint.split('|'); const question=parts[1]||'Question'; const options=parts.slice(2,6); const correct=(parts[6]||'correct:A').replace('correct:','').trim().toUpperCase();
+    S.currentQuestion={ type:'MCQ', question, options, correct, meta, index: meta.question_index||0 }; S.currentQuestionShownAt=Date.now();
+    qs('questionText').textContent=question;
+    const wrap=document.createElement('div'); wrap.className='mcq-options';
+    const letters=['A','B','C','D'];
+    options.forEach((opt,i)=>{ const b=document.createElement('button'); b.className='mcq-option'; b.textContent=opt; b.addEventListener('click', ()=>submitMCQAnswer(letters[i], b, wrap)); wrap.appendChild(b); });
+    const hint=document.createElement('div'); hint.className='voice-hint'; hint.textContent='or speak your answer to Diya';
+    qs('questionBody').appendChild(wrap); qs('questionBody').appendChild(hint);
+  } else if((content_hint||'').startsWith('OPEN|')){
+    const q=content_hint.replace('OPEN|',''); S.currentQuestion={ type:'OPEN', question:q, meta }; qs('questionText').textContent=q;
+    const ta=document.createElement('textarea'); ta.className='hots-input'; ta.placeholder='Think aloud or type here. You can also answer Diya by voice.'; qs('questionBody').appendChild(ta);
+    const hint=document.createElement('div'); hint.className='voice-hint'; hint.textContent='You can answer by voice to Diya, or type here for your own notes.'; qs('questionBody').appendChild(hint);
+  } else { qs('questionText').textContent=content_hint||'Answer verbally to Diya.'; }
+}
+async function submitMCQAnswer(letter, btn, wrap){
+  if(!S.currentQuestion || S.currentQuestion.type!=='MCQ') return;
+  const rt=Math.round((Date.now()-S.currentQuestionShownAt)/1000); const correct=letter===S.currentQuestion.correct; const buttons=[...wrap.querySelectorAll('.mcq-option')];
+  buttons.forEach((b,i)=>{ const l=['A','B','C','D'][i]; b.disabled=true; if(l===letter) b.classList.add(correct?'correct':'wrong'); if(!correct && l===S.currentQuestion.correct) b.classList.add('correct'); });
+  fetch(WF.submitAnswer,{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ student_id:S.studentId, session_id:S.sessionId, chapter_num:S.activeChapterNum, chapter_name:S.activeChapterName, stage:'question', question_index:S.currentQuestion.index||0, question_text:S.currentQuestion.question, student_answer:letter, correct, score:correct?1:0, response_time_secs:rt }) }).catch(()=>{});
+  setTimeout(()=>{ S.pageState=3; qs('questionOverlay').classList.remove('visible'); qs('questionBody').innerHTML=''; transitionToTeaching(true); },4000);
+}
+function contentHintToScene(chapter_num, content_hint=''){ const hint=String(content_hint||'').toLowerCase(); if(/irrational|√2|pi|π| e/.test(hint)) return CHAPTERS[0].name; if(/polynomial|zeros|roots/.test(hint)) return CHAPTERS[1].name; if(/coordinate|x-axis|y-axis|quadrant/.test(hint)) return CHAPTERS[2].name; if(/linear equation|graph line/.test(hint)) return CHAPTERS[3].name; if(/triangle|congruence|similar/.test(hint)) return CHAPTERS[5].name; if(/circle|chord|arc|tangent/.test(hint)) return CHAPTERS[8].name; if(/surface area|volume|cylinder/.test(hint)) return CHAPTERS[10].name; if(/statistics|mean|median|histogram/.test(hint)) return CHAPTERS[11].name; if(/probability|sample space/.test(hint)) return CHAPTERS[14].name; return (CHAPTERS.find(c=>c.num===Number(chapter_num))||{name:S.activeChapterName}).name; }
+function renderD3Scene(chapter_num, content_hint='overview', visual_type='overview'){ S.pageState=3; qs('intakeScreen').classList.remove('visible'); qs('questionOverlay').classList.remove('visible'); const chapterName=contentHintToScene(chapter_num||S.activeChapterNum, content_hint); S.lastSceneHint=content_hint; S.lastSceneVisualType=visual_type; S.lastD3Args={chapter_num: chapter_num||S.activeChapterNum, content_hint, visual_type}; renderVisualFor(chapterName); qs('infoLastVisual').textContent=`${chapterName} · ${visual_type}`; qs('explainingHint').textContent=content_hint||chapterName; const banner=qs('explainingBanner'); banner.classList.add('visible'); setTimeout(()=>banner.classList.remove('visible'),7000); if(visual_type==='equation') activateTab('equation'); else if(visual_type==='steps') activateTab('steps'); else activateTab('visual'); sendVisualLog({student_id:S.studentId, topic:chapterName, visual_type, content_hint, chapter_num:chapter_num||S.activeChapterNum}); }
+function sendVisualLog(payload){ fetch(WF.visualEvent,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({session_id:S.sessionId},payload||{}))}).catch(()=>{}); }
+
+function renderVisualFor(chapter) {
+  const host = document.getElementById('visualCanvas');
+  host.innerHTML = '';
+  const w = host.clientWidth  || 640;
+  const h = host.clientHeight || 420;
+  const svg = d3.select(host).append('svg')
+    .attr('viewBox', `0 0 ${w} ${h}`)
+    .attr('width', '100%').attr('height', '100%')
+    .attr('preserveAspectRatio', 'xMidYMid meet');
+
+  const ch = chapter.toLowerCase();
+  if      (ch.includes('number'))       drawNumberSystems(svg, w, h);
+  else if (ch.includes('polynomial'))   drawPolynomials(svg, w, h);
+  else if (ch.includes('coordinate'))   drawCoordinateGeo(svg, w, h);
+  else if (ch.includes('linear'))       drawLinearEquations(svg, w, h);
+  else if (ch.includes('euclid'))       drawEuclid(svg, w, h);
+  else if (ch.includes('lines') || ch.includes('angle')) drawLinesAngles(svg, w, h);
+  else if (ch.includes('triangle'))     drawTriangles(svg, w, h);
+  else if (ch.includes('quadrilateral')) drawQuadrilaterals(svg, w, h);
+  else if (ch.includes('areas') || ch.includes('parallelogram')) drawAreas(svg, w, h);
+  else if (ch.includes('circle'))       drawCircles(svg, w, h);
+  else if (ch.includes('construction')) drawConstructions(svg, w, h);
+  else if (ch.includes('heron'))        drawHerons(svg, w, h);
+  else if (ch.includes('surface') || ch.includes('volume')) drawSurfaces(svg, w, h);
+  else if (ch.includes('statistic'))    drawStatistics(svg, w, h);
+  else if (ch.includes('probab'))       drawProbability(svg, w, h);
+  else drawPlaceholder(svg, w, h, chapter);
+}
+
+function title(svg, w, text) {
+  svg.append('text').attr('x', w/2).attr('y', 32).attr('text-anchor', 'middle')
+    .attr('fill', '#e8dfc8').attr('font-size', '14px').attr('font-weight', 600)
+    .attr('font-family', 'DM Sans, sans-serif').text(text);
+}
+function subtitle(svg, w, h, text) {
+  svg.append('text').attr('x', w/2).attr('y', h-22).attr('text-anchor', 'middle')
+    .attr('fill', '#c9951a').attr('font-size', '12px').attr('font-weight', 600)
+    .attr('font-family', 'DM Sans, sans-serif').text(text);
+}
+
+// Ch 1
+function drawNumberSystems(svg, w, h) {
+  title(svg, w, 'Number Systems · N ⊂ W ⊂ Z ⊂ Q ⊂ ℝ');
+  const cx = w/2, cy = h/2+10;
+  const sets = [
+    { r:155, label:'ℝ  Real', c:'#c9951a', fc:'rgba(201,149,26,0.07)', tx:cx-8, ty:cy-148 },
+    { r:122, label:'Q  Rational', c:'#4fd1c5', fc:'rgba(79,209,197,0.07)', tx:cx+108, ty:cy-98 },
+    { r:88,  label:'Z  Integer', c:'#8dffbf', fc:'rgba(141,255,191,0.07)', tx:cx+76, ty:cy-66 },
+    { r:55,  label:'W  Whole', c:'#e8b84b', fc:'rgba(232,184,75,0.1)', tx:cx+46, ty:cy-33 },
+    { r:26,  label:'ℕ', c:'#3a8f5c', fc:'rgba(58,143,92,0.18)', tx:cx, ty:cy+6 },
+  ];
+  sets.forEach(s => {
+    svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',s.r).attr('fill',s.fc).attr('stroke',s.c).attr('stroke-width',1.4);
+    svg.append('text').attr('x',s.tx).attr('y',s.ty).attr('fill',s.c).attr('font-size','11px').attr('font-weight',700).attr('font-family','DM Sans').text(s.label);
+  });
+  svg.append('text').attr('x',cx).attr('y',cy+5).attr('text-anchor','middle').attr('fill','#8dffbf').attr('font-size','9px').text('ℕ');
+  [
+    {x:cx-108,y:cy-52,l:'√2',v:'≈1.414'},
+    {x:cx-92, y:cy+56,l:'π', v:'≈3.142'},
+    {x:cx-128,y:cy+10,l:'e', v:'≈2.718'},
+  ].forEach(p => {
+    svg.append('circle').attr('cx',p.x).attr('cy',p.y).attr('r',20).attr('fill','rgba(201,149,26,0.12)').attr('stroke','#c9951a').attr('stroke-width',1.2);
+    svg.append('text').attr('x',p.x).attr('y',p.y+4).attr('text-anchor','middle').attr('fill','#e8b84b').attr('font-size','13px').attr('font-weight',700).text(p.l);
+    svg.append('text').attr('x',p.x).attr('y',p.y+18).attr('text-anchor','middle').attr('fill','#7a8a9d').attr('font-size','9px').text(p.v);
+  });
+}
+
+// Ch 2
+function drawPolynomials(svg, w, h) {
+  title(svg, w, 'Polynomials · p(x) = x² − 3x − 4');
+  const xS = d3.scaleLinear().domain([-5,7]).range([55, w-40]);
+  const yS = d3.scaleLinear().domain([-14,18]).range([h-45, 40]);
+  svg.append('g').attr('transform',`translate(0,${yS(0)})`).call(d3.axisBottom(xS).ticks(8)).selectAll('text').attr('fill','#7a8a9d').attr('font-size','10px');
+  svg.append('g').attr('transform',`translate(${xS(0)},0)`).call(d3.axisLeft(yS).ticks(7)).selectAll('text').attr('fill','#7a8a9d').attr('font-size','10px');
+  const line = d3.line().x(d=>xS(d.x)).y(d=>yS(d.y)).curve(d3.curveCatmullRom);
+  const data = d3.range(-5,7.05,.1).map(v=>({x:v,y:v*v-3*v-4}));
+  const path = svg.append('path').datum(data).attr('fill','none').attr('stroke','#c9951a').attr('stroke-width',3).attr('d',line);
+  const len = path.node().getTotalLength();
+  path.attr('stroke-dasharray',len).attr('stroke-dashoffset',len).transition().duration(1000).attr('stroke-dashoffset',0);
+  // roots at x=4, x=-1
+  [-1,4].forEach(r => {
+    svg.append('circle').attr('cx',xS(r)).attr('cy',yS(0)).attr('r',8).attr('fill','#e8b84b').attr('stroke','#06101e').attr('stroke-width',2);
+    svg.append('text').attr('x',xS(r)).attr('y',yS(0)-14).attr('text-anchor','middle').attr('fill','#e8dfc8').attr('font-size','11px').attr('font-weight',600).text(`x=${r}`);
+  });
+  svg.append('text').attr('x',w-20).attr('y',h-12).attr('text-anchor','end').attr('fill','#7a8a9d').attr('font-size','11px').text('Zeros at x = −1 and x = 4');
+}
+
+// Ch 3
+function drawCoordinateGeo(svg, w, h) {
+  title(svg, w, 'Coordinate Geometry · Cartesian Plane');
+  const cx=w/2, cy=h/2;
+  const xS=d3.scaleLinear().domain([-8,8]).range([40,w-40]);
+  const yS=d3.scaleLinear().domain([-6,6]).range([h-40,40]);
+  // Axes
+  svg.append('line').attr('x1',40).attr('x2',w-40).attr('y1',cy).attr('y2',cy).attr('stroke','#3a4a5a').attr('stroke-width',1.5);
+  svg.append('line').attr('x1',cx).attr('x2',cx).attr('y1',40).attr('y2',h-40).attr('stroke','#3a4a5a').attr('stroke-width',1.5);
+  svg.append('text').attr('x',w-28).attr('y',cy-8).attr('fill','#7a8a9d').attr('font-size','12px').text('X →');
+  svg.append('text').attr('x',cx+8).attr('y',50).attr('fill','#7a8a9d').attr('font-size','12px').text('↑ Y');
+  // Quadrant labels
+  [{t:'I',x:cx+30,y:cy-25},{t:'II',x:cx-50,y:cy-25},{t:'III',x:cx-50,y:cy+35},{t:'IV',x:cx+30,y:cy+35}]
+    .forEach(q => svg.append('text').attr('x',q.x).attr('y',q.y).attr('fill','rgba(122,138,157,0.35)').attr('font-size','13px').attr('font-weight',700).text(q.t));
+  // Points
+  [{x:4,y:3,l:'A(4,3)',c:'#c9951a'},{x:-3,y:2,l:'B(−3,2)',c:'#4fd1c5'},{x:-2,y:-4,l:'C(−2,−4)',c:'#8dffbf'},{x:3,y:-2,l:'D(3,−2)',c:'#e8b84b'}]
+    .forEach((p,i) => {
+      const px=xS(p.x), py=yS(p.y);
+      svg.append('line').attr('x1',px).attr('x2',px).attr('y1',cy).attr('y2',py).attr('stroke',p.c).attr('stroke-dasharray','3 3').attr('stroke-width',1).attr('opacity',.45);
+      svg.append('line').attr('x1',cx).attr('x2',px).attr('y1',py).attr('y2',py).attr('stroke',p.c).attr('stroke-dasharray','3 3').attr('stroke-width',1).attr('opacity',.45);
+      svg.append('circle').attr('cx',px).attr('cy',py).attr('r',0).attr('fill',p.c).attr('stroke','#06101e').attr('stroke-width',2)
+        .transition().duration(500).delay(i*120).attr('r',9);
+      svg.append('text').attr('x',px+11).attr('y',py-9).attr('fill',p.c).attr('font-size','11px').attr('font-weight',600).text(p.l);
+    });
+}
+
+// Ch 4
+function drawLinearEquations(svg, w, h) {
+  title(svg, w, 'Linear Equations in Two Variables');
+  const xS=d3.scaleLinear().domain([-8,8]).range([55,w-40]);
+  const yS=d3.scaleLinear().domain([-7,7]).range([h-45,40]);
+  const mk = (m,c) => d3.range(-8,8.1,.4).map(v=>({x:v,y:m*v+c}));
+  const line = d3.line().x(d=>xS(d.x)).y(d=>yS(d.y));
+  svg.append('g').attr('transform',`translate(0,${yS(0)})`).call(d3.axisBottom(xS).ticks(8)).selectAll('text').attr('fill','#7a8a9d').attr('font-size','10px');
+  svg.append('g').attr('transform',`translate(${xS(0)},0)`).call(d3.axisLeft(yS).ticks(7)).selectAll('text').attr('fill','#7a8a9d').attr('font-size','10px');
+  const eqs=[{m:1,c:1,col:'#c9951a',l:'y = x + 1'},{m:-2,c:4,col:'#4fd1c5',l:'y = −2x + 4'}];
+  eqs.forEach(eq => svg.append('path').datum(mk(eq.m,eq.c)).attr('fill','none').attr('stroke',eq.col).attr('stroke-width',2.8).attr('d',line));
+  // intersection
+  const ix=(eqs[1].c-eqs[0].c)/(eqs[0].m-eqs[1].m), iy=eqs[0].m*ix+eqs[0].c;
+  svg.append('circle').attr('cx',xS(ix)).attr('cy',yS(iy)).attr('r',10).attr('fill','#8dffbf').attr('stroke','#06101e').attr('stroke-width',2);
+  svg.append('text').attr('x',xS(ix)+14).attr('y',yS(iy)-12).attr('fill','#e8dfc8').attr('font-size','11px').text(`(${ix.toFixed(1)}, ${iy.toFixed(1)})`);
+  eqs.forEach((eq,i) => svg.append('text').attr('x',65).attr('y',48+i*18).attr('fill',eq.col).attr('font-size','12px').attr('font-weight',600).text(eq.l));
+  subtitle(svg, w, h, 'Solution is the point of intersection of the two lines');
+}
+
+// Ch 5
+function drawEuclid(svg, w, h) {
+  title(svg, w, "Euclid's Geometry · Axioms & Postulates");
+  const cx=w/2, cy=h/2-10;
+  svg.append('line').attr('x1',60).attr('x2',w-60).attr('y1',cy).attr('y2',cy).attr('stroke','#4fd1c5').attr('stroke-width',2);
+  const r=Math.min(w,h)*0.26;
+  svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',r).attr('fill','rgba(201,149,26,0.04)').attr('stroke','#c9951a').attr('stroke-width',1.8);
+  svg.append('circle').attr('cx',cx-r*.35).attr('cy',cy).attr('r',r*.6).attr('fill','none').attr('stroke','#8dffbf').attr('stroke-width',1.2).attr('stroke-dasharray','5 3.5');
+  svg.append('circle').attr('cx',cx+r*.35).attr('cy',cy).attr('r',r*.6).attr('fill','none').attr('stroke','#8dffbf').attr('stroke-width',1.2).attr('stroke-dasharray','5 3.5');
+  const axioms=['P1: A line passes through 2 distinct points.','P2: A terminated line can be produced indefinitely.','P3: A circle can be drawn with any centre & radius.'];
+  axioms.forEach((a,i) => svg.append('text').attr('x',60).attr('y',h-85+i*22).attr('fill','#7a8a9d').attr('font-size','10.5px').text(a));
+}
+
+// Ch 6
+function drawLinesAngles(svg, w, h) {
+  title(svg, w, 'Lines & Angles · Parallel Lines & Transversal');
+  const cx=w/2, y1=h/2-85, y2=h/2+85;
+  svg.append('line').attr('x1',50).attr('x2',w-50).attr('y1',y1).attr('y2',y1).attr('stroke','#4fd1c5').attr('stroke-width',2.5);
+  svg.append('line').attr('x1',50).attr('x2',w-50).attr('y1',y2).attr('y2',y2).attr('stroke','#4fd1c5').attr('stroke-width',2.5);
+  // Arrows for parallel
+  [y1,y2].forEach(y => svg.append('text').attr('x',52).attr('y',y-8).attr('fill','#4fd1c5').attr('font-size','12px').text('‖'));
+  // Transversal
+  svg.append('line').attr('x1',cx-90).attr('x2',cx+90).attr('y1',y1-65).attr('y2',y2+65).attr('stroke','#c9951a').attr('stroke-width',2.5);
+  // Angle labels
+  const pts=[{px:cx-28,py:y1,labels:['∠1','∠2','∠3','∠4']},{px:cx+28,py:y2,labels:['∠5','∠6','∠7','∠8']}];
+  pts.forEach(pt => {
+    svg.append('circle').attr('cx',pt.px).attr('cy',pt.py).attr('r',5).attr('fill','#e8b84b');
+  });
+  [{x:cx-65,y:y1-28,t:'∠1 = ∠5 (Corresponding)',c:'#c9951a'},{x:cx-65,y:y1+20,t:'∠3 = ∠5 (Alternate interior)',c:'#8dffbf'}]
+    .forEach(l => svg.append('text').attr('x',l.x).attr('y',l.y).attr('fill',l.c).attr('font-size','11px').text(l.t));
+  subtitle(svg, w, h, '∠1 + ∠3 = 180° (Co-interior angles are supplementary)');
+}
+
+// Ch 7
+function drawTriangles(svg, w, h) {
+  title(svg, w, 'Triangles · Congruence & Angle Sum Property');
+  const cx=w/2, cy=h/2+10;
+  const A=[cx, cy-110], B=[cx-120, cy+70], C=[cx+120, cy+70];
+  svg.append('polygon').attr('points',[A,B,C].map(p=>p.join(',')).join(' ')).attr('fill','rgba(201,149,26,0.07)').attr('stroke','#c9951a').attr('stroke-width',2.5);
+  // Altitude from A
+  const foot=[cx, cy+70];
+  svg.append('line').attr('x1',A[0]).attr('y1',A[1]).attr('x2',foot[0]).attr('y2',foot[1]).attr('stroke','rgba(79,209,197,0.4)').attr('stroke-dasharray','5 3').attr('stroke-width',1.5);
+  svg.append('rect').attr('x',foot[0]-8).attr('y',foot[1]-8).attr('width',8).attr('height',8).attr('fill','none').attr('stroke','#4fd1c5').attr('stroke-width',1);
+  [[A,'A'],[B,'B'],[C,'C']].forEach(([pt,l]) => {
+    const dx=pt[0]-cx, dy=pt[1]-cy;
+    svg.append('text').attr('x',pt[0]+dx*.12-5).attr('y',pt[1]+dy*.12+5).attr('fill','#e8dfc8').attr('font-size','14px').attr('font-weight',700).text(l);
+  });
+  // Side labels
+  [[A,B,'c'],[B,C,'a'],[A,C,'b']].forEach(([p1,p2,l]) => {
+    const mx=(p1[0]+p2[0])/2-8, my=(p1[1]+p2[1])/2;
+    svg.append('text').attr('x',mx).attr('y',my).attr('fill','#7a8a9d').attr('font-size','12px').text(l);
+  });
+  subtitle(svg, w, h, '∠A + ∠B + ∠C = 180°');
+}
+
+// Ch 8
+function drawQuadrilaterals(svg, w, h) {
+  title(svg, w, 'Quadrilaterals · Parallelogram Properties');
+  const cx=w/2, cy=h/2;
+  const pts=[[cx-130,cy-60],[cx+70,cy-60],[cx+130,cy+60],[cx-70,cy+60]];
+  svg.append('polygon').attr('points',pts.map(p=>p.join(',')).join(' ')).attr('fill','rgba(79,209,197,0.06)').attr('stroke','#4fd1c5').attr('stroke-width',2.5);
+  svg.append('line').attr('x1',pts[0][0]).attr('y1',pts[0][1]).attr('x2',pts[2][0]).attr('y2',pts[2][1]).attr('stroke','#c9951a').attr('stroke-dasharray','6 4').attr('stroke-width',1.5);
+  svg.append('line').attr('x1',pts[1][0]).attr('y1',pts[1][1]).attr('x2',pts[3][0]).attr('y2',pts[3][1]).attr('stroke','#c9951a').attr('stroke-dasharray','6 4').attr('stroke-width',1.5);
+  svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',7).attr('fill','#e8b84b').attr('stroke','#06101e').attr('stroke-width',2);
+  svg.append('text').attr('x',cx+11).attr('y',cy+16).attr('fill','#e8b84b').attr('font-size','11px').text('Diagonals bisect each other');
+  ['A','B','C','D'].forEach((l,i) => svg.append('text').attr('x',pts[i][0]+(pts[i][0]-cx)*.12-5).attr('y',pts[i][1]+(pts[i][1]-cy)*.12+5).attr('fill','#e8dfc8').attr('font-size','13px').attr('font-weight',700).text(l));
+  subtitle(svg, w, h, 'Opposite sides parallel & equal · Opposite angles equal');
+}
+
+// Ch 9
+function drawAreas(svg, w, h) {
+  title(svg, w, 'Areas of Parallelograms & Triangles');
+  const cx=w/2, cy=h/2;
+  // Parallelogram
+  const pts=[[cx-140,cy-50],[cx+60,cy-50],[cx+140,cy+50],[cx-60,cy+50]];
+  svg.append('polygon').attr('points',pts.map(p=>p.join(',')).join(' ')).attr('fill','rgba(141,255,191,0.07)').attr('stroke','#8dffbf').attr('stroke-width',2.2);
+  // Height
+  svg.append('line').attr('x1',pts[0][0]).attr('y1',pts[0][1]).attr('x2',pts[0][0]).attr('y2',pts[3][1]).attr('stroke','#c9951a').attr('stroke-dasharray','5 3').attr('stroke-width',1.5);
+  svg.append('rect').attr('x',pts[0][0]).attr('y',pts[3][1]-10).attr('width',10).attr('height',10).attr('fill','none').attr('stroke','#c9951a').attr('stroke-width',1);
+  svg.append('text').attr('x',pts[0][0]-20).attr('y',(pts[0][1]+pts[3][1])/2+4).attr('fill','#c9951a').attr('font-size','12px').attr('font-weight',600).text('h');
+  svg.append('text').attr('x',cx).attr('y',cy+5).attr('text-anchor','middle').attr('fill','#7a8a9d').attr('font-size','11px').text('b');
+  subtitle(svg, w, h, 'Area = base × height   |   △ = ½ × Parallelogram (same base & same parallels)');
+}
+
+// Ch 10
+function drawCircles(svg, w, h) {
+  title(svg, w, 'Circles · Inscribed Angle Theorem');
+  const cx=w/2, cy=h/2+5, r=Math.min(w,h)*.27;
+  svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',r).attr('fill','rgba(201,149,26,0.04)').attr('stroke','#c9951a').attr('stroke-width',2.2);
+  svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',5).attr('fill','#e8b84b');
+  svg.append('text').attr('x',cx+8).attr('y',cy+15).attr('fill','#7a8a9d').attr('font-size','11px').text('O');
+  const th=130*Math.PI/180;
+  const A={x:cx+r, y:cy};
+  const B={x:cx+r*Math.cos(th), y:cy-r*Math.sin(th)};
+  const P={x:cx-r*.85, y:cy+r*.3};
+  [[cx,cy,A.x,A.y,'#e8b84b'],[cx,cy,B.x,B.y,'#e8b84b'],[P.x,P.y,A.x,A.y,'#8dffbf'],[P.x,P.y,B.x,B.y,'#8dffbf']]
+    .forEach(([x1,y1,x2,y2,c]) => svg.append('line').attr('x1',x1).attr('y1',y1).attr('x2',x2).attr('y2',y2).attr('stroke',c).attr('stroke-width',1.8));
+  [{pt:A,l:'A'},{pt:B,l:'B'},{pt:P,l:'P'}].forEach(({pt,l}) => {
+    svg.append('circle').attr('cx',pt.x).attr('cy',pt.y).attr('r',7).attr('fill',l==='P'?'#4fd1c5':'#c9951a').attr('stroke','#06101e').attr('stroke-width',1.5);
+    svg.append('text').attr('x',pt.x+11).attr('y',pt.y+4).attr('fill','#e8dfc8').attr('font-size','12px').attr('font-weight',600).text(l);
+  });
+  subtitle(svg, w, h, '∠AOB (central) = 2 × ∠APB (inscribed) on the same arc');
+}
+
+// Ch 11
+function drawConstructions(svg, w, h) {
+  title(svg, w, 'Constructions · Angle Bisector & Perpendicular');
+  const cx=w/2, cy=h/2;
+  // Show 60° angle construction
+  const r=110;
+  svg.append('line').attr('x1',cx).attr('y1',cy).attr('x2',cx+r+30).attr('y2',cy).attr('stroke','#4fd1c5').attr('stroke-width',2);
+  const th=Math.PI/3; // 60°
+  svg.append('line').attr('x1',cx).attr('y1',cy).attr('x2',cx+r*Math.cos(th)).attr('y2',cy-r*Math.sin(th)).attr('stroke','#c9951a').attr('stroke-width',2);
+  // Arc
+  const arc=d3.arc()({innerRadius:r*.55, outerRadius:r*.55, startAngle:-Math.PI/2, endAngle:-Math.PI/2+th});
+  svg.append('path').attr('d',arc).attr('transform',`translate(${cx},${cy})`).attr('fill','none').attr('stroke','#e8b84b').attr('stroke-width',1.8);
+  // Bisector
+  const bisect=th/2;
+  svg.append('line').attr('x1',cx).attr('y1',cy).attr('x2',cx+r*.8*Math.cos(bisect)).attr('y2',cy-r*.8*Math.sin(bisect)).attr('stroke','#8dffbf').attr('stroke-width',1.5).attr('stroke-dasharray','5 3');
+  svg.append('text').attr('x',cx+r*.45*Math.cos(bisect)+12).attr('y',cy-r*.45*Math.sin(bisect)).attr('fill','#8dffbf').attr('font-size','11px').text('bisector');
+  svg.append('text').attr('x',cx+r*.7+5).attr('y',cy-8).attr('fill','#7a8a9d').attr('font-size','11px').text('60°');
+  // Perpendicular bisector hint
+  const lx=w*.65, ly=cy;
+  svg.append('line').attr('x1',lx-60).attr('y1',ly).attr('x2',lx+60).attr('y2',ly).attr('stroke','#4fd1c5').attr('stroke-width',2);
+  svg.append('line').attr('x1',lx).attr('y1',ly-50).attr('x2',lx).attr('y2',ly+50).attr('stroke','#c9951a').attr('stroke-width',2).attr('stroke-dasharray','4 3');
+  svg.append('rect').attr('x',lx-6).attr('y',ly-6).attr('width',6).attr('height',6).attr('fill','none').attr('stroke','#e8b84b').attr('stroke-width',1.3);
+  svg.append('text').attr('x',lx).attr('y',ly+66).attr('text-anchor','middle').attr('fill','#7a8a9d').attr('font-size','10.5px').text('Perpendicular Bisector');
+  subtitle(svg, w, h, 'Compass & straightedge constructions — exact, no measurement');
+}
+
+// Ch 12
+function drawHerons(svg, w, h) {
+  title(svg, w, "Heron's Formula · s = (a+b+c)/2");
+  const a=8,b=11,c=13, s=(a+b+c)/2;
+  const area=Math.sqrt(s*(s-a)*(s-b)*(s-c));
+  // Build triangle: AB=c, AC=b, BC=a
+  const cx=w/2;
+  const Ax=cx-c*20, Ay=h/2+50, Bx=cx+c*20, By=h/2+50;
+  const cosA=(b*b+c*c-a*a)/(2*b*c);
+  const Cx=Ax+b*20*cosA, Cy=Ay-b*20*Math.sqrt(1-cosA*cosA);
+  svg.append('polygon').attr('points',`${Ax},${Ay} ${Bx},${By} ${Cx},${Cy}`).attr('fill','rgba(58,143,92,0.1)').attr('stroke','#3a8f5c').attr('stroke-width',2.5);
+  [['A',Ax,Ay],['B',Bx,By],['C',Cx,Cy]].forEach(([l,px,py]) => {
+    const dx=px-cx, dy=py-((Ay+By+Cy)/3);
+    svg.append('text').attr('x',px+dx*.12-5).attr('y',py+dy*.12+5).attr('fill','#e8dfc8').attr('font-size','13px').attr('font-weight',700).text(l);
+  });
+  [[(Ax+Bx)/2,(Ay+By)/2,`c=${c}`],[(Ax+Cx)/2,(Ay+Cy)/2,`b=${b}`],[(Bx+Cx)/2,(By+Cy)/2,`a=${a}`]]
+    .forEach(([mx,my,l]) => svg.append('text').attr('x',mx+5).attr('y',my+4).attr('fill','#c9951a').attr('font-size','11px').attr('font-weight',600).text(l));
+  // Formula
+  const fy=h-65;
+  svg.append('rect').attr('x',50).attr('y',fy-22).attr('width',w-100).attr('height',50).attr('rx',10).attr('fill','rgba(201,149,26,0.07)').attr('stroke','rgba(201,149,26,0.18)');
+  svg.append('text').attr('x',60).attr('y',fy+2).attr('fill','#e8b84b').attr('font-size','12px').attr('font-weight',600).text(`s = (${a}+${b}+${c})/2 = ${s}  →  Area = √(s·(s-a)·(s-b)·(s-c))`);
+  svg.append('text').attr('x',60).attr('y',fy+22).attr('fill','#8dffbf').attr('font-size','13px').attr('font-weight',700).text(`Area = √(${s}×${s-a}×${s-b}×${s-c}) ≈ ${area.toFixed(2)} sq. units`);
+}
+
+// Ch 13
+function drawSurfaces(svg, w, h) {
+  title(svg, w, 'Surface Areas & Volumes');
+  // Cone
+  const cX=w/4, cY=h/2, cR=55, cH=120;
+  svg.append('polygon').attr('points',`${cX},${cY-cH/2} ${cX-cR},${cY+cH/2} ${cX+cR},${cY+cH/2}`).attr('fill','rgba(79,209,197,0.08)').attr('stroke','#4fd1c5').attr('stroke-width',2);
+  svg.append('ellipse').attr('cx',cX).attr('cy',cY+cH/2).attr('rx',cR).attr('ry',15).attr('fill','rgba(79,209,197,0.06)').attr('stroke','#4fd1c5').attr('stroke-width',1.5);
+  svg.append('line').attr('x1',cX).attr('x2',cX+cR).attr('y1',cY+cH/2).attr('y2',cY+cH/2).attr('stroke','#7a8a9d').attr('stroke-dasharray','3 2').attr('stroke-width',1);
+  svg.append('text').attr('x',cX+cR/2).attr('y',cY+cH/2+26).attr('text-anchor','middle').attr('fill','#7a8a9d').attr('font-size','11px').text('r');
+  svg.append('text').attr('x',cX-20).attr('y',cY+5).attr('fill','#7a8a9d').attr('font-size','11px').text('h');
+  svg.append('text').attr('x',cX).attr('y',cY-cH/2-14).attr('text-anchor','middle').attr('fill','#4fd1c5').attr('font-size','12px').attr('font-weight',600).text('Cone');
+  svg.append('text').attr('x',cX).attr('y',h-50).attr('text-anchor','middle').attr('fill','#7a8a9d').attr('font-size','10.5px').text('V = ⅓πr²h');
+  // Sphere
+  const sX=w*.62, sY=h/2, sR=62;
+  svg.append('circle').attr('cx',sX).attr('cy',sY).attr('r',sR).attr('fill','rgba(201,149,26,0.06)').attr('stroke','#c9951a').attr('stroke-width',2);
+  svg.append('ellipse').attr('cx',sX).attr('cy',sY).attr('rx',sR).attr('ry',17).attr('fill','none').attr('stroke','#c9951a').attr('stroke-width',1.5).attr('stroke-dasharray','5 4');
+  svg.append('line').attr('x1',sX).attr('x2',sX+sR).attr('y1',sY).attr('y2',sY).attr('stroke','#7a8a9d').attr('stroke-dasharray','3 2').attr('stroke-width',1);
+  svg.append('text').attr('x',sX+sR/2).attr('y',sY-9).attr('text-anchor','middle').attr('fill','#7a8a9d').attr('font-size','11px').text('r');
+  svg.append('text').attr('x',sX).attr('y',sY-sR-14).attr('text-anchor','middle').attr('fill','#c9951a').attr('font-size','12px').attr('font-weight',600).text('Sphere');
+  svg.append('text').attr('x',sX).attr('y',h-50).attr('text-anchor','middle').attr('fill','#7a8a9d').attr('font-size','10.5px').text('V = 4/3 πr³');
+}
+
+// Ch 14
+function drawStatistics(svg, w, h) {
+  title(svg, w, 'Statistics · Frequency Histogram');
+  const data=[{l:'0-10',v:5},{l:'10-20',v:12},{l:'20-30',v:18},{l:'30-40',v:22},{l:'40-50',v:15},{l:'50-60',v:8}];
+  const m={t:50,r:30,b:55,l:50};
+  const bw=w-m.l-m.r, bh=h-m.t-m.b;
+  const xS=d3.scaleBand().domain(data.map(d=>d.l)).range([0,bw]).padding(0.12);
+  const yS=d3.scaleLinear().domain([0,25]).range([bh,0]);
+  const g=svg.append('g').attr('transform',`translate(${m.l},${m.t})`);
+  g.append('g').attr('transform',`translate(0,${bh})`).call(d3.axisBottom(xS)).selectAll('text').attr('fill','#7a8a9d').attr('font-size','10px');
+  g.append('g').call(d3.axisLeft(yS).ticks(5)).selectAll('text').attr('fill','#7a8a9d').attr('font-size','10px');
+  const cols=['#c9951a','#e8b84b','#4fd1c5','#8dffbf','#e8b84b','#c9951a'];
+  g.selectAll('.b').data(data).join('rect').attr('x',d=>xS(d.l)).attr('width',xS.bandwidth())
+    .attr('y',bh).attr('height',0).attr('rx',5).attr('fill',(_,i)=>cols[i]).attr('opacity',.88)
+    .transition().duration(700).delay((_,i)=>i*80).attr('y',d=>yS(d.v)).attr('height',d=>bh-yS(d.v));
+  const mean=data.reduce((s,d)=>s+d.v,0)/data.length;
+  g.append('line').attr('x1',0).attr('x2',bw).attr('y1',yS(mean)).attr('y2',yS(mean)).attr('stroke','#ff9999').attr('stroke-width',2).attr('stroke-dasharray','6 4');
+  g.append('text').attr('x',bw+4).attr('y',yS(mean)+4).attr('fill','#ff9999').attr('font-size','10px').text(`μ=${mean.toFixed(0)}`);
+  subtitle(svg, w, h, 'Mean · Median · Mode from grouped data');
+}
+
+// Ch 15
+function drawProbability(svg, w, h) {
+  title(svg, w, 'Probability · Empirical Probability');
+  const data=[{l:'Red',v:28},{l:'Blue',v:24},{l:'Green',v:26},{l:'Yellow',v:22}];
+  const cols=['#c9951a','#4fd1c5','#3a8f5c','#e8b84b'];
+  const cx=190, cy=h/2, r=110;
+  const pie=d3.pie().value(d=>d.v)(data);
+  const arc=d3.arc().innerRadius(0).outerRadius(r);
+  svg.selectAll('.sl').data(pie).join('path').attr('transform',`translate(${cx},${cy})`).attr('d',arc).attr('fill',(_,i)=>cols[i]).attr('opacity',.88).attr('stroke','#06101e').attr('stroke-width',2);
+  // Legend
+  data.forEach((d,i) => {
+    const lx=340, ly=h/2-55+i*36;
+    svg.append('rect').attr('x',lx).attr('y',ly-10).attr('width',14).attr('height',14).attr('rx',4).attr('fill',cols[i]);
+    svg.append('text').attr('x',lx+20).attr('y',ly+4).attr('fill','#e8dfc8').attr('font-size','12.5px').attr('font-weight',500).text(`${d.l}: ${d.v}/100 = 0.${d.v}`);
+  });
+  subtitle(svg, w, h, 'P(E) = Number of favourable outcomes ÷ Total outcomes');
+}
+
+function drawPlaceholder(svg, w, h, chapter) {
+  svg.append('rect').attr('x',50).attr('y',50).attr('width',w-100).attr('height',h-100).attr('rx',20).attr('fill','rgba(201,149,26,0.03)').attr('stroke','rgba(201,149,26,0.1)');
+  svg.append('text').attr('x',w/2).attr('y',h/2-14).attr('text-anchor','middle').attr('fill','#e8dfc8').attr('font-size','20px').attr('font-weight',700).text(chapter);
+  svg.append('text').attr('x',w/2).attr('y',h/2+16).attr('text-anchor','middle').attr('fill','#7a8a9d').attr('font-size','13px').text('Visual loads when Diya calls show_visual for this chapter.');
+}
+</script>
+</body>
+</html>
