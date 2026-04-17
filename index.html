@@ -1025,53 +1025,46 @@ function startRetryLoop(widget) {
   _retryTimer = setInterval(() => retryRegisterShowVisual(widget), 300);
 }
 
-  const safeChapterNum = normalizeChapterForVisual(
-    params.chapter_num,
-    params.topic,
-    params.content_hint
-  );
-
-  renderD3Scene(
-    safeChapterNum,
-    params.content_hint || 'overview',
-    (CHAPTERS.find(c => c.num === safeChapterNum) || {}).name || S.activeChapterName,
-    params.topic || '',
-    params.visual_type || 'overview'
-  );
-
 function handleShowVisual(params) {
   const { topic, visual_type, content_hint, chapter_num, student_id } = params;
   console.log('[Karka] show_visual handled:', { visual_type, content_hint, chapter_num });
 
-  if (visual_type === 'question'
-      || (content_hint && (content_hint.startsWith('MCQ|') || content_hint.startsWith('OPEN|')))) {
+  if (
+    visual_type === 'question' ||
+    (content_hint && (content_hint.startsWith('MCQ|') || content_hint.startsWith('OPEN|')))
+  ) {
     renderQuestionCard(content_hint, chapter_num);
   } else {
     showVisualCanvas();
-    
-    const safeChapterNum = normalizeChapterForVisual(
-    params.chapter_num,
-    params.topic,
-    params.content_hint
-  );
 
-  renderD3Scene(
-    safeChapterNum,
-    params.content_hint || 'overview',
-    (CHAPTERS.find(c => c.num === safeChapterNum) || {}).name || S.activeChapterName,
-    params.topic || '',
-    params.visual_type || 'overview'
-  );
+    const safeChapterNum = normalizeChapterForVisual(
+      params.chapter_num,
+      params.topic,
+      params.content_hint
+    );
+
+    renderD3Scene(
+      safeChapterNum,
+      params.content_hint || 'overview',
+      (CHAPTERS.find(c => c.num === safeChapterNum) || {}).name || S.activeChapterName,
+      params.topic || '',
+      params.visual_type || 'overview'
+    );
+  }
 
   wfPost(N8N.WF06_VISUAL_EVENT, {
-    student_id  : student_id || S.studentId,
-    session_id  : S.sessionId,
-    topic, visual_type, content_hint, chapter_num,
-    timestamp   : new Date().toISOString(),
+    student_id: student_id || S.studentId,
+    session_id: S.sessionId,
+    topic,
+    visual_type,
+    content_hint,
+    chapter_num: normalizeChapterForVisual(chapter_num, topic, content_hint),
+    timestamp: new Date().toISOString(),
   });
 
   document.getElementById('infoLastVisual').textContent =
-    (topic || 'visual') + ' · Ch ' + (chapter_num || S.activeChapterNum);
+    (topic || 'visual') + ' · Ch ' + (normalizeChapterForVisual(chapter_num, topic, content_hint) || S.activeChapterNum);
+
   flashBanner((topic || 'Visual') + ' — Diya is explaining');
 }
 
@@ -1085,14 +1078,14 @@ function registerShowVisual(widget) {
     widget.clientTools = { show_visual: handler };
     console.log('[Karka] show_visual registered via object assignment ✓');
     return;
-  } catch(e1) {
+  } catch (e1) {
     console.warn('[Karka] Object assignment failed:', e1.message);
   }
 
   try {
     widget.clientTools.register('show_visual', handler);
     console.log('[Karka] show_visual registered via .register() ✓');
-  } catch(e2) {
+  } catch (e2) {
     console.warn('[Karka] .register() also failed:', e2.message);
     throw e2;
   }
