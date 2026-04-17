@@ -2072,265 +2072,307 @@ function drawSurfaceVolume(svg, w, h, mode='overview') {
       .duration(dur)
       .style('opacity', 1);
 
-  const pulse = (sel, base=1, peak=1.18, delay=0) => {
-    sel.transition().delay(delay).duration(450).attr('transform', `scale(${peak})`)
-      .transition().duration(450).attr('transform', `scale(${base})`);
+  const pulseFill = (sel, colorFrom, colorTo, delay=0) => {
+    sel.transition().delay(delay).duration(450).attr('fill', colorTo)
+      .transition().duration(450).attr('fill', colorFrom);
   };
 
+  const dashed = '6 6';
+
   if (mode === 'cuboid') {
-    const g = svg.append('g').attr('transform', 'translate(0,0)');
+    const g = svg.append('g');
+
     const front = g.append('rect')
-      .attr('x', 300).attr('y', 210)
-      .attr('width', 150).attr('height', 170)
-      .attr('fill', 'rgba(103,232,249,.06)')
+      .attr('x', 250).attr('y', 220)
+      .attr('width', 170).attr('height', 140)
+      .attr('fill', 'rgba(103,232,249,.05)')
       .attr('stroke', '#67e8f9')
       .attr('stroke-width', 4);
 
     const topFace = g.append('polygon')
-      .attr('points', '300,210 360,170 510,170 450,210')
-      .attr('fill', 'rgba(103,232,249,.04)')
-      .attr('stroke', '#67e8f9')
-      .attr('stroke-width', 4);
-
-    const sideFace = g.append('polygon')
-      .attr('points', '450,210 510,170 510,340 450,380')
+      .attr('points', '250,220 320,170 490,170 420,220')
       .attr('fill', 'rgba(103,232,249,.03)')
       .attr('stroke', '#67e8f9')
       .attr('stroke-width', 4);
 
-    const label1 = g.append('text')
-      .attr('x', 330).attr('y', 410)
-      .attr('fill', '#67e8f9')
-      .attr('font-size', 20)
-      .attr('font-weight', 800)
-      .text('Cuboid');
+    const sideFace = g.append('polygon')
+      .attr('points', '420,220 490,170 490,310 420,360')
+      .attr('fill', 'rgba(103,232,249,.025)')
+      .attr('stroke', '#67e8f9')
+      .attr('stroke-width', 4);
 
-    const formula = g.append('text')
-      .attr('x', 600).attr('y', 260)
-      .attr('fill', '#eef4ff')
-      .attr('font-size', 24)
-      .attr('font-weight', 800)
-      .text('TSA = 2(lb + bh + hl)');
+    const lenLine = g.append('line')
+      .attr('x1', 250).attr('y1', 382).attr('x2', 420).attr('y2', 382)
+      .attr('stroke', '#ffc857').attr('stroke-width', 3).attr('stroke-dasharray', dashed);
 
-    const formula2 = g.append('text')
-      .attr('x', 600).attr('y', 300)
-      .attr('fill', '#ffc857')
-      .attr('font-size', 22)
-      .attr('font-weight', 800)
-      .text('Volume = l × b × h');
+    const htLine = g.append('line')
+      .attr('x1', 220).attr('y1', 220).attr('x2', 220).attr('y2', 360)
+      .attr('stroke', '#ff89c6').attr('stroke-width', 3).attr('stroke-dasharray', dashed);
+
+    const brLine = g.append('line')
+      .attr('x1', 432).attr('y1', 210).attr('x2', 502).attr('y2', 160)
+      .attr('stroke', '#79f2b3').attr('stroke-width', 3).attr('stroke-dasharray', dashed);
+
+    const lLbl = g.append('text').attr('x', 325).attr('y', 405).attr('fill', '#ffc857').attr('font-size', 18).attr('font-weight', 800).text('l');
+    const hLbl = g.append('text').attr('x', 205).attr('y', 295).attr('fill', '#ff89c6').attr('font-size', 18).attr('font-weight', 800).text('h');
+    const bLbl = g.append('text').attr('x', 510).attr('y', 158).attr('fill', '#79f2b3').attr('font-size', 18).attr('font-weight', 800).text('b');
+
+    const objLbl = g.append('text').attr('x', 305).attr('y', 440).attr('fill', '#67e8f9').attr('font-size', 20).attr('font-weight', 800).text('Cuboid');
+
+    const f1 = g.append('text').attr('x', 590).attr('y', 210).attr('fill', '#eef4ff').attr('font-size', 22).attr('font-weight', 800).text('LSA = 2h(l + b)');
+    const f2 = g.append('text').attr('x', 590).attr('y', 250).attr('fill', '#ffc857').attr('font-size', 22).attr('font-weight', 800).text('TSA = 2(lb + bh + hl)');
+    const f3 = g.append('text').attr('x', 590).attr('y', 290).attr('fill', '#79f2b3').attr('font-size', 22).attr('font-weight', 800).text('Volume = l × b × h');
 
     fadeIn(front, 0);
-    fadeIn(topFace, 350);
-    fadeIn(sideFace, 700);
-    fadeIn(label1, 1050);
-    fadeIn(formula, 1450);
-    fadeIn(formula2, 1900);
+    fadeIn(topFace, 250);
+    fadeIn(sideFace, 500);
+    fadeIn(lenLine, 850); fadeIn(lLbl, 1000);
+    fadeIn(htLine, 1100); fadeIn(hLbl, 1250);
+    fadeIn(brLine, 1350); fadeIn(bLbl, 1500);
+    fadeIn(objLbl, 1600);
+    fadeIn(f1, 1900);
+    fadeIn(f2, 2250);
+    fadeIn(f3, 2600);
 
-    front.transition().delay(2350).duration(500).attr('fill', 'rgba(103,232,249,.12)')
-      .transition().duration(500).attr('fill', 'rgba(103,232,249,.06)');
+    pulseFill(front, 'rgba(103,232,249,.05)', 'rgba(103,232,249,.12)', 3000);
     return;
   }
 
   if (mode === 'cylinder') {
     const g = svg.append('g');
+
     const topE = g.append('ellipse')
-      .attr('cx', 430).attr('cy', 180).attr('rx', 90).attr('ry', 24)
+      .attr('cx', 390).attr('cy', 185).attr('rx', 90).attr('ry', 24)
       .attr('fill', 'rgba(255,200,87,.08)')
       .attr('stroke', '#ffc857').attr('stroke-width', 4);
 
     const side1 = g.append('line')
-      .attr('x1', 340).attr('y1', 180).attr('x2', 340).attr('y2', 390)
+      .attr('x1', 300).attr('y1', 185).attr('x2', 300).attr('y2', 390)
       .attr('stroke', '#ffc857').attr('stroke-width', 4);
 
     const side2 = g.append('line')
-      .attr('x1', 520).attr('y1', 180).attr('x2', 520).attr('y2', 390)
+      .attr('x1', 480).attr('y1', 185).attr('x2', 480).attr('y2', 390)
       .attr('stroke', '#ffc857').attr('stroke-width', 4);
 
     const bottomE = g.append('ellipse')
-      .attr('cx', 430).attr('cy', 390).attr('rx', 90).attr('ry', 24)
+      .attr('cx', 390).attr('cy', 390).attr('rx', 90).attr('ry', 24)
       .attr('fill', 'rgba(255,200,87,.05)')
       .attr('stroke', '#ffc857').attr('stroke-width', 4);
 
-    const lbl = g.append('text')
-      .attr('x', 390).attr('y', 435)
-      .attr('fill', '#ffc857')
-      .attr('font-size', 20)
-      .attr('font-weight', 800)
-      .text('Cylinder');
+    const rLine = g.append('line')
+      .attr('x1', 390).attr('y1', 185).attr('x2', 480).attr('y2', 185)
+      .attr('stroke', '#67e8f9').attr('stroke-width', 3).attr('stroke-dasharray', dashed);
 
-    const f1 = g.append('text')
-      .attr('x', 620).attr('y', 260)
-      .attr('fill', '#eef4ff')
-      .attr('font-size', 24)
-      .attr('font-weight', 800)
-      .text('CSA = 2πrh');
+    const hLine = g.append('line')
+      .attr('x1', 255).attr('y1', 185).attr('x2', 255).attr('y2', 390)
+      .attr('stroke', '#ff89c6').attr('stroke-width', 3).attr('stroke-dasharray', dashed);
 
-    const f2 = g.append('text')
-      .attr('x', 620).attr('y', 300)
-      .attr('fill', '#ffc857')
-      .attr('font-size', 22)
-      .attr('font-weight', 800)
-      .text('Volume = πr²h');
+    const rLbl = g.append('text').attr('x', 430).attr('y', 170).attr('fill', '#67e8f9').attr('font-size', 18).attr('font-weight', 800).text('r');
+    const hLbl = g.append('text').attr('x', 238).attr('y', 295).attr('fill', '#ff89c6').attr('font-size', 18).attr('font-weight', 800).text('h');
+
+    const objLbl = g.append('text').attr('x', 350).attr('y', 435).attr('fill', '#ffc857').attr('font-size', 20).attr('font-weight', 800).text('Cylinder');
+
+    const f1 = g.append('text').attr('x', 590).attr('y', 200).attr('fill', '#eef4ff').attr('font-size', 22).attr('font-weight', 800).text('CSA = 2πrh');
+    const f2 = g.append('text').attr('x', 590).attr('y', 240).attr('fill', '#ffc857').attr('font-size', 22).attr('font-weight', 800).text('TSA = 2πr(h + r)');
+    const f3 = g.append('text').attr('x', 590).attr('y', 280).attr('fill', '#79f2b3').attr('font-size', 22).attr('font-weight', 800).text('Volume = πr²h');
 
     fadeIn(topE, 0);
-    fadeIn(side1, 300);
-    fadeIn(side2, 300);
-    fadeIn(bottomE, 650);
-    fadeIn(lbl, 1000);
-    fadeIn(f1, 1400);
-    fadeIn(f2, 1800);
+    fadeIn(side1, 250);
+    fadeIn(side2, 250);
+    fadeIn(bottomE, 550);
+    fadeIn(rLine, 900); fadeIn(rLbl, 1050);
+    fadeIn(hLine, 1150); fadeIn(hLbl, 1300);
+    fadeIn(objLbl, 1450);
+    fadeIn(f1, 1800);
+    fadeIn(f2, 2150);
+    fadeIn(f3, 2500);
 
-    topE.transition().delay(2200).duration(450).attr('ry', 28)
+    topE.transition().delay(3000).duration(450).attr('ry', 28)
       .transition().duration(450).attr('ry', 24);
     return;
   }
 
   if (mode === 'cone') {
     const g = svg.append('g');
+
+    const apexX = 390, apexY = 140;
+    const baseY = 395, rx = 110, ry = 24;
+
     const left = g.append('line')
-      .attr('x1', 430).attr('y1', 140).attr('x2', 320).attr('y2', 390)
+      .attr('x1', apexX).attr('y1', apexY).attr('x2', apexX-rx).attr('y2', baseY)
       .attr('stroke', '#ff89c6').attr('stroke-width', 4);
 
     const right = g.append('line')
-      .attr('x1', 430).attr('y1', 140).attr('x2', 540).attr('y2', 390)
+      .attr('x1', apexX).attr('y1', apexY).attr('x2', apexX+rx).attr('y2', baseY)
       .attr('stroke', '#ff89c6').attr('stroke-width', 4);
 
     const base = g.append('ellipse')
-      .attr('cx', 430).attr('cy', 390).attr('rx', 110).attr('ry', 26)
+      .attr('cx', apexX).attr('cy', baseY).attr('rx', rx).attr('ry', ry)
       .attr('fill', 'rgba(255,137,198,.05)')
       .attr('stroke', '#ff89c6').attr('stroke-width', 4);
 
-    const lbl = g.append('text')
-      .attr('x', 405).attr('y', 435)
+    const centerDot = g.append('circle')
+      .attr('cx', apexX).attr('cy', baseY).attr('r', 4)
+      .attr('fill', '#eef4ff');
+
+    const rLine = g.append('line')
+      .attr('x1', apexX).attr('y1', baseY).attr('x2', apexX+rx).attr('y2', baseY)
+      .attr('stroke', '#67e8f9').attr('stroke-width', 3).attr('stroke-dasharray', dashed);
+
+    const hLine = g.append('line')
+      .attr('x1', apexX).attr('y1', apexY).attr('x2', apexX).attr('y2', baseY)
+      .attr('stroke', '#ffc857').attr('stroke-width', 3).attr('stroke-dasharray', dashed);
+
+    const lLine = g.append('line')
+      .attr('x1', apexX).attr('y1', apexY).attr('x2', apexX+rx).attr('y2', baseY)
+      .attr('stroke', '#79f2b3').attr('stroke-width', 3).attr('stroke-dasharray', dashed);
+
+    const rLbl = g.append('text').attr('x', apexX+55).attr('y', baseY-12).attr('fill', '#67e8f9').attr('font-size', 18).attr('font-weight', 800).text('r');
+    const hLbl = g.append('text').attr('x', apexX+14).attr('y', 280).attr('fill', '#ffc857').attr('font-size', 18).attr('font-weight', 800).text('h');
+    const lLbl = g.append('text').attr('x', apexX+72).attr('y', 250).attr('fill', '#79f2b3').attr('font-size', 18).attr('font-weight', 800).text('l');
+
+    const objLbl = g.append('text')
+      .attr('x', 360).attr('y', 440)
       .attr('fill', '#ff89c6')
       .attr('font-size', 20)
       .attr('font-weight', 800)
       .text('Cone');
 
     const f1 = g.append('text')
-      .attr('x', 610).attr('y', 260)
+      .attr('x', 585).attr('y', 185)
       .attr('fill', '#eef4ff')
-      .attr('font-size', 24)
+      .attr('font-size', 22)
       .attr('font-weight', 800)
       .text('CSA = πrl');
 
     const f2 = g.append('text')
-      .attr('x', 610).attr('y', 300)
+      .attr('x', 585).attr('y', 225)
       .attr('fill', '#ffc857')
+      .attr('font-size', 22)
+      .attr('font-weight', 800)
+      .text('TSA = πr(l + r)');
+
+    const f3 = g.append('text')
+      .attr('x', 585).attr('y', 265)
+      .attr('fill', '#79f2b3')
       .attr('font-size', 22)
       .attr('font-weight', 800)
       .text('Volume = ⅓πr²h');
 
-    fadeIn(left, 0);
-    fadeIn(right, 250);
-    fadeIn(base, 650);
-    fadeIn(lbl, 1000);
-    fadeIn(f1, 1400);
-    fadeIn(f2, 1800);
+    const noteText = g.append('text')
+      .attr('x', 585).attr('y', 325)
+      .attr('fill', '#95a4c4')
+      .attr('font-size', 16)
+      .attr('font-weight', 700)
+      .text('l = slant height');
 
-    base.transition().delay(2200).duration(450).attr('ry', 30)
-      .transition().duration(450).attr('ry', 26);
+    fadeIn(left, 0);
+    fadeIn(right, 220);
+    fadeIn(base, 520);
+    fadeIn(centerDot, 700);
+    fadeIn(rLine, 950); fadeIn(rLbl, 1100);
+    fadeIn(hLine, 1250); fadeIn(hLbl, 1400);
+    fadeIn(lLine, 1550); fadeIn(lLbl, 1700);
+    fadeIn(objLbl, 1850);
+    fadeIn(f1, 2200);
+    fadeIn(f2, 2550);
+    fadeIn(f3, 2900);
+    fadeIn(noteText, 3250);
+
+    base.transition().delay(3650).duration(450).attr('ry', 30)
+      .transition().duration(450).attr('ry', 24);
     return;
   }
 
   if (mode === 'sphere') {
     const g = svg.append('g');
+
     const ball = g.append('circle')
-      .attr('cx', 430).attr('cy', 270).attr('r', 130)
+      .attr('cx', 390).attr('cy', 285).attr('r', 125)
       .attr('fill', 'rgba(255,137,198,.08)')
-      .attr('stroke', '#ff89c6').attr('stroke-width', 4);
+      .attr('stroke', '#ff89c6')
+      .attr('stroke-width', 4);
 
     const eq = g.append('line')
-      .attr('x1', 300).attr('y1', 270).attr('x2', 560).attr('y2', 270)
+      .attr('x1', 265).attr('y1', 285).attr('x2', 515).attr('y2', 285)
       .attr('stroke', 'rgba(255,255,255,.35)')
       .attr('stroke-width', 2)
-      .attr('stroke-dasharray', '6 6');
+      .attr('stroke-dasharray', dashed);
 
-    const lbl = g.append('text')
-      .attr('x', 400).attr('y', 430)
-      .attr('fill', '#ff89c6')
-      .attr('font-size', 20)
-      .attr('font-weight', 800)
-      .text('Sphere');
+    const rLine = g.append('line')
+      .attr('x1', 390).attr('y1', 285).attr('x2', 515).attr('y2', 285)
+      .attr('stroke', '#67e8f9').attr('stroke-width', 3).attr('stroke-dasharray', dashed);
 
-    const f1 = g.append('text')
-      .attr('x', 610).attr('y', 260)
-      .attr('fill', '#eef4ff')
-      .attr('font-size', 24)
-      .attr('font-weight', 800)
-      .text('Surface Area = 4πr²');
+    const rLbl = g.append('text').attr('x', 448).attr('y', 270).attr('fill', '#67e8f9').attr('font-size', 18).attr('font-weight', 800).text('r');
+    const objLbl = g.append('text').attr('x', 360).attr('y', 445).attr('fill', '#ff89c6').attr('font-size', 20).attr('font-weight', 800).text('Sphere');
 
-    const f2 = g.append('text')
-      .attr('x', 610).attr('y', 300)
-      .attr('fill', '#ffc857')
-      .attr('font-size', 22)
-      .attr('font-weight', 800)
-      .text('Volume = 4/3 πr³');
+    const f1 = g.append('text').attr('x', 585).attr('y', 210).attr('fill', '#eef4ff').attr('font-size', 22).attr('font-weight', 800).text('Surface Area = 4πr²');
+    const f2 = g.append('text').attr('x', 585).attr('y', 250).attr('fill', '#ffc857').attr('font-size', 22).attr('font-weight', 800).text('Volume = 4/3 πr³');
 
     fadeIn(ball, 0);
-    fadeIn(eq, 450);
-    fadeIn(lbl, 900);
-    fadeIn(f1, 1300);
-    fadeIn(f2, 1750);
+    fadeIn(eq, 350);
+    fadeIn(rLine, 700);
+    fadeIn(rLbl, 900);
+    fadeIn(objLbl, 1100);
+    fadeIn(f1, 1450);
+    fadeIn(f2, 1850);
 
-    ball.transition().delay(2200).duration(450).attr('r', 138)
-      .transition().duration(450).attr('r', 130);
+    ball.transition().delay(2350).duration(450).attr('r', 133)
+      .transition().duration(450).attr('r', 125);
     return;
   }
 
-  // overview staged comparison
-  const g1 = svg.append('g');
-  const cuboid = g1.append('rect')
-    .attr('x', 220).attr('y', 200).attr('width', 90).attr('height', 150)
+  // overview
+  const g = svg.append('g');
+
+  const cuboid = g.append('rect')
+    .attr('x', 180).attr('y', 220)
+    .attr('width', 90).attr('height', 130)
     .attr('fill', 'none').attr('stroke', '#67e8f9').attr('stroke-width', 4);
 
-  const cylTop = g1.append('ellipse')
-    .attr('cx', 470).attr('cy', 210).attr('rx', 60).attr('ry', 18)
+  const cylTop = g.append('ellipse')
+    .attr('cx', 400).attr('cy', 235).attr('rx', 50).attr('ry', 16)
     .attr('fill', 'none').attr('stroke', '#ffc857').attr('stroke-width', 4);
 
-  const cylLeft = g1.append('line')
-    .attr('x1', 410).attr('y1', 210).attr('x2', 410).attr('y2', 350)
+  const cylL = g.append('line')
+    .attr('x1', 350).attr('y1', 235).attr('x2', 350).attr('y2', 355)
     .attr('stroke', '#ffc857').attr('stroke-width', 4);
 
-  const cylRight = g1.append('line')
-    .attr('x1', 530).attr('y1', 210).attr('x2', 530).attr('y2', 350)
+  const cylR = g.append('line')
+    .attr('x1', 450).attr('y1', 235).attr('x2', 450).attr('y2', 355)
     .attr('stroke', '#ffc857').attr('stroke-width', 4);
 
-  const cylBottom = g1.append('ellipse')
-    .attr('cx', 470).attr('cy', 350).attr('rx', 60).attr('ry', 18)
+  const cylB = g.append('ellipse')
+    .attr('cx', 400).attr('cy', 355).attr('rx', 50).attr('ry', 16)
     .attr('fill', 'none').attr('stroke', '#ffc857').attr('stroke-width', 4);
 
-  const coneL = g1.append('line')
-    .attr('x1', 690).attr('y1', 170).attr('x2', 620).attr('y2', 350)
+  const coneL = g.append('line')
+    .attr('x1', 610).attr('y1', 205).attr('x2', 540).attr('y2', 355)
     .attr('stroke', '#ff89c6').attr('stroke-width', 4);
 
-  const coneR = g1.append('line')
-    .attr('x1', 690).attr('y1', 170).attr('x2', 760).attr('y2', 350)
+  const coneR = g.append('line')
+    .attr('x1', 610).attr('y1', 205).attr('x2', 680).attr('y2', 355)
     .attr('stroke', '#ff89c6').attr('stroke-width', 4);
 
-  const coneB = g1.append('ellipse')
-    .attr('cx', 690).attr('cy', 350).attr('rx', 70).attr('ry', 16)
+  const coneB = g.append('ellipse')
+    .attr('cx', 610).attr('cy', 355).attr('rx', 70).attr('ry', 16)
     .attr('fill', 'none').attr('stroke', '#ff89c6').attr('stroke-width', 4);
 
-  const t1 = g1.append('text').attr('x', 215).attr('y', 390).attr('fill', '#67e8f9').attr('font-size', 18).attr('font-weight', 800).text('Cuboid');
-  const t2 = g1.append('text').attr('x', 438).attr('y', 390).attr('fill', '#ffc857').attr('font-size', 18).attr('font-weight', 800).text('Cylinder');
-  const t3 = g1.append('text').attr('x', 665).attr('y', 390).attr('fill', '#ff89c6').attr('font-size', 18).attr('font-weight', 800).text('Cone');
+  const sphere = g.append('circle')
+    .attr('cx', 820).attr('cy', 285).attr('r', 62)
+    .attr('fill', 'rgba(121,242,179,.05)').attr('stroke', '#79f2b3').attr('stroke-width', 4);
 
-  fadeIn(cuboid, 0);
-  fadeIn(t1, 300);
+  const t1 = g.append('text').attr('x', 172).attr('y', 390).attr('fill', '#67e8f9').attr('font-size', 17).attr('font-weight', 800).text('Cuboid');
+  const t2 = g.append('text').attr('x', 365).attr('y', 390).attr('fill', '#ffc857').attr('font-size', 17).attr('font-weight', 800).text('Cylinder');
+  const t3 = g.append('text').attr('x', 585).attr('y', 390).attr('fill', '#ff89c6').attr('font-size', 17).attr('font-weight', 800).text('Cone');
+  const t4 = g.append('text').attr('x', 790).attr('y', 390).attr('fill', '#79f2b3').attr('font-size', 17).attr('font-weight', 800).text('Sphere');
 
-  fadeIn(cylTop, 700);
-  fadeIn(cylLeft, 950);
-  fadeIn(cylRight, 950);
-  fadeIn(cylBottom, 1200);
-  fadeIn(t2, 1450);
+  fadeIn(cuboid, 0); fadeIn(t1, 200);
+  fadeIn(cylTop, 500); fadeIn(cylL, 700); fadeIn(cylR, 700); fadeIn(cylB, 900); fadeIn(t2, 1100);
+  fadeIn(coneL, 1400); fadeIn(coneR, 1600); fadeIn(coneB, 1800); fadeIn(t3, 2000);
+  fadeIn(sphere, 2300); fadeIn(t4, 2500);
 
-  fadeIn(coneL, 1850);
-  fadeIn(coneR, 2100);
-  fadeIn(coneB, 2350);
-  fadeIn(t3, 2600);
-
-  note(svg, w, h, 'Compare cuboid, cylinder, cone, and sphere by surface area and volume');
+  note(svg, w, h, 'Compare cuboid, cylinder, cone, and sphere by dimensions, surface area, and volume');
 }
 
 function drawStatistics(svg, w, h, mode='bar-graph') {
