@@ -1987,6 +1987,8 @@ function drawCircles(svg, w, h, mode='circle-parts') {
   line(svg,cx-r,cy,cx+r,cy,'#ff89c6',3); label(svg,cx-35,cy+26,'Diameter','#ff89c6',18,800);
   line(svg,cx-120,cy-95,cx+80,cy-30,'#79f2b3',4); label(svg,cx+96,cy-28,'Chord','#79f2b3',18,800);
   note(svg,w,h,'Radius, diameter, chord, arc, and centre are basic parts of a circle');
+}
+
 function drawConstructions(svg, w, h, mode='overview') {
   title(svg, w,
     mode === 'perpendicular-bisector' ? 'Constructions · Perpendicular Bisector'
@@ -2175,7 +2177,7 @@ function drawFallback(svg, w, h, chapterName='Maths') {
   label(svg, w/2-120, h/2, 'Visual is ready for this chapter', '#67e8f9', 26, 800);
   note(svg,w,h,'Diya will switch to a more specific scene during explanation');
 }
-}
+
 function updateModeLabel() {
   const mode = S.currentState === 1 ? 'Intake · First Session'
     : S.currentState === 2 ? 'Question · Practice'
