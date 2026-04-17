@@ -2061,48 +2061,276 @@ function drawSurfaceVolume(svg, w, h, mode='overview') {
     mode === 'cylinder' ? 'Surface Areas & Volumes · Cylinder'
     : mode === 'cone' ? 'Surface Areas & Volumes · Cone'
     : mode === 'sphere' ? 'Surface Areas & Volumes · Sphere'
-    : 'Surface Areas & Volumes');
+    : mode === 'cuboid' ? 'Surface Areas & Volumes · Cuboid'
+    : 'Surface Areas & Volumes'
+  );
+
+  const fadeIn = (sel, delay=0, dur=500) =>
+    sel.style('opacity', 0)
+      .transition()
+      .delay(delay)
+      .duration(dur)
+      .style('opacity', 1);
+
+  const pulse = (sel, base=1, peak=1.18, delay=0) => {
+    sel.transition().delay(delay).duration(450).attr('transform', `scale(${peak})`)
+      .transition().duration(450).attr('transform', `scale(${base})`);
+  };
+
+  if (mode === 'cuboid') {
+    const g = svg.append('g').attr('transform', 'translate(0,0)');
+    const front = g.append('rect')
+      .attr('x', 300).attr('y', 210)
+      .attr('width', 150).attr('height', 170)
+      .attr('fill', 'rgba(103,232,249,.06)')
+      .attr('stroke', '#67e8f9')
+      .attr('stroke-width', 4);
+
+    const topFace = g.append('polygon')
+      .attr('points', '300,210 360,170 510,170 450,210')
+      .attr('fill', 'rgba(103,232,249,.04)')
+      .attr('stroke', '#67e8f9')
+      .attr('stroke-width', 4);
+
+    const sideFace = g.append('polygon')
+      .attr('points', '450,210 510,170 510,340 450,380')
+      .attr('fill', 'rgba(103,232,249,.03)')
+      .attr('stroke', '#67e8f9')
+      .attr('stroke-width', 4);
+
+    const label1 = g.append('text')
+      .attr('x', 330).attr('y', 410)
+      .attr('fill', '#67e8f9')
+      .attr('font-size', 20)
+      .attr('font-weight', 800)
+      .text('Cuboid');
+
+    const formula = g.append('text')
+      .attr('x', 600).attr('y', 260)
+      .attr('fill', '#eef4ff')
+      .attr('font-size', 24)
+      .attr('font-weight', 800)
+      .text('TSA = 2(lb + bh + hl)');
+
+    const formula2 = g.append('text')
+      .attr('x', 600).attr('y', 300)
+      .attr('fill', '#ffc857')
+      .attr('font-size', 22)
+      .attr('font-weight', 800)
+      .text('Volume = l × b × h');
+
+    fadeIn(front, 0);
+    fadeIn(topFace, 350);
+    fadeIn(sideFace, 700);
+    fadeIn(label1, 1050);
+    fadeIn(formula, 1450);
+    fadeIn(formula2, 1900);
+
+    front.transition().delay(2350).duration(500).attr('fill', 'rgba(103,232,249,.12)')
+      .transition().duration(500).attr('fill', 'rgba(103,232,249,.06)');
+    return;
+  }
 
   if (mode === 'cylinder') {
-    svg.append('ellipse').attr('cx',430).attr('cy',170).attr('rx',90).attr('ry',28)
-      .attr('fill','rgba(103,232,249,.10)').attr('stroke','#67e8f9').attr('stroke-width',4);
-    svg.append('ellipse').attr('cx',430).attr('cy',390).attr('rx',90).attr('ry',28)
-      .attr('fill','rgba(103,232,249,.06)').attr('stroke','#67e8f9').attr('stroke-width',4);
-    line(svg,340,170,340,390,'#67e8f9',4); line(svg,520,170,520,390,'#67e8f9',4);
-    label(svg,610,250,'CSA = 2πrh', '#ffc857', 24, 800);
-    label(svg,610,290,'Volume = πr²h', '#eef4ff', 24, 800);
+    const g = svg.append('g');
+    const topE = g.append('ellipse')
+      .attr('cx', 430).attr('cy', 180).attr('rx', 90).attr('ry', 24)
+      .attr('fill', 'rgba(255,200,87,.08)')
+      .attr('stroke', '#ffc857').attr('stroke-width', 4);
+
+    const side1 = g.append('line')
+      .attr('x1', 340).attr('y1', 180).attr('x2', 340).attr('y2', 390)
+      .attr('stroke', '#ffc857').attr('stroke-width', 4);
+
+    const side2 = g.append('line')
+      .attr('x1', 520).attr('y1', 180).attr('x2', 520).attr('y2', 390)
+      .attr('stroke', '#ffc857').attr('stroke-width', 4);
+
+    const bottomE = g.append('ellipse')
+      .attr('cx', 430).attr('cy', 390).attr('rx', 90).attr('ry', 24)
+      .attr('fill', 'rgba(255,200,87,.05)')
+      .attr('stroke', '#ffc857').attr('stroke-width', 4);
+
+    const lbl = g.append('text')
+      .attr('x', 390).attr('y', 435)
+      .attr('fill', '#ffc857')
+      .attr('font-size', 20)
+      .attr('font-weight', 800)
+      .text('Cylinder');
+
+    const f1 = g.append('text')
+      .attr('x', 620).attr('y', 260)
+      .attr('fill', '#eef4ff')
+      .attr('font-size', 24)
+      .attr('font-weight', 800)
+      .text('CSA = 2πrh');
+
+    const f2 = g.append('text')
+      .attr('x', 620).attr('y', 300)
+      .attr('fill', '#ffc857')
+      .attr('font-size', 22)
+      .attr('font-weight', 800)
+      .text('Volume = πr²h');
+
+    fadeIn(topE, 0);
+    fadeIn(side1, 300);
+    fadeIn(side2, 300);
+    fadeIn(bottomE, 650);
+    fadeIn(lbl, 1000);
+    fadeIn(f1, 1400);
+    fadeIn(f2, 1800);
+
+    topE.transition().delay(2200).duration(450).attr('ry', 28)
+      .transition().duration(450).attr('ry', 24);
     return;
   }
 
   if (mode === 'cone') {
-    line(svg,430,140,320,390,'#ffc857',4);
-    line(svg,430,140,540,390,'#ffc857',4);
-    svg.append('ellipse').attr('cx',430).attr('cy',390).attr('rx',110).attr('ry',26)
-      .attr('fill','rgba(255,200,87,.08)').attr('stroke','#ffc857').attr('stroke-width',4);
-    label(svg,610,250,'CSA = πrl', '#ffc857', 24, 800);
-    label(svg,610,290,'Volume = ⅓πr²h', '#eef4ff', 24, 800);
+    const g = svg.append('g');
+    const left = g.append('line')
+      .attr('x1', 430).attr('y1', 140).attr('x2', 320).attr('y2', 390)
+      .attr('stroke', '#ff89c6').attr('stroke-width', 4);
+
+    const right = g.append('line')
+      .attr('x1', 430).attr('y1', 140).attr('x2', 540).attr('y2', 390)
+      .attr('stroke', '#ff89c6').attr('stroke-width', 4);
+
+    const base = g.append('ellipse')
+      .attr('cx', 430).attr('cy', 390).attr('rx', 110).attr('ry', 26)
+      .attr('fill', 'rgba(255,137,198,.05)')
+      .attr('stroke', '#ff89c6').attr('stroke-width', 4);
+
+    const lbl = g.append('text')
+      .attr('x', 405).attr('y', 435)
+      .attr('fill', '#ff89c6')
+      .attr('font-size', 20)
+      .attr('font-weight', 800)
+      .text('Cone');
+
+    const f1 = g.append('text')
+      .attr('x', 610).attr('y', 260)
+      .attr('fill', '#eef4ff')
+      .attr('font-size', 24)
+      .attr('font-weight', 800)
+      .text('CSA = πrl');
+
+    const f2 = g.append('text')
+      .attr('x', 610).attr('y', 300)
+      .attr('fill', '#ffc857')
+      .attr('font-size', 22)
+      .attr('font-weight', 800)
+      .text('Volume = ⅓πr²h');
+
+    fadeIn(left, 0);
+    fadeIn(right, 250);
+    fadeIn(base, 650);
+    fadeIn(lbl, 1000);
+    fadeIn(f1, 1400);
+    fadeIn(f2, 1800);
+
+    base.transition().delay(2200).duration(450).attr('ry', 30)
+      .transition().duration(450).attr('ry', 26);
     return;
   }
 
   if (mode === 'sphere') {
-    circle(svg,430,270,130,'rgba(255,137,198,.08)','#ff89c6',4);
-    line(svg,300,270,560,270,'rgba(255,255,255,.35)',2,'6 6');
-    label(svg,610,250,'Surface area = 4πr²', '#ffc857', 24, 800);
-    label(svg,610,290,'Volume = 4/3 πr³', '#eef4ff', 24, 800);
+    const g = svg.append('g');
+    const ball = g.append('circle')
+      .attr('cx', 430).attr('cy', 270).attr('r', 130)
+      .attr('fill', 'rgba(255,137,198,.08)')
+      .attr('stroke', '#ff89c6').attr('stroke-width', 4);
+
+    const eq = g.append('line')
+      .attr('x1', 300).attr('y1', 270).attr('x2', 560).attr('y2', 270)
+      .attr('stroke', 'rgba(255,255,255,.35)')
+      .attr('stroke-width', 2)
+      .attr('stroke-dasharray', '6 6');
+
+    const lbl = g.append('text')
+      .attr('x', 400).attr('y', 430)
+      .attr('fill', '#ff89c6')
+      .attr('font-size', 20)
+      .attr('font-weight', 800)
+      .text('Sphere');
+
+    const f1 = g.append('text')
+      .attr('x', 610).attr('y', 260)
+      .attr('fill', '#eef4ff')
+      .attr('font-size', 24)
+      .attr('font-weight', 800)
+      .text('Surface Area = 4πr²');
+
+    const f2 = g.append('text')
+      .attr('x', 610).attr('y', 300)
+      .attr('fill', '#ffc857')
+      .attr('font-size', 22)
+      .attr('font-weight', 800)
+      .text('Volume = 4/3 πr³');
+
+    fadeIn(ball, 0);
+    fadeIn(eq, 450);
+    fadeIn(lbl, 900);
+    fadeIn(f1, 1300);
+    fadeIn(f2, 1750);
+
+    ball.transition().delay(2200).duration(450).attr('r', 138)
+      .transition().duration(450).attr('r', 130);
     return;
   }
 
-  svg.append('rect').attr('x',220).attr('y',180).attr('width',120).attr('height',170)
-    .attr('fill','none').attr('stroke','#67e8f9').attr('stroke-width',4);
-  svg.append('ellipse').attr('cx',470).attr('cy',200).attr('rx',70).attr('ry',22)
-    .attr('fill','none').attr('stroke','#ffc857').attr('stroke-width',4);
-  svg.append('ellipse').attr('cx',470).attr('cy',350).attr('rx',70).attr('ry',22)
-    .attr('fill','none').attr('stroke','#ffc857').attr('stroke-width',4);
-  line(svg,400,200,400,350,'#ffc857',4); line(svg,540,200,540,350,'#ffc857',4);
-  line(svg,710,160,620,350,'#ff89c6',4); line(svg,710,160,800,350,'#ff89c6',4);
-  svg.append('ellipse').attr('cx',710).attr('cy',350).attr('rx',90).attr('ry',18)
-    .attr('fill','none').attr('stroke','#ff89c6').attr('stroke-width',4);
-  note(svg,w,h,'Compare cuboid, cylinder, cone, and sphere by surface area and volume');
+  // overview staged comparison
+  const g1 = svg.append('g');
+  const cuboid = g1.append('rect')
+    .attr('x', 220).attr('y', 200).attr('width', 90).attr('height', 150)
+    .attr('fill', 'none').attr('stroke', '#67e8f9').attr('stroke-width', 4);
+
+  const cylTop = g1.append('ellipse')
+    .attr('cx', 470).attr('cy', 210).attr('rx', 60).attr('ry', 18)
+    .attr('fill', 'none').attr('stroke', '#ffc857').attr('stroke-width', 4);
+
+  const cylLeft = g1.append('line')
+    .attr('x1', 410).attr('y1', 210).attr('x2', 410).attr('y2', 350)
+    .attr('stroke', '#ffc857').attr('stroke-width', 4);
+
+  const cylRight = g1.append('line')
+    .attr('x1', 530).attr('y1', 210).attr('x2', 530).attr('y2', 350)
+    .attr('stroke', '#ffc857').attr('stroke-width', 4);
+
+  const cylBottom = g1.append('ellipse')
+    .attr('cx', 470).attr('cy', 350).attr('rx', 60).attr('ry', 18)
+    .attr('fill', 'none').attr('stroke', '#ffc857').attr('stroke-width', 4);
+
+  const coneL = g1.append('line')
+    .attr('x1', 690).attr('y1', 170).attr('x2', 620).attr('y2', 350)
+    .attr('stroke', '#ff89c6').attr('stroke-width', 4);
+
+  const coneR = g1.append('line')
+    .attr('x1', 690).attr('y1', 170).attr('x2', 760).attr('y2', 350)
+    .attr('stroke', '#ff89c6').attr('stroke-width', 4);
+
+  const coneB = g1.append('ellipse')
+    .attr('cx', 690).attr('cy', 350).attr('rx', 70).attr('ry', 16)
+    .attr('fill', 'none').attr('stroke', '#ff89c6').attr('stroke-width', 4);
+
+  const t1 = g1.append('text').attr('x', 215).attr('y', 390).attr('fill', '#67e8f9').attr('font-size', 18).attr('font-weight', 800).text('Cuboid');
+  const t2 = g1.append('text').attr('x', 438).attr('y', 390).attr('fill', '#ffc857').attr('font-size', 18).attr('font-weight', 800).text('Cylinder');
+  const t3 = g1.append('text').attr('x', 665).attr('y', 390).attr('fill', '#ff89c6').attr('font-size', 18).attr('font-weight', 800).text('Cone');
+
+  fadeIn(cuboid, 0);
+  fadeIn(t1, 300);
+
+  fadeIn(cylTop, 700);
+  fadeIn(cylLeft, 950);
+  fadeIn(cylRight, 950);
+  fadeIn(cylBottom, 1200);
+  fadeIn(t2, 1450);
+
+  fadeIn(coneL, 1850);
+  fadeIn(coneR, 2100);
+  fadeIn(coneB, 2350);
+  fadeIn(t3, 2600);
+
+  note(svg, w, h, 'Compare cuboid, cylinder, cone, and sphere by surface area and volume');
 }
 
 function drawStatistics(svg, w, h, mode='bar-graph') {
