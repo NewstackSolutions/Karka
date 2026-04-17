@@ -1375,65 +1375,57 @@ function renderD3Scene(chapter_num, content_hint='', chapterName='', topic='', v
     }
   }
 
-  else if (num === 7 || name.includes('triangle')) {
-    if (
-      text.includes('pythagoras') ||
-      text.includes('hypotenuse') ||
-      text.includes('right angle') ||
-      text.includes('right angled') ||
-      text.includes('right triangle') ||
-      text.includes('c^2') ||
-      text.includes('a^2 + b^2') ||
-      text.includes('b^2 + a^2')
-    ) {
-      drawTriangles(svg, w, h, 'pythagoras');
-    } else if (
-      text.includes('congruent') ||
-      text.includes('congruence') ||
-      text.includes('sss') ||
-      text.includes('sas') ||
-      text.includes('asa') ||
-      text.includes('rhs')
-    ) {
-      drawTriangles(svg, w, h, 'congruence');
-    } else if (
-      text.includes('similar') ||
-      text.includes('similarity') ||
-      text.includes('proportion') ||
-      text.includes('scale factor')
-    ) {
-      drawTriangles(svg, w, h, 'similarity');
-    } else if (
-      text.includes('median') ||
-      text.includes('altitude') ||
-      text.includes('centroid') ||
-      text.includes('bisector')
-    ) {
-      drawTriangles(svg, w, h, 'centres');
-    } else {
-      drawTriangles(svg, w, h, 'overview');
-    }
+  else if (num === 7 || (name.includes('triangle') && !name.includes('parallelogram') && !name.includes('areas'))) {
+  if (
+    text.includes('pythagoras') ||
+    text.includes('hypotenuse') ||
+    text.includes('right angle') ||
+    text.includes('right angled') ||
+    text.includes('right triangle') ||
+    text.includes('c^2') ||
+    text.includes('a^2 + b^2') ||
+    text.includes('b^2 + a^2')
+  ) {
+    drawTriangles(svg, w, h, 'pythagoras');
+  } else if (
+    text.includes('congruent') ||
+    text.includes('congruence') ||
+    text.includes('sss') ||
+    text.includes('sas') ||
+    text.includes('asa') ||
+    text.includes('rhs')
+  ) {
+    drawTriangles(svg, w, h, 'congruence');
+  } else if (
+    text.includes('similar') ||
+    text.includes('similarity') ||
+    text.includes('proportion') ||
+    text.includes('scale factor')
+  ) {
+    drawTriangles(svg, w, h, 'similarity');
+  } else if (
+    text.includes('median') ||
+    text.includes('altitude') ||
+    text.includes('centroid') ||
+    text.includes('bisector')
+  ) {
+    drawTriangles(svg, w, h, 'centres');
+  } else {
+    drawTriangles(svg, w, h, 'overview');
   }
+}
 
-  else if (num === 8 || name.includes('quadrilateral')) {
-    if (text.includes('angle sum')) {
-      drawQuadrilaterals(svg, w, h, 'angle-sum');
-    } else {
-      drawQuadrilaterals(svg, w, h, 'types');
-    }
+else if (num === 9 || name.includes('areas of parallelograms')) {
+  if (text.includes('same base') || text.includes('same parallels')) {
+    drawAreas(svg, w, h, 'same-base-same-parallels');
+  } else if (text.includes('parallelogram')) {
+    drawAreas(svg, w, h, 'area-parallelogram');
+  } else if (text.includes('triangle')) {
+    drawAreas(svg, w, h, 'area-triangle');
+  } else {
+    drawAreas(svg, w, h, 'overview');
   }
-
-  else if (num === 9 || name.includes('areas of parallelograms') || name.includes('areas')) {
-    if (text.includes('same base') || text.includes('same parallels')) {
-      drawAreas(svg, w, h, 'same-base-same-parallels');
-    } else if (text.includes('parallelogram')) {
-      drawAreas(svg, w, h, 'area-parallelogram');
-    } else if (text.includes('triangle')) {
-      drawAreas(svg, w, h, 'area-triangle');
-    } else {
-      drawAreas(svg, w, h, 'overview');
-    }
-  }
+}
 
   else if (num === 10 || name.includes('circle')) {
     if (text.includes('centre') || text.includes('circumference')) {
@@ -1909,7 +1901,7 @@ function drawAreas(svg, w, h, mode='overview') {
   if (mode === 'area-parallelogram') {
     svg.append('polygon')
       .attr('points', `280,360 560,360 650,220 370,220`)
-      .attr('fill','rgba(103,232,249,.10)').attr('stroke','#67e8f9').attr('stroke-width',4);
+      .attr('fill','rgba(103,232,249,0.08)').attr('stroke','#67e8f9').attr('stroke-width',4);
     line(svg, 370,220,370,360,'#ffc857',3,'6 6');
     label(svg, 600, 305, 'base', '#67e8f9', 18, 800);
     label(svg, 382, 300, 'height', '#ffc857', 18, 800);
@@ -1932,7 +1924,7 @@ function drawAreas(svg, w, h, mode='overview') {
   if (mode === 'same-base-same-parallels') {
     svg.append('polygon')
       .attr('points', `280,370 520,370 600,260 360,260`)
-      .attr('fill','rgba(103,232,249,.08)').attr('stroke','#67e8f9').attr('stroke-width',4);
+      .attr('fill','rgba(103,232,249,0.08)').attr('stroke','#67e8f9').attr('stroke-width',4);
     svg.append('polygon')
       .attr('points', `280,370 520,370 650,190 410,190`)
       .attr('fill','rgba(255,200,87,.08)').attr('stroke','#ffc857').attr('stroke-width',4);
@@ -1943,10 +1935,10 @@ function drawAreas(svg, w, h, mode='overview') {
 
   svg.append('polygon')
     .attr('points', `250,370 490,370 570,250 330,250`)
-    .attr('fill','rgba(103,232,249,.08)').attr('stroke','#67e8f9').attr('stroke-width',4);
+    .attr('fill','rgba(103,232,249,0.08)').attr('stroke','#67e8f9').attr('stroke-width',4);
   svg.append('polygon')
     .attr('points', `670,370 830,370 750,220`)
-    .attr('fill','rgba(255,200,87,.08)').attr('stroke','#ffc857').attr('stroke-width',4);
+    .attr('fill','rgba(255,200,87,0.08)').attr('stroke','#ffc857').attr('stroke-width',4);
   label(svg, 320, 210, 'Parallelogram', '#67e8f9', 20, 800);
   label(svg, 700, 210, 'Triangle', '#ffc857', 20, 800);
   note(svg,w,h,'Area depends on the shape, base, and perpendicular height');
@@ -1965,7 +1957,7 @@ function drawCircles(svg, w, h, mode='circle-parts') {
     line(svg,cx,cy,cx+r*Math.cos(-1.1),cy+r*Math.sin(-1.1),'#ffc857',4);
     line(svg,cx,cy,cx+r*Math.cos(0.6),cy+r*Math.sin(0.6),'#ffc857',4);
     svg.append('path').attr('d',`M${cx+45},${cy} A45,45 0 0 1 ${cx+24},${cy-38}`)
-      .attr('fill','rgba(255,200,87,.18)');
+      .attr('fill','rgba(255,200,87,0.18)');
     label(svg,cx+62,cy-18,'∠ at centre','#ffc857',18,800);
     note(svg,w,h,'The angle subtended by an arc at the centre is double the angle at the circumference');
     return;
@@ -2212,10 +2204,10 @@ function setEquationText(lines = []) {
   wrap.style.maxWidth = '320px';
   wrap.style.padding = '14px 16px';
   wrap.style.borderRadius = '18px';
-  wrap.style.background = 'rgba(8,13,24,.82)';
-  wrap.style.border = '1px solid rgba(255,255,255,.08)';
+  wrap.style.background = 'rgba(8,13,24,0.82)';
+  wrap.style.border = '1px solid rgba(255,255,255,0.08)';
   wrap.style.backdropFilter = 'blur(10px)';
-  wrap.style.boxShadow = '0 16px 30px rgba(0,0,0,.28)';
+  wrap.style.boxShadow = '0 16px 30px rgba(0,0,0,0.28)';
   wrap.innerHTML = lines.map(l => `<div style="font-family:'Space Grotesk',sans-serif;font-size:18px;line-height:1.45;color:#eef4ff;margin:4px 0;">${l}</div>`).join('');
   stage.appendChild(wrap);
 }
