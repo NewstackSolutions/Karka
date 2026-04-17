@@ -1309,12 +1309,15 @@ function normalizeHint(s='') {
 
 function renderD3Scene(chapter_num, content_hint='', chapterName='', topic='', visual_type='overview') {
   const { svg, w, h } = freshSVG();
+
   const hint = normalizeHint(content_hint);
   const name = normalizeHint(chapterName || S.activeChapterName);
   const top  = normalizeHint(topic);
   const vtype = normalizeHint(visual_type);
   const text = `${top} ${hint} ${vtype}`.trim();
   const num  = Number(chapter_num) || S.activeChapterNum;
+
+  console.log('renderD3Scene', { chapter_num, content_hint, chapterName, topic, visual_type, text });
 
   if (num === 1 || name.includes('number systems')) {
     if (text.includes('decimal') || text.includes('terminating') || text.includes('recurring') || text.includes('expansion')) {
@@ -1329,7 +1332,11 @@ function renderD3Scene(chapter_num, content_hint='', chapterName='', topic='', v
   }
 
   else if (num === 2 || name.includes('polynomial')) {
-    drawPolynomials(svg, w, h, text.includes('factor') ? 'factor' : 'overview');
+    if (text.includes('factor')) {
+      drawPolynomials(svg, w, h, 'factor');
+    } else {
+      drawPolynomials(svg, w, h, 'overview');
+    }
   }
 
   else if (num === 3 || name.includes('coordinate')) {
@@ -1369,13 +1376,39 @@ function renderD3Scene(chapter_num, content_hint='', chapterName='', topic='', v
   }
 
   else if (num === 7 || name.includes('triangle')) {
-    if (text.includes('pythagoras') || text.includes('hypotenuse') || text.includes('right angle') || text.includes('right angled') || text.includes('right triangle') || text.includes('c^2') || text.includes('a^2 + b^2') || text.includes('b^2 + a^2')) {
+    if (
+      text.includes('pythagoras') ||
+      text.includes('hypotenuse') ||
+      text.includes('right angle') ||
+      text.includes('right angled') ||
+      text.includes('right triangle') ||
+      text.includes('c^2') ||
+      text.includes('a^2 + b^2') ||
+      text.includes('b^2 + a^2')
+    ) {
       drawTriangles(svg, w, h, 'pythagoras');
-    } else if (text.includes('congruent') || text.includes('congruence') || text.includes('sss') || text.includes('sas') || text.includes('asa') || text.includes('rhs')) {
+    } else if (
+      text.includes('congruent') ||
+      text.includes('congruence') ||
+      text.includes('sss') ||
+      text.includes('sas') ||
+      text.includes('asa') ||
+      text.includes('rhs')
+    ) {
       drawTriangles(svg, w, h, 'congruence');
-    } else if (text.includes('similar') || text.includes('similarity') || text.includes('proportion') || text.includes('scale factor')) {
+    } else if (
+      text.includes('similar') ||
+      text.includes('similarity') ||
+      text.includes('proportion') ||
+      text.includes('scale factor')
+    ) {
       drawTriangles(svg, w, h, 'similarity');
-    } else if (text.includes('median') || text.includes('altitude') || text.includes('centroid') || text.includes('bisector')) {
+    } else if (
+      text.includes('median') ||
+      text.includes('altitude') ||
+      text.includes('centroid') ||
+      text.includes('bisector')
+    ) {
       drawTriangles(svg, w, h, 'centres');
     } else {
       drawTriangles(svg, w, h, 'overview');
@@ -1383,26 +1416,33 @@ function renderD3Scene(chapter_num, content_hint='', chapterName='', topic='', v
   }
 
   else if (num === 8 || name.includes('quadrilateral')) {
-    if (text.includes('angle sum')) drawQuadrilaterals(svg, w, h, 'angle-sum');
-    else drawQuadrilaterals(svg, w, h, 'types');
+    if (text.includes('angle sum')) {
+      drawQuadrilaterals(svg, w, h, 'angle-sum');
+    } else {
+      drawQuadrilaterals(svg, w, h, 'types');
+    }
   }
 
   else if (num === 9 || name.includes('areas of parallelograms') || name.includes('areas')) {
     if (text.includes('same base') || text.includes('same parallels')) {
       drawAreas(svg, w, h, 'same-base-same-parallels');
-    } else if (text.includes('triangle')) {
-      drawAreas(svg, w, h, 'area-triangle');
     } else if (text.includes('parallelogram')) {
       drawAreas(svg, w, h, 'area-parallelogram');
+    } else if (text.includes('triangle')) {
+      drawAreas(svg, w, h, 'area-triangle');
     } else {
       drawAreas(svg, w, h, 'overview');
     }
   }
 
   else if (num === 10 || name.includes('circle')) {
-    if (text.includes('centre') || text.includes('circumference')) drawCircles(svg, w, h, 'angle-at-centre');
-    else if (text.includes('chord')) drawCircles(svg, w, h, 'equal-chords');
-    else drawCircles(svg, w, h, 'circle-parts');
+    if (text.includes('centre') || text.includes('circumference')) {
+      drawCircles(svg, w, h, 'angle-at-centre');
+    } else if (text.includes('chord')) {
+      drawCircles(svg, w, h, 'equal-chords');
+    } else {
+      drawCircles(svg, w, h, 'circle-parts');
+    }
   }
 
   else if (num === 11 || name.includes('construction')) {
@@ -1424,11 +1464,25 @@ function renderD3Scene(chapter_num, content_hint='', chapterName='', topic='', v
   }
 
   else if (num === 13 || name.includes('surface') || name.includes('volume')) {
-    drawSurfaceVolume(svg, w, h, text.includes('cone') ? 'cone' : text.includes('sphere') ? 'sphere' : text.includes('cylinder') ? 'cylinder' : 'overview');
+    if (text.includes('cone')) {
+      drawSurfaceVolume(svg, w, h, 'cone');
+    } else if (text.includes('sphere')) {
+      drawSurfaceVolume(svg, w, h, 'sphere');
+    } else if (text.includes('cylinder')) {
+      drawSurfaceVolume(svg, w, h, 'cylinder');
+    } else {
+      drawSurfaceVolume(svg, w, h, 'overview');
+    }
   }
 
   else if (num === 14 || name.includes('statistics')) {
-    drawStatistics(svg, w, h, text.includes('histogram') ? 'histogram' : text.includes('frequency') ? 'frequency-table' : 'bar-graph');
+    if (text.includes('histogram')) {
+      drawStatistics(svg, w, h, 'histogram');
+    } else if (text.includes('frequency')) {
+      drawStatistics(svg, w, h, 'frequency-table');
+    } else {
+      drawStatistics(svg, w, h, 'bar-graph');
+    }
   }
 
   else if (num === 15 || name.includes('probability')) {
@@ -1712,13 +1766,28 @@ function drawLinesAngles(svg, w, h, mode='types-of-angles') {
     ['Obtuse > 90°','#ffc857'],
     ['Straight = 180°','#ff89c6'],
   ];
+
   starts.forEach((sx, i) => {
     const color = labelsList[i][1];
     circle(svg, sx, baseY, 6, color);
-    if (i===0) { line(svg, sx, baseY, sx+70, baseY, color,4); line(svg, sx, baseY, sx-50, baseY-50, color,4); }
-    if (i===1) { line(svg, sx, baseY, sx+70, baseY, color,4); line(svg, sx, baseY, sx, baseY-70, color,4); }
-    if (i===2) { line(svg, sx, baseY, sx+70, baseY, color,4); line(svg, sx, baseY, sx+50, baseY-50, color,4); }
-    if (i===3) { line(svg, sx, baseY, sx+70, baseY, color,4); line(svg, sx, baseY, sx-70, baseY, color,4); }
+
+    if (i===0) { // acute
+      line(svg, sx, baseY, sx+70, baseY, color, 4);
+      line(svg, sx, baseY, sx+50, baseY-50, color, 4);
+    }
+    if (i===1) { // right
+      line(svg, sx, baseY, sx+70, baseY, color, 4);
+      line(svg, sx, baseY, sx, baseY-70, color, 4);
+    }
+    if (i===2) { // obtuse
+      line(svg, sx, baseY, sx+70, baseY, color, 4);
+      line(svg, sx, baseY, sx-50, baseY-50, color, 4);
+    }
+    if (i===3) { // straight
+      line(svg, sx, baseY, sx+70, baseY, color, 4);
+      line(svg, sx, baseY, sx-70, baseY, color, 4);
+    }
+
     label(svg, sx-42, baseY+52, labelsList[i][0], color, 16, 800);
   });
 }
@@ -2088,16 +2157,14 @@ function drawStatistics(svg, w, h, mode='bar-graph') {
 function drawProbability(svg, w, h) {
   title(svg, w, 'Probability · Favourable Outcomes / Total Outcomes');
   const cx=420, cy=300, r=130;
-  const pie = d3.pie().value(d=>d.value)([{label:'Favourable',value:3,color:'#67e8f9'},{label:'Unfavourable',value:5,color:'#ffc857'}]);
+  const pie = d3.pie().value(d=>d.value)([
+    {label:'Favourable',value:3,color:'#67e8f9'},
+    {label:'Unfavourable',value:5,color:'#ffc857'}
+  ]);
   const arc = d3.arc().innerRadius(0).outerRadius(r);
   const g = svg.append('g').attr('transform',`translate(${cx},${cy})`);
   g.selectAll('path').data(pie).enter().append('path')
-    .attr('d',arc).attr('fill',d=>d.data.color).attr('opacity',0.85)
-    .each(function(){this._current={startAngle:0,endAngle:0};})
-    .transition().duration(900)
-    .attrTween('d',function(d){
-      const i=d3.interpolate(this._current,d); this._current=i(1); return t=>arc(i(t));
-    });
+    .attr('d',arc).attr('fill',d=>d.data.color).attr('opacity',0.85);
   label(svg,650,250,'Probability = favourable / total', '#eef4ff', 28, 800);
   label(svg,650,300,'Example: P(Head) = 1/2', '#ffc857', 24, 800);
   note(svg,w,h,'Probability is a number between 0 and 1');
