@@ -1025,6 +1025,20 @@ function startRetryLoop(widget) {
   _retryTimer = setInterval(() => retryRegisterShowVisual(widget), 300);
 }
 
+  const safeChapterNum = normalizeChapterForVisual(
+    params.chapter_num,
+    params.topic,
+    params.content_hint
+  );
+
+  renderD3Scene(
+    safeChapterNum,
+    params.content_hint || 'overview',
+    (CHAPTERS.find(c => c.num === safeChapterNum) || {}).name || S.activeChapterName,
+    params.topic || '',
+    params.visual_type || 'overview'
+  );
+
 function handleShowVisual(params) {
   const { topic, visual_type, content_hint, chapter_num, student_id } = params;
   console.log('[Karka] show_visual handled:', { visual_type, content_hint, chapter_num });
@@ -1034,15 +1048,20 @@ function handleShowVisual(params) {
     renderQuestionCard(content_hint, chapter_num);
   } else {
     showVisualCanvas();
-    S.currentState = 3;
-    const chNum  = Number(chapter_num) || S.activeChapterNum;
-    const ch     = CHAPTERS.find(c => c.num === chNum);
-    const chName = ch ? ch.name : S.activeChapterName;
-    setActiveChapter(chNum, chName, false);
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      renderD3Scene(chNum, content_hint || '', chName, topic || '', visual_type || '');
-    }));
-  }
+    
+    const safeChapterNum = normalizeChapterForVisual(
+    params.chapter_num,
+    params.topic,
+    params.content_hint
+  );
+
+  renderD3Scene(
+    safeChapterNum,
+    params.content_hint || 'overview',
+    (CHAPTERS.find(c => c.num === safeChapterNum) || {}).name || S.activeChapterName,
+    params.topic || '',
+    params.visual_type || 'overview'
+  );
 
   wfPost(N8N.WF06_VISUAL_EVENT, {
     student_id  : student_id || S.studentId,
@@ -1305,6 +1324,33 @@ function normalizeHint(s='') {
     .replace(/[^a-z0-9^+\- ]+/g,' ')
     .replace(/\s+/g,' ')
     .trim();
+}
+
+function normalizeChapterForVisual(chapter_num, topic='', content_hint='') {
+  const t = `${topic} ${content_hint}`.toLowerCase();
+
+  if (
+    t.includes('surface area') || t.includes('volume') ||
+    t.includes('cuboid') || t.includes('cylinder') ||
+    t.includes('cone') || t.includes('sphere')
+  ) return 13;
+
+  if (t.includes('heron')) return 12;
+
+  if (
+    t.includes('construction') || t.includes('bisector') ||
+    t.includes('60 degree') || t.includes('90 degree') ||
+    t.includes('perpendicular bisector') || t.includes('angle bisector')
+  ) return 11;
+
+  if (
+    t.includes('statistics') || t.includes('histogram') ||
+    t.includes('frequency') || t.includes('bar graph')
+  ) return 14;
+
+  if (t.includes('probability')) return 15;
+
+  return Number(chapter_num) || S.activeChapterNum;
 }
 
 function renderD3Scene(chapter_num, content_hint='', chapterName='', topic='', visual_type='overview') {
