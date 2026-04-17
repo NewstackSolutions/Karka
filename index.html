@@ -60,7 +60,6 @@
     }
     .brand-copy p{margin:3px 0 0;color:var(--muted);font-size:.80rem}
 
-    /* Hero: avatar inline with heading — flex row, text left, avatar right */
     .hero{
       position:relative;z-index:2;display:flex;gap:20px;align-items:stretch;
       flex:1;min-height:0;
@@ -93,7 +92,6 @@
     .feature strong{display:block;font-size:.82rem;margin-bottom:4px}
     .feature span{color:var(--muted);font-size:.75rem;line-height:1.45}
 
-    /* Avatar card: fixed width, stretches full hero height */
     .hero-card{
       position:relative;width:210px;flex-shrink:0;border-radius:24px;border:1px solid var(--line);
       background:linear-gradient(180deg,rgba(19,27,49,.92),rgba(10,16,30,.96));
@@ -173,7 +171,6 @@
     .btn-primary{width:100%;margin-top:22px;background:linear-gradient(135deg,var(--gold),#ffe8b3);color:#231300}
     .btn-secondary{width:100%;margin-top:10px;background:rgba(255,255,255,.05);color:var(--text);border:1px solid var(--line)}
 
-    /* ===== APP SCREEN ===== */
     #appScreen{
       height:100vh;display:grid;grid-template-columns:270px 1fr 340px;overflow:hidden;
     }
@@ -233,7 +230,6 @@
       background:rgba(255,255,255,.03);color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;
     }
 
-    /* ===== MAIN CONTENT ===== */
     .main{
       overflow:hidden;display:flex;flex-direction:column;
       background:radial-gradient(circle at 15% 10%,rgba(103,232,249,.06),transparent 18%),
@@ -252,7 +248,6 @@
     .chapter-title-main{font-family:'Space Grotesk',sans-serif;font-size:1.55rem;letter-spacing:-.04em}
     .header-right{display:flex;align-items:center;gap:16px}
 
-    /* Session Timer */
     .session-timer-wrap{
       display:flex;align-items:center;gap:8px;
       padding:8px 14px;border-radius:999px;
@@ -270,7 +265,6 @@
     @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.75);opacity:.45}}
     @keyframes timerPulse{0%,100%{opacity:1}50%{opacity:.5}}
 
-    /* Floating Logo */
     .floating-logo-wrap{display:relative;display:flex;align-items:center;gap:10px}
     .floating-logo-orbit{
       position:relative;width:108px;height:108px;border-radius:50%;display:grid;
@@ -301,9 +295,8 @@
       -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
       white-space:nowrap;
     }
-    .steel-sub{font-size:.72rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:4px;text-align:right}
+    .steel-sub{font-size:.72rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
 
-    /* Visual board */
     .visual-board{flex:1;padding:16px 18px 18px;display:flex;flex-direction:column;gap:12px;min-height:0}
     .viz-tabs{display:flex;align-items:center;gap:8px;flex-shrink:0}
     .viz-tab{
@@ -325,7 +318,6 @@
     }
     #visualCanvas{position:absolute;inset:0;width:100%;height:100%}
 
-    /* Welcome Screen (Intake STATE 1) */
     #welcomeScreen{
       position:absolute;inset:0;display:flex;flex-direction:column;
       align-items:center;justify-content:center;gap:22px;text-align:center;padding:40px;
@@ -365,7 +357,6 @@
     }
     .intake-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(121,242,179,.7);animation:pulse 1.5s infinite}
 
-    /* MCQ Overlay (STATE 2) */
     #mcqOverlay{
       position:absolute;inset:0;display:flex;flex-direction:column;
       align-items:center;justify-content:center;gap:20px;padding:32px;
@@ -401,7 +392,6 @@
     .mcq-btn.wrong .opt-label{background:rgba(255,107,107,.25);color:#ff8d8d}
     .mcq-voice-hint{color:var(--muted);font-size:.82rem;font-style:italic}
 
-    /* HOTS text area */
     #hotsOverlay{
       position:absolute;inset:0;display:flex;flex-direction:column;
       align-items:center;justify-content:center;gap:18px;padding:40px;
@@ -419,7 +409,6 @@
     }
     .hots-hint{color:var(--muted);font-size:.86rem;max-width:480px;text-align:center}
 
-    /* Explaining banner */
     .explaining-banner{
       position:absolute;left:14px;right:14px;bottom:14px;border-radius:18px;
       padding:12px 14px;border:1px solid rgba(255,255,255,.08);
@@ -439,7 +428,6 @@
     .explaining-text{font-size:.86rem;line-height:1.45}
     .explaining-text strong{color:var(--gold)}
 
-    /* Session end overlay */
     #sessionEndOverlay{
       position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;
       align-items:center;justify-content:center;gap:24px;text-align:center;padding:40px;
@@ -460,7 +448,6 @@
       font-weight:800;font-size:1rem;font-family:'DM Sans',sans-serif;border:none;cursor:pointer;
     }
 
-    /* Teacher panel */
     .teacher-panel-header{
       padding:18px 16px 14px;border-bottom:1px solid var(--line);
       position:sticky;top:0;z-index:2;background:rgba(6,12,23,.92);backdrop-filter:blur(10px);
@@ -507,14 +494,12 @@
     .quota-bar-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--gold),var(--pink));border-radius:99px;transition:width .5s ease}
     .quota-legend{margin-top:6px;display:flex;justify-content:space-between;color:var(--muted);font-size:.74rem}
 
-    /* ===== ANIMATIONS ===== */
     @keyframes floatLogo{0%,100%{transform:translateY(0px) scale(1)}50%{transform:translateY(-8px) scale(1.025)}}
     @keyframes spinSlow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
     @keyframes spinDot{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
     @keyframes welcomeFloat{0%,100%{transform:translateY(0px) scale(1)}50%{transform:translateY(-9px) scale(1.03)}}
     @keyframes spinRing{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
-    /* ===== RESPONSIVE ===== */
     @media(max-width:1280px){
       #appScreen{grid-template-columns:250px 1fr 310px}
       #loginScreen{grid-template-columns:1fr}
@@ -539,7 +524,6 @@
 </head>
 <body>
 
-<!-- ======== STATE 0: LOGIN SCREEN ======== -->
 <div id="loginScreen">
   <section class="login-left">
     <div class="brand-row">
@@ -578,26 +562,25 @@
       <div class="auth-card">
         <h3>Student sign in</h3>
         <p>Enter your Student ID and PIN to start your Karka learning session with Diya.</p>
-        <div class="field">
-          <label for="fStudentId">Student ID</label>
-          <input id="fStudentId" type="text" placeholder="e.g. priya_2025" autocomplete="username">
-        </div>
-        <div class="field">
-          <label for="fPin">PIN</label>
-          <input id="fPin" type="password" placeholder="4-digit PIN" autocomplete="current-password" maxlength="6">
-        </div>
-        <div id="authError" class="error hidden"></div>
-        <button class="btn btn-primary" id="loginBtn">Enter learning board →</button>
-        <button class="btn btn-secondary" id="demoBtn">Use demo student</button>
+        <form id="loginForm" onsubmit="event.preventDefault(); doLogin();">
+          <div class="field">
+            <label for="fStudentId">Student ID</label>
+            <input id="fStudentId" type="text" placeholder="e.g. priya_2025" autocomplete="username">
+          </div>
+          <div class="field">
+            <label for="fPin">PIN</label>
+            <input id="fPin" type="password" placeholder="4-digit PIN" autocomplete="current-password" maxlength="6">
+          </div>
+          <div id="authError" class="error hidden"></div>
+          <button class="btn btn-primary" id="loginBtn" type="submit">Enter learning board →</button>
+          <button class="btn btn-secondary" id="demoBtn" type="button">Use demo student</button>
+        </form>
       </div>
     </div>
   </section>
 </div>
 
-<!-- ======== STATES 1-3: APP SCREEN ======== -->
 <div id="appScreen" class="hidden">
-
-  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo"><img src="logo_01.jpg" alt="Karka logo"></div>
@@ -622,7 +605,6 @@
     </div>
   </aside>
 
-  <!-- Main visual board -->
   <main class="main">
     <div class="main-header">
       <div class="chapter-breadcrumb">
@@ -656,10 +638,8 @@
       </div>
 
       <div class="viz-stage">
-        <!-- D3 canvas -->
         <div id="visualCanvas"></div>
 
-        <!-- STATE 1: Intake welcome screen -->
         <div id="welcomeScreen" class="hidden">
           <div class="welcome-avatar-wrap">
             <div class="welcome-glow"></div>
@@ -675,7 +655,6 @@
           </div>
         </div>
 
-        <!-- STATE 2a: MCQ card -->
         <div id="mcqOverlay">
           <div class="mcq-tag">Question from Diya</div>
           <div class="mcq-question" id="mcqQuestion">Loading…</div>
@@ -683,14 +662,12 @@
           <div class="mcq-voice-hint">or speak your answer to Diya</div>
         </div>
 
-        <!-- STATE 2b: HOTS open question -->
         <div id="hotsOverlay">
           <div class="hots-tag">Open Question — HOTS</div>
           <div class="hots-question" id="hotsQuestion">Loading…</div>
           <div class="hots-hint">Share your thinking with Diya — speak or type your answer</div>
         </div>
 
-        <!-- Explaining banner -->
         <div class="explaining-banner" id="explainingBanner">
           <div class="sound-wave"><span></span><span></span><span></span><span></span><span></span></div>
           <div class="explaining-text"><strong>Diya is explaining</strong> — <span id="explainingHint">visual incoming…</span></div>
@@ -699,7 +676,6 @@
     </div>
   </main>
 
-  <!-- Teacher panel (right) -->
   <aside class="teacher-panel">
     <div class="teacher-panel-header">
       <h3>Teacher — Diya</h3>
@@ -745,7 +721,6 @@
   </aside>
 </div>
 
-<!-- Session end overlay -->
 <div id="sessionEndOverlay">
   <div class="session-end-icon">🎉</div>
   <div class="session-end-title">Great work today!</div>
@@ -754,24 +729,19 @@
 </div>
 
 <script>
-/* ============================================================
-   N8N WEBHOOK CONFIG — GANITAM FRONTEND CONTRACT v2
-   Base: https://coolvinoo.app.n8n.cloud
-   ============================================================ */
 const N8N = {
   BASE: 'https://coolvinoo.app.n8n.cloud',
-  WF01_GET_STUDENT : '/webhook/student-state',   // GET ?id=
-  WF02_SESSION_START: '/webhook/session-start',   // POST
-  WF03_HEARTBEAT    : '/webhook/heartbeat',       // POST
-  WF04_LOAD_QUESTION: '/webhook/load-question',   // POST
-  WF05_SUBMIT_ANSWER: '/webhook/submit-answer',   // POST
-  WF06_VISUAL_EVENT : '/webhook/visual-event',    // POST
-  WF08_SAVE_INTAKE  : '/webhook/save-intake',     // POST
+  WF01_GET_STUDENT : '/webhook/student-state',
+  WF02_SESSION_START: '/webhook/session-start',
+  WF03_HEARTBEAT    : '/webhook/heartbeat',
+  WF04_LOAD_QUESTION: '/webhook/load-question',
+  WF05_SUBMIT_ANSWER: '/webhook/submit-answer',
+  WF06_VISUAL_EVENT : '/webhook/visual-event',
+  WF08_SAVE_INTAKE  : '/webhook/save-intake',
 };
 
 const AGENT_ID = 'agent_1901kp14wnx7ecab789827fkwg1p';
 
-/* ===== CHAPTERS ===== */
 const CHAPTERS = [
   {num:1,  name:'Number Systems',                         short:'Number Systems'},
   {num:2,  name:'Polynomials',                            short:'Polynomials'},
@@ -790,7 +760,6 @@ const CHAPTERS = [
   {num:15, name:'Probability',                            short:'Probability'},
 ];
 
-/* ===== STUDENT STATE ===== */
 const S = {
   studentId       : '',
   studentName     : '',
@@ -807,12 +776,11 @@ const S = {
   weakChapters    : 'none',
   sessionId            : '',
   lastVisualTimestamp  : '',
-  currentState    : 0,   // 0=login, 1=intake, 2=question, 3=teaching
+  currentState    : 0,
   mcqStartTime    : 0,
   activeWidget    : null,
 };
 
-/* ===== DEMO FALLBACK ===== */
 const DEMO = {
   'priya_2025': {
     student_id:'priya_2025', pin:'1234', student_name:'Priya',
@@ -830,10 +798,7 @@ const DEMO = {
   },
 };
 
-/* ============================================================
-   WEBHOOK HELPERS
-   ============================================================ */
-async function wfGet(path, params = {}, timeoutMs = 5000) {
+async function wfGet(path, params = {}, timeoutMs = 8000) {
   const url = new URL(N8N.BASE + path);
   Object.entries(params).forEach(([k,v]) => url.searchParams.set(k, v));
   const controller = new AbortController();
@@ -864,9 +829,6 @@ async function wfPost(path, body, signal) {
   }
 }
 
-/* ============================================================
-   STATE 0 — LOGIN
-   ============================================================ */
 function showError(msg) {
   const el = document.getElementById('authError');
   el.textContent = msg;
@@ -896,13 +858,9 @@ async function doLogin() {
   loginBtn.textContent = 'Checking…';
   clearError();
 
-  // WF01 — GET /webhook/student-state?id={id}
   let rec = await wfGet(N8N.WF01_GET_STUDENT, { id });
-
-  // n8n Sheets nodes return arrays — unwrap first element
   if (Array.isArray(rec)) rec = rec[0] || null;
 
-  // Fallback to demo data if n8n unavailable or slow
   if (!rec || typeof rec !== 'object' || !rec.student_id) {
     console.log('[Karka] n8n unavailable — using demo fallback');
     rec = DEMO[id];
@@ -919,7 +877,6 @@ async function doLogin() {
       return;
     }
   } else {
-    // n8n responded — validate PIN
     if (rec.pin && rec.pin !== pin) {
       showError('Invalid Student ID or PIN.');
       loginBtn.disabled = false;
@@ -928,7 +885,6 @@ async function doLogin() {
     }
   }
 
-  // Populate student state
   S.studentId        = id;
   S.studentName      = rec.student_name || 'Student';
   S.plan             = rec.plan || 'Student';
@@ -947,14 +903,10 @@ async function doLogin() {
   launchApp();
 }
 
-/* ============================================================
-   LAUNCH APP — ROUTE TO STATE 1 OR 3
-   ============================================================ */
 function launchApp() {
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('appScreen').classList.remove('hidden');
 
-  // Populate sidebar
   document.getElementById('sStudentName').textContent = S.studentName;
   document.getElementById('sStudentPlan').textContent = S.plan + ' plan';
   buildChapterList();
@@ -967,12 +919,8 @@ function launchApp() {
   } else {
     enterTeachingState();
   }
-
 }
 
-/* ============================================================
-   STATE 1 — INTAKE
-   ============================================================ */
 function enterIntakeState() {
   S.currentState = 1;
   document.getElementById('welcomeScreen').classList.remove('hidden');
@@ -985,9 +933,6 @@ function enterIntakeState() {
   injectWidget();
 }
 
-/* ============================================================
-   STATE 3 — TEACHING
-   ============================================================ */
 function enterTeachingState() {
   S.currentState = 3;
   document.getElementById('welcomeScreen').classList.add('hidden');
@@ -998,7 +943,6 @@ function enterTeachingState() {
   document.getElementById('infoMode').textContent = 'Teaching · Chapter ' + S.activeChapterNum;
   document.getElementById('teacherStatus').textContent = 'Online · Teaching';
 
-  // requestAnimationFrame ensures canvas has real pixel dimensions before D3 reads them
   requestAnimationFrame(() => requestAnimationFrame(() => {
     renderD3Scene(S.activeChapterNum, 'overview', S.activeChapterName, S.activeChapterName, 'overview');
   }));
@@ -1006,16 +950,6 @@ function enterTeachingState() {
   if (!S.activeWidget) injectWidget();
 }
 
-/* ============================================================
-   ELEVENLABS WIDGET INJECTION + CLIENT TOOL REGISTRATION
-
-   show_visual is a CLIENT TOOL — ElevenLabs calls the
-   registered JS function directly in the browser at 0ms.
-   No polling, no DOM sniffing, no postMessage.
-
-   All other tools are WEBHOOK TOOLS → ElevenLabs calls
-   n8n directly. Frontend has no involvement in those.
-   ============================================================ */
 function injectWidget() {
   const container   = document.getElementById('widget-container');
   const placeholder = document.getElementById('widgetPlaceholder');
@@ -1041,9 +975,6 @@ function injectWidget() {
     return { status: 'rendered' };
   };
 
-  // ── CORRECT API (per ElevenLabs source): listen for 'elevenlabs-convai:call'
-  // This fires on the widget element BEFORE the session connects to ElevenLabs.
-  // Inject clientTools into event.detail.config here — this is the documented way.
   widget.addEventListener('elevenlabs-convai:call', (event) => {
     console.log('[Karka] elevenlabs-convai:call fired — injecting clientTools');
     if (event.detail && event.detail.config) {
@@ -1055,7 +986,6 @@ function injectWidget() {
     console.log('[Karka] show_visual injected via :call event ✓');
   });
 
-  // Also set as property for any version that reads it directly
   widget.clientTools = { show_visual: handler };
 
   container.appendChild(widget);
@@ -1071,43 +1001,30 @@ function injectWidget() {
   });
 }
 
-// Queue holds any show_visual calls that arrive before registration completes
 const _pendingVisuals = [];
 let _showVisualRegistered = false;
 let _retryTimer = null;
 
 function retryRegisterShowVisual(widget) {
   if (_showVisualRegistered) return;
-
   if (widget && (widget.clientTools !== undefined)) {
     try {
       registerShowVisual(widget);
       _showVisualRegistered = true;
       if (_retryTimer) { clearInterval(_retryTimer); _retryTimer = null; }
       console.log('[Karka] show_visual client tool registered ✓');
-      // Flush any calls that arrived before registration
       _pendingVisuals.forEach(p => handleShowVisual(p));
       _pendingVisuals.length = 0;
     } catch(e) {
       console.warn('[Karka] show_visual register threw:', e.message);
-      // Keep retrying — interval still running
     }
   }
-  // If clientTools not ready yet, interval fires again in 300ms — no cap, no bail-out
 }
-
 function startRetryLoop(widget) {
-  if (_retryTimer) return; // already running
+  if (_retryTimer) return;
   _retryTimer = setInterval(() => retryRegisterShowVisual(widget), 300);
 }
 
-/* ============================================================
-   CLIENT TOOL: show_visual
-   ElevenLabs calls this function in the browser whenever
-   Diya wants to show a diagram, graph, or MCQ question.
-   Returns { status: 'rendered' } back to Diya immediately.
-   ============================================================ */
-// Core handler — called by the registered client tool AND by pending queue flush
 function handleShowVisual(params) {
   const { topic, visual_type, content_hint, chapter_num, student_id } = params;
   console.log('[Karka] show_visual handled:', { visual_type, content_hint, chapter_num });
@@ -1121,6 +1038,7 @@ function handleShowVisual(params) {
     const chNum  = Number(chapter_num) || S.activeChapterNum;
     const ch     = CHAPTERS.find(c => c.num === chNum);
     const chName = ch ? ch.name : S.activeChapterName;
+    setActiveChapter(chNum, chName, false);
     requestAnimationFrame(() => requestAnimationFrame(() => {
       renderD3Scene(chNum, content_hint || '', chName, topic || '', visual_type || '');
     }));
@@ -1144,7 +1062,6 @@ function registerShowVisual(widget) {
     return { status: 'rendered' };
   };
 
-  // Try object assignment first (current @elevenlabs/convai-widget-embed API)
   try {
     widget.clientTools = { show_visual: handler };
     console.log('[Karka] show_visual registered via object assignment ✓');
@@ -1153,17 +1070,15 @@ function registerShowVisual(widget) {
     console.warn('[Karka] Object assignment failed:', e1.message);
   }
 
-  // Fallback: .register() method (older widget versions)
   try {
     widget.clientTools.register('show_visual', handler);
     console.log('[Karka] show_visual registered via .register() ✓');
   } catch(e2) {
     console.warn('[Karka] .register() also failed:', e2.message);
-    throw e2; // let retry loop know
+    throw e2;
   }
 }
 
-// Helper: make visual canvas visible and hide other overlays
 function showVisualCanvas() {
   document.getElementById('visualCanvas').style.display   = 'block';
   document.getElementById('welcomeScreen').classList.add('hidden');
@@ -1171,9 +1086,6 @@ function showVisualCanvas() {
   document.getElementById('hotsOverlay').classList.remove('visible');
 }
 
-/* ============================================================
-   STATE 2 — QUESTION CARD
-   ============================================================ */
 function renderQuestionCard(content_hint, chapter_num) {
   S.currentState = 2;
   S.mcqStartTime = Date.now();
@@ -1189,7 +1101,6 @@ function renderQuestionCard(content_hint, chapter_num) {
 
 function renderMCQ(content_hint, chapter_num) {
   const parts = content_hint.split('|');
-  // parts[0]="MCQ", [1]=question, [2..5]=options, [6]="correct:X"
   const question   = parts[1] || '';
   const options    = parts.slice(2, 6);
   const correctRaw = (parts[6] || 'correct:A').replace('correct:', '').trim();
@@ -1215,14 +1126,12 @@ function renderMCQ(content_hint, chapter_num) {
 }
 
 function handleMCQClick(clickedBtn, chosen, correct, question, options, chapter_num) {
-  // Disable all buttons
   document.querySelectorAll('.mcq-btn').forEach(b => b.disabled = true);
 
   const isCorrect = chosen === correct;
   clickedBtn.classList.add(isCorrect ? 'correct' : 'wrong');
 
   if (!isCorrect) {
-    // Highlight the correct one in green
     document.querySelectorAll('.mcq-btn').forEach(b => {
       const lbl = b.querySelector('.opt-label').textContent.trim();
       if (lbl === correct) b.classList.add('correct');
@@ -1231,7 +1140,6 @@ function handleMCQClick(clickedBtn, chosen, correct, question, options, chapter_
 
   const responseTimeSecs = Math.round((Date.now() - S.mcqStartTime) / 1000);
 
-  // WF05 submit-answer (async)
   wfPost(N8N.WF05_SUBMIT_ANSWER, {
     student_id     : S.studentId,
     session_id     : S.sessionId,
@@ -1244,7 +1152,6 @@ function handleMCQClick(clickedBtn, chosen, correct, question, options, chapter_
     response_time_secs: responseTimeSecs,
   });
 
-  // Return to teaching after 4 seconds
   setTimeout(() => {
     document.getElementById('mcqOverlay').classList.remove('visible');
     S.currentState = 3;
@@ -1258,9 +1165,6 @@ function renderHOTS(content_hint) {
   document.getElementById('hotsOverlay').classList.add('visible');
 }
 
-/* ============================================================
-   SESSION COUNTDOWN TIMER
-   ============================================================ */
 let timerInterval = null;
 let timerSecsLeft = 0;
 
@@ -1302,15 +1206,11 @@ function renderTimer() {
   }
 }
 
-/* ============================================================
-   SESSION END
-   ============================================================ */
 function endSession(params = {}) {
   if (timerInterval) clearInterval(timerInterval);
 
   const sessionDurationMins = Math.round((S.quotaRemaining * 60 - timerSecsLeft) / 60);
 
-  // WF03 heartbeat
   wfPost(N8N.WF03_HEARTBEAT, {
     student_id          : S.studentId,
     session_id          : S.sessionId,
@@ -1318,18 +1218,13 @@ function endSession(params = {}) {
     triggered_by        : params.triggered_by || 'manual',
   });
 
-  // Show end overlay
   document.getElementById('sessionEndOverlay').classList.add('visible');
 
-  // Disable widget mic if available
   if (S.activeWidget && typeof S.activeWidget.endSession === 'function') {
     try { S.activeWidget.endSession(); } catch(e) {}
   }
 }
 
-/* ============================================================
-   CHAPTER NAVIGATION
-   ============================================================ */
 function buildChapterList() {
   const container = document.getElementById('chapterList');
   container.innerHTML = '';
@@ -1338,24 +1233,23 @@ function buildChapterList() {
     btn.className = 'chapter-item';
     btn.dataset.num = ch.num;
     btn.innerHTML = `<span class="ch-num">${ch.num}</span><span class="ch-name">${ch.short}</span>`;
-    btn.onclick = () => setActiveChapter(ch.num, ch.name, true);
+    btn.addEventListener('click', () => setActiveChapter(ch.num, ch.name));
     container.appendChild(btn);
   });
 }
 
-function setActiveChapter(num, name, renderVisual = true) {
-  S.activeChapterNum  = num;
+function setActiveChapter(num, name, rerender = true) {
+  S.activeChapterNum = num;
   S.activeChapterName = name;
-  document.getElementById('chapterBadge').textContent   = `Chapter ${num}`;
-  document.getElementById('chapterTitle').textContent   = name;
-  document.getElementById('infoChapter').textContent    = `Chapter ${num} · ${name}`;
-  document.getElementById('infoMode').textContent       = `Teaching · Chapter ${num}`;
-  document.querySelectorAll('.chapter-item').forEach(el =>
-    el.classList.toggle('active', +el.dataset.num === num)
-  );
-  if (renderVisual && S.currentState >= 3) {
-    document.getElementById('mcqOverlay').classList.remove('visible');
-    document.getElementById('hotsOverlay').classList.remove('visible');
+  document.getElementById('chapterBadge').textContent = `Chapter ${num}`;
+  document.getElementById('chapterTitle').textContent = name;
+  document.getElementById('infoChapter').textContent = `Chapter ${num} · ${name}`;
+
+  document.querySelectorAll('.chapter-item').forEach(el => {
+    el.classList.toggle('active', Number(el.dataset.num) === Number(num));
+  });
+
+  if (rerender && S.currentState !== 1) {
     requestAnimationFrame(() => requestAnimationFrame(() => {
       renderD3Scene(num, 'overview', name, name, 'overview');
     }));
@@ -1363,999 +1257,968 @@ function setActiveChapter(num, name, renderVisual = true) {
 }
 
 function updateQuota() {
-  const r = S.quotaRemaining;
-  const t = S.quotaTotal;
-  document.getElementById('infoQuota').textContent = `${r} mins remaining`;
-  document.getElementById('quotaMax').textContent  = `of ${t} mins`;
-  document.getElementById('quotaFill').style.width = `${Math.max(0, Math.min(100,(r/t)*100))}%`;
+  document.getElementById('infoQuota').textContent = `${S.quotaRemaining} mins remaining`;
+  document.getElementById('quotaMax').textContent  = `${S.quotaTotal} mins`;
+  document.getElementById('quotaFill').style.width = `${Math.max(4, (S.quotaRemaining / S.quotaTotal) * 100)}%`;
 }
 
-/* ============================================================
-   D3 VISUAL SCENE ROUTING
-   ============================================================ */
-// Show the explaining banner at the bottom of the visual board
-function flashBanner(hint) {
+function flashBanner(text) {
   const banner = document.getElementById('explainingBanner');
-  if (!banner) return;
-  const hintEl = document.getElementById('explainingHint');
-  if (hintEl) hintEl.textContent = hint;
+  document.getElementById('explainingHint').textContent = text;
   banner.classList.add('visible');
-  setTimeout(() => banner.classList.remove('visible'), 3000);
+  clearTimeout(flashBanner._t);
+  flashBanner._t = setTimeout(() => banner.classList.remove('visible'), 2800);
 }
 
-/* ============================================================
-   D3 SCENE ROUTER
-   Comprehensive content_hint keyword → drawing function map.
-   Covers all 15 CBSE Class 9 chapters and sub-scenes.
-   content_hint keywords come directly from Diya's tool call.
-   ============================================================ */
+document.getElementById('logoutBtn').addEventListener('click', () => location.reload());
+document.getElementById('replayBtn').addEventListener('click', () => {
+  renderD3Scene(S.activeChapterNum, 'overview', S.activeChapterName, S.activeChapterName, 'overview');
+});
 
-// Helper: create a fresh SVG on the visualCanvas
+document.querySelectorAll('.viz-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.viz-tab').forEach(x => x.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
 function freshSVG() {
-  const host = document.getElementById('visualCanvas');
-  host.innerHTML = '';
-  const w = host.clientWidth  || 860;
-  const h = host.clientHeight || 560;
-  const svg = d3.select(host).append('svg')
-    .attr('viewBox', `0 0 ${w} ${h}`)
-    .attr('width','100%').attr('height','100%')
-    .attr('preserveAspectRatio','xMidYMid meet');
+  const root = d3.select('#visualCanvas');
+  root.selectAll('*').remove();
+  const rect = document.getElementById('visualCanvas').getBoundingClientRect();
+  const w = Math.max(820, rect.width || 900);
+  const h = Math.max(520, rect.height || 560);
+  const svg = root.append('svg').attr('width', '100%').attr('height', '100%')
+    .attr('viewBox', `0 0 ${w} ${h}`);
+  svg.append('rect').attr('x', 30).attr('y', 26).attr('width', w-60).attr('height', h-72)
+    .attr('rx', 30).attr('fill', 'rgba(255,255,255,0.02)').attr('stroke', 'rgba(103,232,249,0.12)');
   return { svg, w, h };
 }
 
-function renderD3Scene(chapter_num, content_hint, chapterName, topic = '', visual_type = '') {
-  const { svg, w, h } = freshSVG();
-
-  const normalize = (s='') => String(s)
+function normalizeHint(s='') {
+  return String(s)
     .toLowerCase()
-    .replace(/²/g, '^2')
-    .replace(/√/g, 'sqrt')
-    .replace(/[^a-z0-9^+\-\s]/g, ' ')
-    .replace(/\s+/g, ' ')
+    .replace(/²/g,'^2')
+    .replace(/−/g,'-')
+    .replace(/[–—]/g,'-')
+    .replace(/[_]/g,' ')
+    .replace(/[^a-z0-9^+\- ]+/g,' ')
+    .replace(/\s+/g,' ')
     .trim();
+}
 
-  const hint = normalize(content_hint);
-  const name = normalize(chapterName || S.activeChapterName);
-  const top  = normalize(topic);
-  const vtype = normalize(visual_type);
-  const text = `${top} ${hint} ${vtype}`;
+function renderD3Scene(chapter_num, content_hint='', chapterName='', topic='', visual_type='overview') {
+  const { svg, w, h } = freshSVG();
+  const hint = normalizeHint(content_hint);
+  const name = normalizeHint(chapterName || S.activeChapterName);
+  const top  = normalizeHint(topic);
+  const vtype = normalizeHint(visual_type);
+  const text = `${top} ${hint} ${vtype}`.trim();
   const num  = Number(chapter_num) || S.activeChapterNum;
 
-  if (num === 1 || name.includes('number')) {
-    if (text.includes('irrational') || text.includes('sqrt2') || text.includes('sqrt 2') || text.includes('pi') || text.includes('non terminating'))
-      drawNumberSystems(svg, w, h, 'irrational');
-    else if (text.includes('number line') || text.includes('between') || text.includes('locate'))
+  if (num === 1 || name.includes('number systems')) {
+    if (text.includes('decimal') || text.includes('terminating') || text.includes('recurring') || text.includes('expansion')) {
+      drawNumberSystems(svg, w, h, 'decimal-expansion');
+    } else if (text.includes('irrational') || text.includes('rational')) {
+      drawNumberSystems(svg, w, h, 'rational-vs-irrational');
+    } else if (text.includes('numberline') || text.includes('number line')) {
       drawNumberSystems(svg, w, h, 'numberline');
-    else if (text.includes('rational') || text.includes('p q') || text.includes('terminating') || text.includes('recurring') || text.includes('decimal'))
-      drawNumberSystems(svg, w, h, 'rational');
-    else
+    } else {
       drawNumberSystems(svg, w, h, 'overview');
+    }
   }
+
   else if (num === 2 || name.includes('polynomial')) {
-    if (text.includes('zero') || text.includes('root') || text.includes('factor') || text.includes('x ='))
-      drawPolynomials(svg, w, h, 'roots');
-    else if (text.includes('degree') || text.includes('linear') || text.includes('quadratic') || text.includes('cubic'))
-      drawPolynomials(svg, w, h, 'degree');
-    else
-      drawPolynomials(svg, w, h, 'roots');
+    drawPolynomials(svg, w, h, text.includes('factor') ? 'factor' : 'overview');
   }
+
   else if (num === 3 || name.includes('coordinate')) {
-    if (text.includes('distance') || text.includes('length'))
-      drawCoordinateGeometry(svg, w, h, 'distance');
-    else if (text.includes('midpoint') || text.includes('mid point'))
-      drawCoordinateGeometry(svg, w, h, 'midpoint');
-    else if (text.includes('quadrant') || text.includes('plot') || text.includes('origin') || text.includes('point') || text.includes('x axis') || text.includes('y axis') || text.includes('coordinates'))
-      drawCoordinateGeometry(svg, w, h, 'quadrants');
-    else
-      drawCoordinateGeometry(svg, w, h, 'overview');
+    if (text.includes('plot') || text.includes('point')) {
+      drawCoordinateGeometry(svg, w, h, 'plot-point', text);
+    } else if (text.includes('quadrant')) {
+      drawCoordinateGeometry(svg, w, h, 'quadrant', text);
+    } else {
+      drawCoordinateGeometry(svg, w, h, 'coordinate-plane', text);
+    }
   }
-  else if (num === 4 || name.includes('linear')) {
-    if (text.includes('solution') || text.includes('intersection') || text.includes('simultaneous'))
-      drawLinearEquations(svg, w, h, 'solution');
-    else if (text.includes('slope') || text.includes('gradient') || text.includes('intercept'))
-      drawLinearEquations(svg, w, h, 'slope');
-    else
-      drawLinearEquations(svg, w, h, 'graph');
+
+  else if (num === 4 || name.includes('linear equations')) {
+    drawLinearEquations(svg, w, h, 'overview');
   }
+
   else if (num === 5 || name.includes('euclid')) {
-    if (text.includes('point') || text.includes('line segment') || text.includes('segment') || text.includes('line') || text.includes('plane') || text.includes('ray'))
-      drawEuclid(svg, w, h, 'primitives');
-    else if (text.includes('postulate') || text.includes('can be drawn') || text.includes('extended indefinitely') || text.includes('circle can be drawn'))
-      drawEuclid(svg, w, h, 'postulates');
-    else if (text.includes('axiom') || text.includes('common notion') || text.includes('whole is greater') || text.includes('things equal'))
-      drawEuclid(svg, w, h, 'axioms');
-    else
-      drawEuclid(svg, w, h, 'overview');
+    if (text.includes('point') || text.includes('line') || text.includes('plane') || text.includes('ray') || text.includes('segment')) {
+      drawEuclid(svg, w, h, 'primitives', text);
+    } else if (text.includes('postulate') || text.includes('straight line') || text.includes('extended indefinitely') || text.includes('circle can be drawn')) {
+      drawEuclid(svg, w, h, 'postulates', text);
+    } else if (text.includes('axiom') || text.includes('common notion') || text.includes('whole is greater') || text.includes('things equal')) {
+      drawEuclid(svg, w, h, 'axioms', text);
+    } else {
+      drawEuclid(svg, w, h, 'overview', text);
+    }
   }
-  else if (num === 6 || name.includes('lines') || name.includes('angle')) {
-    if (text.includes('parallel') || text.includes('transversal') || text.includes('alternate') || text.includes('corresponding'))
+
+  else if (num === 6 || name.includes('lines and angles')) {
+    if (text.includes('transversal') || text.includes('parallel')) {
       drawLinesAngles(svg, w, h, 'transversal');
-    else if (text.includes('vertical') || text.includes('supplementary') || text.includes('complementary') || text.includes('adjacent'))
-      drawLinesAngles(svg, w, h, 'angle_pairs');
-    else
-      drawLinesAngles(svg, w, h, 'overview');
+    } else if (text.includes('pair') || text.includes('adjacent') || text.includes('vertically opposite') || text.includes('linear pair')) {
+      drawLinesAngles(svg, w, h, 'angle-pairs');
+    } else {
+      drawLinesAngles(svg, w, h, 'types-of-angles');
+    }
   }
+
   else if (num === 7 || name.includes('triangle')) {
-    if (text.includes('pythagoras') || text.includes('hypotenuse') || text.includes('right angle') || text.includes('right angled') || text.includes('right triangle') || text.includes('c^2') || text.includes('a^2 + b^2') || text.includes('theorem'))
+    if (text.includes('pythagoras') || text.includes('hypotenuse') || text.includes('right angle') || text.includes('right angled') || text.includes('right triangle') || text.includes('c^2') || text.includes('a^2 + b^2') || text.includes('b^2 + a^2')) {
       drawTriangles(svg, w, h, 'pythagoras');
-    else if (text.includes('congruent') || text.includes('congruence') || text.includes('sss') || text.includes('sas') || text.includes('asa') || text.includes('aas') || text.includes('rhs'))
+    } else if (text.includes('congruent') || text.includes('congruence') || text.includes('sss') || text.includes('sas') || text.includes('asa') || text.includes('rhs')) {
       drawTriangles(svg, w, h, 'congruence');
-    else if (text.includes('similar') || text.includes('similarity') || text.includes('proportion') || text.includes('scale factor'))
+    } else if (text.includes('similar') || text.includes('similarity') || text.includes('proportion') || text.includes('scale factor')) {
       drawTriangles(svg, w, h, 'similarity');
-    else if (text.includes('median') || text.includes('altitude') || text.includes('centroid') || text.includes('perpendicular bisector'))
+    } else if (text.includes('median') || text.includes('altitude') || text.includes('centroid') || text.includes('bisector')) {
       drawTriangles(svg, w, h, 'centres');
-    else
+    } else {
       drawTriangles(svg, w, h, 'overview');
+    }
   }
+
   else if (num === 8 || name.includes('quadrilateral')) {
-    if (text.includes('parallelogram') || text.includes('opposite side'))
-      drawQuadrilaterals(svg, w, h, 'parallelogram');
-    else if (text.includes('rhombus') || text.includes('diagonal'))
-      drawQuadrilaterals(svg, w, h, 'rhombus');
-    else
-      drawQuadrilaterals(svg, w, h, 'overview');
+    if (text.includes('angle sum')) drawQuadrilaterals(svg, w, h, 'angle-sum');
+    else drawQuadrilaterals(svg, w, h, 'types');
   }
-  else if (num === 9 || name.includes('areas')) {
-    if (text.includes('triangle') && (text.includes('same base') || text.includes('same parallels') || text.includes('half')))
-      drawAreas(svg, w, h, 'same_base');
-    else if (text.includes('triangle') || text.includes('1/2') || text.includes('half'))
-      drawAreas(svg, w, h, 'triangle');
-    else
-      drawAreas(svg, w, h, 'parallelogram');
+
+  else if (num === 9 || name.includes('areas of parallelograms') || name.includes('areas')) {
+    if (text.includes('same base') || text.includes('same parallels')) {
+      drawAreas(svg, w, h, 'same-base-same-parallels');
+    } else if (text.includes('triangle')) {
+      drawAreas(svg, w, h, 'area-triangle');
+    } else if (text.includes('parallelogram')) {
+      drawAreas(svg, w, h, 'area-parallelogram');
+    } else {
+      drawAreas(svg, w, h, 'overview');
+    }
   }
+
   else if (num === 10 || name.includes('circle')) {
-    if (text.includes('chord') || text.includes('arc') || text.includes('subtend'))
-      drawCircles(svg, w, h, 'chord');
-    else if (text.includes('tangent') || text.includes('secant'))
-      drawCircles(svg, w, h, 'tangent');
-    else if (text.includes('angle') || text.includes('inscribed') || text.includes('central') || text.includes('segment'))
-      drawCircles(svg, w, h, 'angles');
-    else
-      drawCircles(svg, w, h, 'overview');
+    if (text.includes('centre') || text.includes('circumference')) drawCircles(svg, w, h, 'angle-at-centre');
+    else if (text.includes('chord')) drawCircles(svg, w, h, 'equal-chords');
+    else drawCircles(svg, w, h, 'circle-parts');
   }
+
   else if (num === 11 || name.includes('construction')) {
-    if (text.includes('angle bisector') || text.includes('bisect the angle'))
-      drawConstructions(svg, w, h, 'angle_bisector');
-    else if (text.includes('60') || text.includes('60 degree') || text.includes('equilateral'))
-      drawConstructions(svg, w, h, 'angle60');
-    else if (text.includes('90') || text.includes('90 degree') || text.includes('perpendicular'))
-      drawConstructions(svg, w, h, 'angle90');
-    else if (text.includes('triangle') || text.includes('base angle') || text.includes('perimeter'))
-      drawConstructions(svg, w, h, 'triangle_construct');
-    else
-      drawConstructions(svg, w, h, 'perpendicular_bisector');
+    if (text.includes('angle bisector')) {
+      drawConstructions(svg, w, h, 'angle-bisector');
+    } else if (text.includes('perpendicular bisector') || text.includes('line bisector') || text.includes('bisect a line')) {
+      drawConstructions(svg, w, h, 'perpendicular-bisector');
+    } else if (text.includes('60') || text.includes('sixty')) {
+      drawConstructions(svg, w, h, 'construction-60-degree');
+    } else if (text.includes('90') || text.includes('ninety')) {
+      drawConstructions(svg, w, h, 'construction-90-degree');
+    } else {
+      drawConstructions(svg, w, h, 'overview');
+    }
   }
+
   else if (num === 12 || name.includes('heron')) {
     drawHeron(svg, w, h);
   }
-  else if (num === 13 || name.includes('surface')) {
-    if (text.includes('cone') || text.includes('slant'))
-      drawSurfaces(svg, w, h, 'cone');
-    else if (text.includes('sphere') || text.includes('ball'))
-      drawSurfaces(svg, w, h, 'sphere');
-    else if (text.includes('cuboid') || text.includes('box') || text.includes('cube'))
-      drawSurfaces(svg, w, h, 'cuboid');
-    else
-      drawSurfaces(svg, w, h, 'cylinder');
+
+  else if (num === 13 || name.includes('surface') || name.includes('volume')) {
+    drawSurfaceVolume(svg, w, h, text.includes('cone') ? 'cone' : text.includes('sphere') ? 'sphere' : text.includes('cylinder') ? 'cylinder' : 'overview');
   }
-  else if (num === 14 || name.includes('statistic')) {
-    if (text.includes('median') || text.includes('mode'))
-      drawStatistics(svg, w, h, 'median');
-    else if (text.includes('histogram') || text.includes('frequency'))
-      drawStatistics(svg, w, h, 'histogram');
-    else
-      drawStatistics(svg, w, h, 'mean');
+
+  else if (num === 14 || name.includes('statistics')) {
+    drawStatistics(svg, w, h, text.includes('histogram') ? 'histogram' : text.includes('frequency') ? 'frequency-table' : 'bar-graph');
   }
+
   else if (num === 15 || name.includes('probability')) {
-    if (text.includes('tree') || text.includes('event') || text.includes('sample space') || text.includes('outcome'))
-      drawProbability(svg, w, h, 'tree');
-    else
-      drawProbability(svg, w, h, 'spinner');
+    drawProbability(svg, w, h);
   }
+
   else {
-    drawPlaceholder(svg, w, h, chapterName || S.activeChapterName);
-  }
-
-  document.getElementById('infoLastVisual').textContent = (chapterName || 'visual');
-  flashBanner((chapterName || 'Visual') + ' ready');
-}
-
-// Chapter click / replay — route by chapter name only
-function renderVisualFor(chapterName) {
-  renderD3Scene(S.activeChapterNum, 'overview', chapterName, chapterName, 'overview');
-}
-
-function drawPlaceholder(svg, w, h, chapter) {
-  svgTitle(svg, w, chapter);
-  svg.append('rect').attr('x',80).attr('y',70).attr('width',w-160).attr('height',h-140)
-    .attr('rx',28).attr('fill','rgba(103,232,249,.04)').attr('stroke','rgba(103,232,249,.14)');
-  svg.append('text').attr('x',w/2).attr('y',h/2).attr('text-anchor','middle')
-    .attr('fill','#eef4ff').attr('font-size','22px').attr('font-weight',800).text(chapter);
-  svg.append('text').attr('x',w/2).attr('y',h/2+32).attr('text-anchor','middle')
-    .attr('fill','#95a4c4').attr('font-size','14px').text('Diya will explain this shortly…');
-}
-
-function svgTitle(svg, w, text) {
-  svg.append('text').attr('x',w/2).attr('y',30)
-    .attr('text-anchor','middle').attr('fill','#ecf4ff')
-    .attr('font-size','15px').attr('font-weight',800).text(text);
-}
-
-function animatePath(path) {
-  const len = path.node().getTotalLength();
-  path.attr('stroke-dasharray',len).attr('stroke-dashoffset',len)
-    .transition().duration(1100).ease(d3.easeCubicOut).attr('stroke-dashoffset',0);
-}
-
-/* ── Ch 1: Number Systems ── */
-function drawNumberSystems(svg, w, h, scene = 'overview') {
-  if (scene === 'overview') {
-    svgTitle(svg, w, 'Number Systems · N ⊂ W ⊂ Z ⊂ Q ⊂ ℝ');
-    const cx=w/2, cy=h/2+10;
-    const sets=[
-      {r:168,c:'rgba(103,232,249,.8)',f:'rgba(103,232,249,.04)',label:'ℝ Real',    lx:cx-16,ly:cy-158},
-      {r:130,c:'rgba(255,200,87,.8)', f:'rgba(255,200,87,.05)', label:'Q Rational',lx:cx+110,ly:cy-96},
-      {r:94, c:'rgba(255,137,198,.8)',f:'rgba(255,137,198,.05)',label:'Z Integer', lx:cx+80, ly:cy-58},
-      {r:60, c:'rgba(121,242,179,.9)',f:'rgba(121,242,179,.07)',label:'W Whole',   lx:cx+46, ly:cy-22},
-      {r:28, c:'rgba(157,140,255,.9)',f:'rgba(157,140,255,.10)',label:'N',         lx:cx,    ly:cy+5},
-    ];
-    sets.forEach((s,i) => {
-      svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',0)
-        .attr('fill',s.f).attr('stroke',s.c).attr('stroke-width',1.8)
-        .transition().delay(i*120).duration(500).attr('r',s.r);
-      svg.append('text').attr('x',s.lx).attr('y',s.ly).attr('fill',s.c)
-        .attr('font-size','12px').attr('font-weight',700)
-        .attr('text-anchor',s.label==='N'?'middle':'start').attr('opacity',0)
-        .text(s.label).transition().delay(i*120+400).duration(300).attr('opacity',1);
-    });
-    [['√2',cx-118,cy-58],['π',cx-95,cy+52],['e',cx-128,cy+8]].forEach(([t,x,y])=>{
-      svg.append('circle').attr('cx',x).attr('cy',y).attr('r',20)
-        .attr('fill','rgba(255,200,87,.09)').attr('stroke','rgba(255,200,87,.7)').attr('stroke-width',1.5);
-      svg.append('text').attr('x',x).attr('y',y+5).attr('text-anchor','middle')
-        .attr('fill','#ffd68a').attr('font-size','15px').attr('font-weight',800).text(t);
-    });
-  }
-  else if (scene === 'irrational') {
-    svgTitle(svg, w, 'Irrational Numbers · Cannot be written as p/q');
-    const xScale = d3.scaleLinear().domain([-1,5]).range([60,w-60]);
-    const yMid   = h/2;
-    // Number line
-    svg.append('line').attr('x1',60).attr('x2',w-60).attr('y1',yMid).attr('y2',yMid)
-      .attr('stroke','#dfe7f3').attr('stroke-width',3);
-    // Ticks 0-4
-    [0,1,2,3,4].forEach(n => {
-      svg.append('line').attr('x1',xScale(n)).attr('x2',xScale(n))
-        .attr('y1',yMid-10).attr('y2',yMid+10).attr('stroke','#dfe7f3').attr('stroke-width',2);
-      svg.append('text').attr('x',xScale(n)).attr('y',yMid+28)
-        .attr('text-anchor','middle').attr('fill','#95a4c4').attr('font-size','13px').text(n);
-    });
-    // Irrational markers
-    const irr = [
-      {val:Math.sqrt(2), label:'√2≈1.414', col:'#ffc857'},
-      {val:Math.PI,      label:'π≈3.14',   col:'#67e8f9'},
-      {val:Math.E,       label:'e≈2.718',  col:'#ff89c6'},
-    ];
-    irr.forEach((d,i) => {
-      const x = xScale(d.val);
-      svg.append('circle').attr('cx',x).attr('cy',yMid).attr('r',0).attr('fill',d.col)
-        .transition().delay(i*200+300).duration(400).attr('r',10);
-      svg.append('text').attr('x',x).attr('y',yMid-22).attr('text-anchor','middle')
-        .attr('fill',d.col).attr('font-size','13px').attr('font-weight',700).attr('opacity',0)
-        .text(d.label).transition().delay(i*200+600).duration(300).attr('opacity',1);
-    });
-    svg.append('text').attr('x',w/2).attr('y',h-50).attr('text-anchor','middle')
-      .attr('fill','#95a4c4').attr('font-size','13px')
-      .text('These points exist on the number line but cannot be expressed as fractions');
-  }
-  else if (scene === 'numberline') {
-    svgTitle(svg, w, 'Number Line · Density of Real Numbers');
-    const xScale = d3.scaleLinear().domain([0,3]).range([80,w-80]);
-    const yMid   = h/2;
-    svg.append('line').attr('x1',80).attr('x2',w-80).attr('y1',yMid).attr('y2',yMid)
-      .attr('stroke','#67e8f9').attr('stroke-width',3);
-    [0,1,2,3].forEach(n => {
-      svg.append('line').attr('x1',xScale(n)).attr('x2',xScale(n))
-        .attr('y1',yMid-12).attr('y2',yMid+12).attr('stroke','#67e8f9').attr('stroke-width',2);
-      svg.append('text').attr('x',xScale(n)).attr('y',yMid+30)
-        .attr('text-anchor','middle').attr('fill','#dfe7f3').attr('font-size','14px').attr('font-weight',700).text(n);
-    });
-    const pts=[{v:0.5,l:'1/2',c:'#79f2b3'},{v:1.41,l:'√2',c:'#ffc857'},{v:1.73,l:'√3',c:'#ff89c6'},{v:2.5,l:'5/2',c:'#9d8cff'}];
-    pts.forEach((p,i)=>{
-      svg.append('circle').attr('cx',xScale(p.v)).attr('cy',yMid).attr('r',0).attr('fill',p.c)
-        .transition().delay(200+i*150).duration(350).attr('r',9);
-      svg.append('text').attr('x',xScale(p.v)).attr('y',yMid-(i%2===0?25:45))
-        .attr('text-anchor','middle').attr('fill',p.c).attr('font-size','13px').attr('font-weight',700)
-        .attr('opacity',0).text(p.l).transition().delay(400+i*150).duration(300).attr('opacity',1);
-    });
-    svg.append('text').attr('x',w/2).attr('y',h-50).attr('text-anchor','middle')
-      .attr('fill','#95a4c4').attr('font-size','13px')
-      .text('Between any two real numbers, infinitely many real numbers exist');
-  }
-  else {
-    svgTitle(svg, w, 'Rational Numbers · p/q form where q ≠ 0');
-    const items=[['1/2','0.5 — terminates'],['1/3','0.333… — recurring'],['7/4','1.75 — terminates'],['2/7','0.285714… — recurring']];
-    items.forEach(([frac,dec],i)=>{
-      const y=100+i*90;
-      svg.append('rect').attr('x',120).attr('y',y).attr('width',220).attr('height',60)
-        .attr('rx',14).attr('fill','rgba(103,232,249,.08)').attr('stroke','rgba(103,232,249,.2)');
-      svg.append('text').attr('x',230).attr('y',y+36).attr('text-anchor','middle')
-        .attr('fill','#67e8f9').attr('font-size','22px').attr('font-weight',800).text(frac);
-      svg.append('text').attr('x',460).attr('y',y+36).attr('text-anchor','middle')
-        .attr('fill','#dfe7f3').attr('font-size','16px').text('= '+dec);
-    });
+    drawFallback(svg, w, h, chapterName || 'Maths');
   }
 }
 
-/* ── Ch 2: Polynomials ── */
-function drawPolynomials(svg, w, h, scene = 'roots') {
-  if (scene === 'roots') {
-    svgTitle(svg, w, 'Polynomials · y = x² − 3x − 4  (zeros at x = −1, 4)');
-    const x=d3.scaleLinear().domain([-3,6]).range([60,w-44]);
-    const y=d3.scaleLinear().domain([-12,16]).range([h-50,50]);
-    svg.append('g').attr('transform',`translate(0,${y(0)})`).call(d3.axisBottom(x).ticks(7))
-      .selectAll('text').attr('fill','#95a4c4');
-    svg.append('g').attr('transform',`translate(${x(0)},0)`).call(d3.axisLeft(y).ticks(6))
-      .selectAll('text').attr('fill','#95a4c4');
-    const lineGen=d3.line().x(d=>x(d.xv)).y(d=>y(d.yv)).curve(d3.curveCatmullRom);
-    const data=d3.range(-3,6.05,.06).map(v=>({xv:v,yv:v*v-3*v-4}));
-    const path=svg.append('path').datum(data).attr('fill','none')
-      .attr('stroke','#67e8f9').attr('stroke-width',3.5).attr('d',lineGen);
-    animatePath(path);
-    [-1,4].forEach(r=>{
-      svg.append('circle').attr('cx',x(r)).attr('cy',y(0)).attr('r',0).attr('fill','#ffc857')
-        .transition().delay(900).duration(300).attr('r',9);
-      svg.append('text').attr('x',x(r)).attr('y',y(0)-18).attr('text-anchor','middle')
-        .attr('fill','#fff').attr('font-size','12px').attr('font-weight',700)
-        .attr('opacity',0).text(`zero: x=${r}`).transition().delay(1100).duration(300).attr('opacity',1);
-    });
-  } else {
-    svgTitle(svg, w, 'Polynomials · Degree determines shape');
-    const x=d3.scaleLinear().domain([-4,4]).range([60,w-40]);
-    const y=d3.scaleLinear().domain([-8,12]).range([h-50,50]);
-    svg.append('g').attr('transform',`translate(0,${y(0)})`).call(d3.axisBottom(x).ticks(7))
-      .selectAll('text').attr('fill','#95a4c4');
-    svg.append('g').attr('transform',`translate(${x(0)},0)`).call(d3.axisLeft(y).ticks(6))
-      .selectAll('text').attr('fill','#95a4c4');
-    const lineGen=d3.line().x(d=>x(d.xv)).y(d=>y(d.yv));
-    const curves=[
-      {fn:v=>2*v-1,    col:'#67e8f9',label:'Linear: 2x−1'},
-      {fn:v=>v*v-3,    col:'#ffc857',label:'Quadratic: x²−3'},
-      {fn:v=>0.3*v*v*v,col:'#ff89c6',label:'Cubic: 0.3x³'},
-    ];
-    curves.forEach((c,i)=>{
-      const data=d3.range(-4,4.1,.1).map(v=>({xv:v,yv:c.fn(v)}));
-      const path=svg.append('path').datum(data).attr('fill','none')
-        .attr('stroke',c.col).attr('stroke-width',2.8).attr('d',lineGen);
-      animatePath(path);
-      svg.append('text').attr('x',w-180).attr('y',80+i*22)
-        .attr('fill',c.col).attr('font-size','12px').attr('font-weight',600).text(c.label);
-    });
-  }
+function title(svg, w, t) {
+  svg.append('text')
+    .attr('x', w/2).attr('y', 58)
+    .attr('text-anchor', 'middle')
+    .attr('fill', '#eef4ff')
+    .attr('font-size', 18)
+    .attr('font-weight', 800)
+    .text(t);
+}
+function note(svg, w, h, t) {
+  svg.append('text')
+    .attr('x', w/2).attr('y', h-28)
+    .attr('text-anchor', 'middle')
+    .attr('fill', '#95a4c4')
+    .attr('font-size', 14)
+    .text(t);
+}
+function line(svg, x1,y1,x2,y2, stroke='#67e8f9', width=4, dash=null){
+  const l = svg.append('line').attr('x1',x1).attr('y1',y1).attr('x2',x2).attr('y2',y2)
+    .attr('stroke',stroke).attr('stroke-width',width).attr('stroke-linecap','round');
+  if (dash) l.attr('stroke-dasharray', dash);
+  return l;
+}
+function circle(svg, cx,cy,r, fill, stroke='none', sw=0){
+  return svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',r).attr('fill',fill).attr('stroke',stroke).attr('stroke-width',sw);
+}
+function label(svg, x,y,t, fill='#eef4ff', size=16, weight=700){
+  return svg.append('text').attr('x',x).attr('y',y).attr('fill',fill).attr('font-size',size).attr('font-weight',weight).text(t);
 }
 
-/* ── Ch 3: Coordinate Geometry ── */
-function drawCoordinateGeometry(svg, w, h, scene = 'overview') {
-  const xScale=d3.scaleLinear().domain([-7,7]).range([50,w-50]);
-  const yScale=d3.scaleLinear().domain([-5,5]).range([h-50,50]);
-  const axisX=()=>svg.append('g').attr('transform',`translate(0,${yScale(0)})`).call(d3.axisBottom(xScale)).selectAll('text').attr('fill','#95a4c4');
-  const axisY=()=>svg.append('g').attr('transform',`translate(${xScale(0)},0)`).call(d3.axisLeft(yScale)).selectAll('text').attr('fill','#95a4c4');
+function drawNumberSystems(svg, w, h, mode='overview') {
+  title(svg, w, mode === 'decimal-expansion'
+    ? 'Number Systems · Decimal Expansions'
+    : mode === 'numberline'
+      ? 'Number Systems · Number Line'
+      : mode === 'rational-vs-irrational'
+        ? 'Number Systems · Rational vs Irrational'
+        : 'Number Systems · Sets of Numbers');
 
-  if (scene === 'distance') {
-    svgTitle(svg, w, 'Distance Formula · d = √[(x₂−x₁)² + (y₂−y₁)²]');
-    axisX(); axisY();
-    const A={x:-3,y:-2}, B={x:4,y:3};
-    svg.append('line').attr('x1',xScale(A.x)).attr('y1',yScale(A.y)).attr('x2',xScale(B.x)).attr('y2',yScale(B.y))
-      .attr('stroke','#67e8f9').attr('stroke-width',3).attr('stroke-dasharray','8 4');
-    svg.append('line').attr('x1',xScale(A.x)).attr('y1',yScale(A.y)).attr('x2',xScale(B.x)).attr('y2',yScale(A.y))
-      .attr('stroke','#ffc857').attr('stroke-width',2).attr('stroke-dasharray','5 3');
-    svg.append('line').attr('x1',xScale(B.x)).attr('y1',yScale(A.y)).attr('x2',xScale(B.x)).attr('y2',yScale(B.y))
-      .attr('stroke','#79f2b3').attr('stroke-width',2).attr('stroke-dasharray','5 3');
-    [[A,'A','#ff89c6'],[B,'B','#ffc857']].forEach(([p,l,c])=>{
-      svg.append('circle').attr('cx',xScale(p.x)).attr('cy',yScale(p.y)).attr('r',8).attr('fill',c);
-      svg.append('text').attr('x',xScale(p.x)+12).attr('y',yScale(p.y)-10).attr('fill',c).attr('font-size','14px').attr('font-weight',700).text(`${l}(${p.x},${p.y})`);
-    });
-    const d=Math.sqrt((B.x-A.x)**2+(B.y-A.y)**2);
-    svg.append('text').attr('x',w/2).attr('y',h-35).attr('text-anchor','middle')
-      .attr('fill','#67e8f9').attr('font-size','15px').attr('font-weight',700)
-      .text(`d = √(7²+5²) = √74 ≈ ${d.toFixed(2)}`);
+  if (mode === 'decimal-expansion') {
+    const x = 120, y = 170;
+    label(svg, x, y, '1/2 = 0.5', '#67e8f9', 24, 800);
+    label(svg, x, y+60, '1/3 = 0.3333...', '#ffc857', 24, 800);
+    label(svg, x, y+120, '√2 = 1.4142135...', '#ff89c6', 24, 800);
+    note(svg, w, h, 'Terminating, recurring, and non-terminating non-recurring expansions');
+    return;
   }
-  else if (scene === 'midpoint') {
-    svgTitle(svg, w, 'Midpoint Formula · M = ((x₁+x₂)/2, (y₁+y₂)/2)');
-    axisX(); axisY();
-    const A={x:-4,y:-3}, B={x:4,y:3}, M={x:0,y:0};
-    svg.append('line').attr('x1',xScale(A.x)).attr('y1',yScale(A.y)).attr('x2',xScale(B.x)).attr('y2',yScale(B.y))
-      .attr('stroke','#67e8f9').attr('stroke-width',3);
-    [[A,'A','#ff89c6'],[B,'B','#ffc857'],[M,'M (midpoint)','#79f2b3']].forEach(([p,l,c])=>{
-      svg.append('circle').attr('cx',xScale(p.x)).attr('cy',yScale(p.y)).attr('r',p===M?10:7).attr('fill',c);
-      svg.append('text').attr('x',xScale(p.x)+14).attr('y',yScale(p.y)-10).attr('fill',c).attr('font-size','13px').attr('font-weight',700).text(l);
-    });
-  }
-  else if (scene === 'quadrants') {
-    svgTitle(svg, w, 'Coordinate Geometry · Four Quadrants');
-    axisX(); axisY();
-    [['I',[3.5,2.5]],['II',[-3.5,2.5]],['III',[-3.5,-2.5]],['IV',[3.5,-2.5]]].forEach(([l,[px,py]])=>{
-      svg.append('text').attr('x',xScale(px)).attr('y',yScale(py)).attr('text-anchor','middle')
-        .attr('fill','rgba(255,255,255,.15)').attr('font-size','30px').attr('font-weight',800).text(l);
-    });
-    const pt={x:3,y:4}; // but scaled to fit
-    const spt={x:3,y:2};
-    svg.append('line').attr('x1',xScale(spt.x)).attr('x2',xScale(spt.x)).attr('y1',yScale(0)).attr('y2',yScale(spt.y))
-      .attr('stroke','#79f2b3').attr('stroke-dasharray','5 4').attr('stroke-width',1.5);
-    svg.append('line').attr('x1',xScale(0)).attr('x2',xScale(spt.x)).attr('y1',yScale(spt.y)).attr('y2',yScale(spt.y))
-      .attr('stroke','#79f2b3').attr('stroke-dasharray','5 4').attr('stroke-width',1.5);
-    svg.append('circle').attr('cx',xScale(spt.x)).attr('cy',yScale(spt.y)).attr('r',10).attr('fill','#ff89c6');
-    svg.append('text').attr('x',xScale(spt.x)+14).attr('y',yScale(spt.y)-12)
-      .attr('fill','#eef4ff').attr('font-size','16px').attr('font-weight',700).text('(3, 2)');
-  }
-  else {
-    svgTitle(svg, w, 'Coordinate Geometry · Cartesian Plane');
-    axisX(); axisY();
-    const points=[{x:3,y:2,c:'#ff89c6',l:'(3,2)'},{x:-3,y:1,c:'#79f2b3',l:'(−3,1)'},{x:2,y:-3,c:'#ffc857',l:'(2,−3)'}];
-    points.forEach(p=>{
-      svg.append('circle').attr('cx',xScale(p.x)).attr('cy',yScale(p.y)).attr('r',0).attr('fill',p.c)
-        .transition().delay(300).duration(400).attr('r',9);
-      svg.append('text').attr('x',xScale(p.x)+13).attr('y',yScale(p.y)-10)
-        .attr('fill',p.c).attr('font-size','13px').attr('font-weight',700).attr('opacity',0)
-        .text(p.l).transition().delay(600).duration(300).attr('opacity',1);
-    });
-  }
-}
 
-/* ── Ch 4: Linear Equations ── */
-function drawLinearEquations(svg, w, h, scene = 'graph') {
-  const xScale=d3.scaleLinear().domain([-8,8]).range([60,w-50]);
-  const yScale=d3.scaleLinear().domain([-7,7]).range([h-50,50]);
-  svg.append('g').attr('transform',`translate(0,${yScale(0)})`).call(d3.axisBottom(xScale).ticks(8)).selectAll('text').attr('fill','#95a4c4');
-  svg.append('g').attr('transform',`translate(${xScale(0)},0)`).call(d3.axisLeft(yScale).ticks(8)).selectAll('text').attr('fill','#95a4c4');
-  const lineGen=d3.line().x(d=>xScale(d.xv)).y(d=>yScale(d.yv));
+  if (mode === 'numberline') {
+    const y = h/2 + 20;
+    line(svg, 120, y, w-120, y, '#eef4ff', 3);
+    for (let i=0;i<=10;i++) {
+      const x = 140 + i*((w-280)/10);
+      line(svg, x, y-10, x, y+10, '#95a4c4', 2);
+      label(svg, x-6, y+34, String(i-5), '#95a4c4', 14, 700);
+    }
+    circle(svg, w/2 + 70, y, 7, '#67e8f9');
+    label(svg, w/2 + 82, y-12, '√2 ≈ 1.41', '#67e8f9', 16, 700);
+    note(svg, w, h, 'Real numbers can be represented on the number line');
+    return;
+  }
 
-  if (scene === 'solution') {
-    svgTitle(svg, w, 'Linear Equations · Finding the Solution Point');
-    const lines=[{m:1,b:1,col:'#67e8f9',lbl:'y = x + 1'},{m:-1,b:3,col:'#ffc857',lbl:'y = −x + 3'}];
-    lines.forEach(({m,b,col,lbl})=>{
-      const data=d3.range(-8,8.1,.2).map(v=>({xv:v,yv:m*v+b}));
-      const path=svg.append('path').datum(data).attr('fill','none').attr('stroke',col).attr('stroke-width',3.5).attr('d',lineGen);
-      animatePath(path);
-    });
-    // intersection at x=1, y=2
-    svg.append('circle').attr('cx',xScale(1)).attr('cy',yScale(2)).attr('r',0).attr('fill','#79f2b3')
-      .transition().delay(1000).duration(400).attr('r',12);
-    svg.append('text').attr('x',xScale(1)+16).attr('y',yScale(2)-14).attr('fill','#79f2b3')
-      .attr('font-size','14px').attr('font-weight',700).attr('opacity',0)
-      .text('Solution (1, 2)').transition().delay(1200).duration(400).attr('opacity',1);
-  } else if (scene === 'slope') {
-    svgTitle(svg, w, 'Slope & Intercept · y = mx + c');
-    const data=d3.range(-8,8.1,.2).map(v=>({xv:v,yv:1.5*v+2}));
-    const path=svg.append('path').datum(data).attr('fill','none').attr('stroke','#67e8f9').attr('stroke-width',3.5).attr('d',lineGen);
-    animatePath(path);
-    svg.append('circle').attr('cx',xScale(0)).attr('cy',yScale(2)).attr('r',10).attr('fill','#ffc857');
-    svg.append('text').attr('x',xScale(0)+14).attr('y',yScale(2)-12).attr('fill','#ffc857').attr('font-size','13px').attr('font-weight',700).text('y-intercept (c=2)');
-    // slope triangle
-    svg.append('line').attr('x1',xScale(2)).attr('y1',yScale(1.5*2+2)).attr('x2',xScale(4)).attr('y2',yScale(1.5*2+2))
-      .attr('stroke','#79f2b3').attr('stroke-width',2).attr('stroke-dasharray','5 3');
-    svg.append('line').attr('x1',xScale(4)).attr('y1',yScale(1.5*2+2)).attr('x2',xScale(4)).attr('y2',yScale(1.5*4+2))
-      .attr('stroke','#ff89c6').attr('stroke-width',2).attr('stroke-dasharray','5 3');
-    svg.append('text').attr('x',xScale(3)).attr('y',yScale(1.5*3)+20).attr('text-anchor','middle')
-      .attr('fill','#79f2b3').attr('font-size','12px').attr('font-weight',700).text('run=2');
-    svg.append('text').attr('x',xScale(4)+30).attr('y',yScale(1.5*3.5)).attr('text-anchor','start')
-      .attr('fill','#ff89c6').attr('font-size','12px').attr('font-weight',700).text('rise=3');
-    svg.append('text').attr('x',w/2).attr('y',h-30).attr('text-anchor','middle')
-      .attr('fill','#95a4c4').attr('font-size','13px').text('slope m = rise/run = 3/2 = 1.5');
-  } else {
-    svgTitle(svg, w, 'Linear Equations in Two Variables · Graph');
-    const lines=[{m:0.8,b:1,col:'#67e8f9',lbl:'y = 0.8x + 1'},{m:-1.2,b:2,col:'#ffc857',lbl:'y = −1.2x + 2'}];
-    lines.forEach(({m,b,col,lbl},i)=>{
-      const data=d3.range(-8,8.1,.2).map(v=>({xv:v,yv:m*v+b}));
-      const path=svg.append('path').datum(data).attr('fill','none').attr('stroke',col).attr('stroke-width',3).attr('d',lineGen);
-      animatePath(path);
-      svg.append('text').attr('x',w-180).attr('y',75+i*22).attr('fill',col).attr('font-size','12px').attr('font-weight',600).text(lbl);
-    });
-  }
-}
-
-/* ── Ch 5: Euclid's Geometry ── */
-function drawEuclid(svg, w, h, scene = 'overview') {
-  if (scene === 'primitives') {
-    svgTitle(svg, w, "Euclid's Geometry · Point, Line, Plane");
-    svg.append('rect').attr('x',70).attr('y',65).attr('width',w-140).attr('height',h-130)
-      .attr('rx',24).attr('fill','rgba(103,232,249,.03)').attr('stroke','rgba(103,232,249,.12)');
-    svg.append('circle').attr('cx',180).attr('cy',190).attr('r',9).attr('fill','#79f2b3');
-    svg.append('text').attr('x',196).attr('y',195).attr('fill','#79f2b3').attr('font-size','15px').attr('font-weight',800).text('Point A');
-    svg.append('line').attr('x1',210).attr('y1',320).attr('x2',590).attr('y2',220).attr('stroke','#67e8f9').attr('stroke-width',4);
-    svg.append('text').attr('x',600).attr('y',218).attr('fill','#67e8f9').attr('font-size','14px').attr('font-weight',700).text('Line l');
-    svg.append('polygon').attr('points',`${w-330},150 ${w-150},120 ${w-110},260 ${w-290},290`)
-      .attr('fill','rgba(255,200,87,.08)').attr('stroke','#ffc857').attr('stroke-width',2.2);
-    svg.append('text').attr('x',w-230).attr('y',210).attr('fill','#ffc857').attr('font-size','15px').attr('font-weight',800).text('Plane P');
-  } else if (scene === 'axioms') {
-    svgTitle(svg, w, "Euclid's Geometry · Axioms / Common Notions");
-    const cards=[
-      'Things equal to the same thing are equal to one another.',
-      'If equals are added to equals, the wholes are equal.',
-      'The whole is greater than the part.'
-    ];
-    cards.forEach((t,i)=>{
-      const x=120,y=140+i*120;
-      svg.append('rect').attr('x',x).attr('y',y).attr('width',w-240).attr('height',84).attr('rx',18)
-        .attr('fill','rgba(157,140,255,.06)').attr('stroke','rgba(157,140,255,.25)');
-      svg.append('text').attr('x',x+24).attr('y',y+34).attr('fill','#dfe7f3').attr('font-size','14px').attr('font-weight',700).text(`Axiom ${i+1}`);
-      svg.append('text').attr('x',x+24).attr('y',y+58).attr('fill','#95a4c4').attr('font-size','13px').text(t);
-    });
-  } else if (scene === 'postulates') {
-    svgTitle(svg, w, "Euclid's Geometry · Postulates");
-    const A={x:w/2-170,y:h/2+30}, B={x:w/2+130,y:h/2-20};
-    svg.append('line').attr('x1',A.x).attr('y1',A.y).attr('x2',B.x).attr('y2',B.y).attr('stroke','#67e8f9').attr('stroke-width',4);
-    [[A,'A','#79f2b3'],[B,'B','#ffc857']].forEach(([p,l,c])=>{
-      svg.append('circle').attr('cx',p.x).attr('cy',p.y).attr('r',10).attr('fill',c);
-      svg.append('text').attr('x',p.x+12).attr('y',p.y-14).attr('fill',c).attr('font-size','15px').attr('font-weight',800).text(l);
-    });
-    svg.append('text').attr('x',w/2).attr('y',h-120).attr('text-anchor','middle').attr('fill','#67e8f9').attr('font-size','15px').attr('font-weight',800).text('Postulate 1: A straight line may be drawn from any point to any point.');
-    svg.append('text').attr('x',w/2).attr('y',h-92).attr('text-anchor','middle').attr('fill','#95a4c4').attr('font-size','13px').text('Postulate 2: A line segment can be extended indefinitely.');
-    svg.append('text').attr('x',w/2).attr('y',h-64).attr('text-anchor','middle').attr('fill','#95a4c4').attr('font-size','13px').text('Postulate 3: A circle can be drawn with any centre and radius.');
-  } else {
-    svgTitle(svg, w, "Euclid's Geometry · Overview");
-    svg.append('rect').attr('x',90).attr('y',90).attr('width',w-180).attr('height',h-180).attr('rx',24)
-      .attr('fill','rgba(103,232,249,.03)').attr('stroke','rgba(103,232,249,.12)');
-    [['Point',170,180,'#79f2b3'],['Line',w/2,180,'#67e8f9'],['Plane',w-220,180,'#ffc857']].forEach(([label,x,y,c])=>{
-      svg.append('circle').attr('cx',x).attr('cy',y).attr('r',8).attr('fill',c);
-      svg.append('text').attr('x',x+16).attr('y',y+5).attr('fill',c).attr('font-size','15px').attr('font-weight',800).text(label);
-    });
-    svg.append('text').attr('x',w/2).attr('y',h-88).attr('text-anchor','middle').attr('fill','#95a4c4').attr('font-size','14px').text('Euclid builds geometry from definitions, axioms, and postulates.');
-  }
-}
-
-/* ── Ch 6: Lines & Angles ── */
-function drawLinesAngles(svg, w, h, scene = 'overview') {
-  if (scene === 'transversal') {
-    svgTitle(svg, w, 'Lines & Angles · Parallel Lines and Transversal');
-    const y1=h*0.34, y2=h*0.67, cx=w/2;
-    svg.append('line').attr('x1',80).attr('x2',w-80).attr('y1',y1).attr('y2',y1).attr('stroke','#dfe7f3').attr('stroke-width',4);
-    svg.append('line').attr('x1',80).attr('x2',w-80).attr('y1',y2).attr('y2',y2).attr('stroke','#dfe7f3').attr('stroke-width',4);
-    // parallel markers
-    [[cx-80,y1],[cx-80,y2]].forEach(([x,y])=>{
-      svg.append('text').attr('x',x).attr('y',y-8).attr('text-anchor','middle')
-        .attr('fill','#95a4c4').attr('font-size','13px').text('//');
-    });
-    svg.append('line').attr('x1',cx-200).attr('y1',y1-160).attr('x2',cx+200).attr('y2',y2+100).attr('stroke','#67e8f9').attr('stroke-width',4);
-    const arcFn=d3.arc();
-    svg.append('path').attr('d',arcFn({innerRadius:0,outerRadius:52,startAngle:0.22,endAngle:0.95}))
-      .attr('transform',`translate(${cx},${y1})`).attr('fill','rgba(255,200,87,.22)');
-    svg.append('path').attr('d',arcFn({innerRadius:0,outerRadius:52,startAngle:0.22,endAngle:0.95}))
-      .attr('transform',`translate(${cx},${y2})`).attr('fill','rgba(103,232,249,.22)');
-    svg.append('text').attr('x',cx+60).attr('y',y1-10).attr('fill','#ffc857').attr('font-size','12px').attr('font-weight',700).text('Corresponding angles equal');
-    svg.append('text').attr('x',cx+60).attr('y',y2+30).attr('fill','#67e8f9').attr('font-size','12px').attr('font-weight',700).text('Alternate angles equal');
-  }
-  else if (scene === 'angle_pairs') {
-    svgTitle(svg, w, 'Lines & Angles · Angle Pairs');
-    const cx=w/2, cy=h/2;
-    svg.append('line').attr('x1',80).attr('x2',w-80).attr('y1',cy).attr('y2',cy).attr('stroke','#dfe7f3').attr('stroke-width',4);
-    svg.append('line').attr('x1',cx).attr('y1',80).attr('x2',cx).attr('y2',h-80).attr('stroke','#dfe7f3').attr('stroke-width',4);
-    const arcFn=d3.arc();
-    const arcs=[
-      {start:0,end:Math.PI/2,col:'#ffc857',label:'90°',lx:cx+50,ly:cy-40},
-      {start:Math.PI/2,end:Math.PI,col:'#67e8f9',label:'90°',lx:cx-60,ly:cy-40},
-    ];
-    arcs.forEach(a=>{
-      svg.append('path').attr('d',arcFn({innerRadius:0,outerRadius:60,startAngle:a.start,endAngle:a.end}))
-        .attr('transform',`translate(${cx},${cy})`).attr('fill',a.col.replace(')',', 0.2)').replace('rgb','rgba'));
-      svg.append('text').attr('x',a.lx).attr('y',a.ly).attr('text-anchor','middle')
-        .attr('fill',a.col).attr('font-size','14px').attr('font-weight',700).text(a.label);
-    });
-    svg.append('text').attr('x',w/2).attr('y',h-35).attr('text-anchor','middle')
-      .attr('fill','#95a4c4').attr('font-size','13px').text('Vertically opposite angles are equal');
-  }
-  else {
-    svgTitle(svg, w, 'Lines & Angles · Types of Angles');
-    const types=[{a:45,label:'Acute < 90°',col:'#79f2b3'},{a:90,label:'Right = 90°',col:'#67e8f9'},{a:135,label:'Obtuse > 90°',col:'#ffc857'},{a:180,label:'Straight = 180°',col:'#ff89c6'}];
-    const spacing=w/(types.length+1);
-    types.forEach(({a,label,col},i)=>{
-      const cx=spacing*(i+1), cy=h/2+20, r=70;
-      const rad=(180-a)*Math.PI/180;
-      svg.append('line').attr('x1',cx).attr('y1',cy).attr('x2',cx+r).attr('y2',cy).attr('stroke',col).attr('stroke-width',3);
-      svg.append('line').attr('x1',cx).attr('y1',cy).attr('x2',cx+r*Math.cos(rad)).attr('y2',cy-r*Math.sin(rad)).attr('stroke',col).attr('stroke-width',3);
-      svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',5).attr('fill',col);
-      svg.append('text').attr('x',cx).attr('y',cy+40).attr('text-anchor','middle').attr('fill',col).attr('font-size','12px').attr('font-weight',700).text(label);
-    });
-  }
-}
-
-/* ── Ch 7: Triangles ── */
-function drawTriangles(svg, w, h, scene = 'overview') {
-  if (scene === 'pythagoras') {
-    svgTitle(svg, w, 'Pythagoras Theorem · a² + b² = c²');
-    const ox=180, oy=h-100, base=280, ht=260;
-    // right-angle triangle
-    const pts=[[ox,oy],[ox+base,oy],[ox,oy-ht]];
-    const pathD=d3.line().curve(d3.curveLinearClosed);
-    svg.append('path').attr('d',pathD(pts)).attr('fill','rgba(103,232,249,.10)').attr('stroke','#67e8f9').attr('stroke-width',3.5);
-    // right angle box
-    svg.append('rect').attr('x',ox).attr('y',oy-28).attr('width',28).attr('height',28)
-      .attr('fill','none').attr('stroke','#79f2b3').attr('stroke-width',2);
-    // labels
-    const labels=[['a',ox-28,(oy-ht/2),'#ffc857'],['b',(ox+base/2),oy+22,'#ff89c6'],['c',(ox+base/2+30),(oy-ht/2),'#67e8f9']];
-    labels.forEach(([l,x,y,c])=>svg.append('text').attr('x',x).attr('y',y).attr('text-anchor','middle').attr('fill',c).attr('font-size','20px').attr('font-weight',800).text(l));
-    // formula box
-    const fbox={x:w-280,y:120};
-    svg.append('rect').attr('x',fbox.x).attr('y',fbox.y).attr('width',220).attr('height',130)
-      .attr('rx',16).attr('fill','rgba(255,255,255,.04)').attr('stroke','rgba(255,255,255,.1)');
-    [['a² + b² = c²',fbox.x+110,fbox.y+42,'#eef4ff',18],
-     ['e.g. 3² + 4² = 5²',fbox.x+110,fbox.y+72,'#95a4c4',13],
-     ['  9  + 16  = 25  ✓',fbox.x+110,fbox.y+96,'#79f2b3',13],
-     ['(3,4,5) Pythagorean triple',fbox.x+110,fbox.y+120,'#ffc857',12]
-    ].forEach(([t,x,y,c,fs])=>svg.append('text').attr('x',x).attr('y',y).attr('text-anchor','middle').attr('fill',c).attr('font-size',`${fs}px`).attr('font-weight',fs===18?800:500).text(t));
-  }
-  else if (scene === 'congruence') {
-    svgTitle(svg, w, 'Triangle Congruence · SSS, SAS, ASA, RHS');
-    const criteria=[
-      {rule:'SSS',desc:'All 3 sides equal',col:'#67e8f9'},
-      {rule:'SAS',desc:'2 sides + included angle',col:'#ffc857'},
-      {rule:'ASA',desc:'2 angles + included side',col:'#79f2b3'},
-      {rule:'RHS',desc:'Right, Hypotenuse, Side',col:'#ff89c6'},
-    ];
-    const spacing=w/(criteria.length+1);
-    criteria.forEach(({rule,desc,col},i)=>{
-      const cx=spacing*(i+1), cy=h/2;
-      svg.append('rect').attr('x',cx-60).attr('y',cy-70).attr('width',120).attr('height',120)
-        .attr('rx',16).attr('fill',col.replace('#','rgba(').replace(/$/,', 0.08)')).attr('stroke',col).attr('stroke-width',1.5);
-      // mini triangle
-      const tp=[[cx,cy-55],[cx-40,cy+30],[cx+40,cy+30]];
-      svg.append('path').attr('d',d3.line().curve(d3.curveLinearClosed)(tp))
-        .attr('fill',col.replace('#','rgba(').replace(/$/,', 0.15)')).attr('stroke',col).attr('stroke-width',2);
-      svg.append('text').attr('x',cx).attr('y',cy+62).attr('text-anchor','middle').attr('fill',col).attr('font-size','15px').attr('font-weight',800).text(rule);
-      svg.append('text').attr('x',cx).attr('y',cy+82).attr('text-anchor','middle').attr('fill','#95a4c4').attr('font-size','11px').text(desc);
-    });
-  }
-  else if (scene === 'centres') {
-    svgTitle(svg, w, 'Triangles · Medians and Centroid');
-    const pts=[[w/2,80],[w/2-180,h-90],[w/2+180,h-90]];
-    const pathD=d3.line().curve(d3.curveLinearClosed);
-    svg.append('path').attr('d',pathD(pts)).attr('fill','rgba(121,242,179,.08)').attr('stroke','#79f2b3').attr('stroke-width',3);
-    // midpoints and medians
-    const mids=[[0,1],[1,2],[0,2]].map(([a,b])=>[(pts[a][0]+pts[b][0])/2,(pts[a][1]+pts[b][1])/2]);
-    [0,1,2].forEach(i=>{
-      svg.append('line').attr('x1',pts[i][0]).attr('y1',pts[i][1])
-        .attr('x2',mids[(i+1)%3][0]).attr('y2',mids[(i+1)%3][1])
-        .attr('stroke','rgba(255,200,87,.6)').attr('stroke-width',2).attr('stroke-dasharray','6 4');
-    });
-    const G=[(pts[0][0]+pts[1][0]+pts[2][0])/3,(pts[0][1]+pts[1][1]+pts[2][1])/3];
-    svg.append('circle').attr('cx',G[0]).attr('cy',G[1]).attr('r',10).attr('fill','#ffc857');
-    svg.append('text').attr('x',G[0]+16).attr('y',G[1]-10).attr('fill','#ffc857').attr('font-size','14px').attr('font-weight',700).text('G (Centroid)');
-  }
-  else {
-    svgTitle(svg, w, 'Triangles · Properties and Relationships');
-    const pts=[[w/2,90],[w/2-170,h-90],[w/2+170,h-90]];
-    const pathD=d3.line().curve(d3.curveLinearClosed);
-    svg.append('path').attr('d',pathD(pts)).attr('fill','rgba(121,242,179,.10)').attr('stroke','#79f2b3').attr('stroke-width',3.5);
-    pts.forEach((p,i)=>svg.append('circle').attr('cx',p[0]).attr('cy',p[1]).attr('r',9).attr('fill',i===0?'#ffc857':'#67e8f9'));
-    [['A',pts[0][0]-20,pts[0][1]-16],['B',pts[1][0]-24,pts[1][1]+10],['C',pts[2][0]+10,pts[2][1]+10]].forEach(([l,x,y])=>
-      svg.append('text').attr('x',x).attr('y',y).attr('fill','#fff').attr('font-size','16px').attr('font-weight',700).text(l)
-    );
-    svg.append('text').attr('x',w/2).attr('y',h-30).attr('text-anchor','middle')
-      .attr('fill','#95a4c4').attr('font-size','13px').text('Sum of all angles = 180°');
-  }
-}
-
-/* ── Ch 8: Quadrilaterals ── */
-function drawQuadrilaterals(svg, w, h, scene = 'overview') {
-  svgTitle(svg, w, scene==='rhombus'?'Rhombus · Diagonals bisect at right angles':'Quadrilaterals · Parallelogram Properties');
-  const pts=scene==='rhombus'
-    ?[[w/2,90],[w/2+160,h/2],[w/2,h-90],[w/2-160,h/2]]
-    :[[w/2-170,h/2-80],[w/2+90,h/2-80],[w/2+170,h/2+80],[w/2-90,h/2+80]];
-  const pathD=d3.line().curve(d3.curveLinearClosed);
-  svg.append('path').attr('d',pathD(pts)).attr('fill','rgba(103,232,249,.10)').attr('stroke','#67e8f9').attr('stroke-width',3.5);
-  // diagonals
-  svg.append('line').attr('x1',pts[0][0]).attr('y1',pts[0][1]).attr('x2',pts[2][0]).attr('y2',pts[2][1])
-    .attr('stroke','rgba(255,200,87,.6)').attr('stroke-width',2).attr('stroke-dasharray','7 5');
-  svg.append('line').attr('x1',pts[1][0]).attr('y1',pts[1][1]).attr('x2',pts[3][0]).attr('y2',pts[3][1])
-    .attr('stroke','rgba(255,137,198,.6)').attr('stroke-width',2).attr('stroke-dasharray','7 5');
-  svg.append('text').attr('x',w/2).attr('y',h-30).attr('text-anchor','middle')
-    .attr('fill','#95a4c4').attr('font-size','13px')
-    .text(scene==='rhombus'?'Diagonals bisect each other at 90°':'Opposite sides parallel and equal');
-}
-
-/* ── Ch 9: Areas ── */
-function drawAreas(svg, w, h, scene = 'parallelogram') {
-  if (scene === 'triangle') {
-    svgTitle(svg, w, 'Areas · Triangle = 1/2 × base × height');
-    const tri=[[220,h-120],[560,h-120],[360,130]];
-    const pathD=d3.line().curve(d3.curveLinearClosed);
-    svg.append('path').attr('d',pathD(tri)).attr('fill','rgba(255,200,87,.14)').attr('stroke','#ffc857').attr('stroke-width',3.5);
-    svg.append('line').attr('x1',360).attr('y1',130).attr('x2',360).attr('y2',h-120)
-      .attr('stroke','#ff89c6').attr('stroke-dasharray','7 5').attr('stroke-width',2.5);
-    svg.append('text').attr('x',370).attr('y',h/2).attr('fill','#ff89c6').attr('font-size','14px').attr('font-weight',700).text('h');
-    svg.append('text').attr('x',390).attr('y',h-98).attr('fill','#95a4c4').attr('font-size','14px').text('base');
-  } else if (scene === 'same_base') {
-    svgTitle(svg, w, 'Areas · Same Base and Same Parallels');
-    const para=[[190,h-125],[520,h-125],[610,145],[280,145]];
-    const tri=[[190,h-125],[520,h-125],[390,145]];
-    const pathD=d3.line().curve(d3.curveLinearClosed);
-    svg.append('path').attr('d',pathD(para)).attr('fill','rgba(121,242,179,.10)').attr('stroke','#79f2b3').attr('stroke-width',3.2);
-    svg.append('path').attr('d',pathD(tri)).attr('fill','rgba(255,200,87,.16)').attr('stroke','#ffc857').attr('stroke-width',3.2);
-    svg.append('line').attr('x1',160).attr('y1',145).attr('x2',650).attr('y2',145).attr('stroke','rgba(255,255,255,.18)').attr('stroke-dasharray','7 5');
-    svg.append('text').attr('x',w/2).attr('y',80).attr('text-anchor','middle').attr('fill','#95a4c4').attr('font-size','14px').text('Triangle area = 1/2 × parallelogram area (same base & same parallels)');
-  } else {
-    svgTitle(svg, w, 'Areas · Parallelogram = base × height');
-    const para=[[160,h-130],[440,h-130],[550,110],[270,110]];
-    const tri= [[160,h-130],[440,h-130],[300,110]];
-    const pathD=d3.line().curve(d3.curveLinearClosed);
-    svg.append('path').attr('d',pathD(para)).attr('fill','rgba(121,242,179,.10)').attr('stroke','#79f2b3').attr('stroke-width',3.5);
-    svg.append('path').attr('d',pathD(tri)).attr('fill','rgba(255,200,87,.14)').attr('stroke','#ffc857').attr('stroke-width',3);
-    svg.append('line').attr('x1',300).attr('y1',110).attr('x2',300).attr('y2',h-130)
-      .attr('stroke','#ff89c6').attr('stroke-dasharray','7 5').attr('stroke-width',2.5);
-    svg.append('text').attr('x',310).attr('y',h/2+10).attr('fill','#ff89c6').attr('font-size','13px').attr('font-weight',700).text('h');
-    svg.append('text').attr('x',w/2-35).attr('y',h-100).attr('fill','#95a4c4').attr('font-size','13px').text('base');
-  }
-}
-
-/* ── Ch 10: Circles ── */
-function drawCircles(svg, w, h, scene = 'overview') {
-  const cx=w/2, cy=h/2+10, r=160;
-  svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',0)
-    .attr('fill','rgba(103,232,249,.05)').attr('stroke','#67e8f9').attr('stroke-width',3.5)
-    .transition().duration(700).attr('r',r);
-  svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',5).attr('fill','#fff');
-
-  if (scene === 'chord') {
-    svgTitle(svg, w, 'Circles · Chord and Arc');
-    const a1=-0.8, a2=1.2;
-    const p1={x:cx+r*Math.cos(a1),y:cy+r*Math.sin(a1)};
-    const p2={x:cx+r*Math.cos(a2),y:cy+r*Math.sin(a2)};
-    svg.append('line').attr('x1',p1.x).attr('y1',p1.y).attr('x2',p2.x).attr('y2',p2.y)
-      .attr('stroke','#ffc857').attr('stroke-width',3);
-    svg.append('text').attr('x',(p1.x+p2.x)/2+15).attr('y',(p1.y+p2.y)/2)
-      .attr('fill','#ffc857').attr('font-size','13px').attr('font-weight',700).text('Chord');
-    const arcPath=d3.arc()({innerRadius:r-2,outerRadius:r+2,startAngle:a1+Math.PI/2,endAngle:a2+Math.PI/2});
-    svg.append('path').attr('d',arcPath).attr('transform',`translate(${cx},${cy})`).attr('fill','#ff89c6');
-    svg.append('text').attr('x',cx+r+20).attr('y',cy-20).attr('fill','#ff89c6').attr('font-size','13px').attr('font-weight',700).text('Arc');
-  }
-  else if (scene === 'tangent') {
-    svgTitle(svg, w, 'Circles · Tangent is perpendicular to radius');
-    const tx=cx+r, ty=cy;
-    svg.append('line').attr('x1',cx).attr('y1',cy).attr('x2',tx).attr('y2',ty)
-      .attr('stroke','#ffc857').attr('stroke-width',2.5);
-    svg.append('line').attr('x1',tx).attr('y1',ty-100).attr('x2',tx).attr('y2',ty+100)
-      .attr('stroke','#79f2b3').attr('stroke-width',3.5);
-    svg.append('rect').attr('x',tx-20).attr('y',ty-20).attr('width',20).attr('height',20)
-      .attr('fill','none').attr('stroke','#79f2b3').attr('stroke-width',2);
-    svg.append('text').attr('x',tx+20).attr('y',ty-60).attr('fill','#79f2b3').attr('font-size','13px').attr('font-weight',700).text('Tangent');
-    svg.append('text').attr('x',cx+50).attr('y',cy-15).attr('fill','#ffc857').attr('font-size','13px').text('Radius ⊥ Tangent at point of contact');
-  }
-  else if (scene === 'angles') {
-    svgTitle(svg, w, 'Circles · Angle at Centre = 2 × Inscribed Angle');
-    const t=Math.PI*0.6;
-    const p1={x:cx+r,y:cy}, p2={x:cx+r*Math.cos(t),y:cy-r*Math.sin(t)};
-    const p3={x:cx+r*Math.cos(t/2+0.4),y:cy+r*Math.sin(t/2+0.4)};
-    [[cx,cy,p1.x,p1.y],[cx,cy,p2.x,p2.y]].forEach(a=>
-      svg.append('line').attr('x1',a[0]).attr('y1',a[1]).attr('x2',a[2]).attr('y2',a[3]).attr('stroke','#ffc857').attr('stroke-width',2.5)
-    );
-    [[p1.x,p1.y,p2.x,p2.y],[p1.x,p1.y,p3.x,p3.y],[p2.x,p2.y,p3.x,p3.y]].forEach(a=>
-      svg.append('line').attr('x1',a[0]).attr('y1',a[1]).attr('x2',a[2]).attr('y2',a[3]).attr('stroke','#dce8ff').attr('stroke-width',2)
-    );
-    svg.append('text').attr('x',cx+14).attr('y',cy-14).attr('fill','#ffc857').attr('font-size','13px').attr('font-weight',700).text('2θ');
-    svg.append('text').attr('x',p3.x+14).attr('y',p3.y).attr('fill','#67e8f9').attr('font-size','13px').attr('font-weight',700).text('θ');
-  }
-  else {
-    svgTitle(svg, w, 'Circles · Parts and Properties');
-    svg.append('text').attr('x',cx+r+18).attr('y',cy).attr('fill','#67e8f9').attr('font-size','13px').attr('font-weight',700).text('Radius');
-    svg.append('line').attr('x1',cx).attr('y1',cy).attr('x2',cx+r).attr('y2',cy).attr('stroke','#ffc857').attr('stroke-width',2.5);
-    svg.append('line').attr('x1',cx-r).attr('y1',cy).attr('x2',cx+r).attr('y2',cy).attr('stroke','#ff89c6').attr('stroke-width',2).attr('stroke-dasharray','6 4');
-    svg.append('text').attr('x',cx).attr('y',cy+20).attr('text-anchor','middle').attr('fill','#ff89c6').attr('font-size','12px').attr('font-weight',700).text('Diameter = 2r');
-  }
-}
-
-/* ── Ch 11: Constructions ── */
-function drawConstructions(svg, w, h, scene = 'perpendicular_bisector') {
-  const cx=w/2, cy=h/2;
-  if (scene === 'angle_bisector') {
-    svgTitle(svg, w, 'Constructions · Angle Bisector');
-    const V={x:260,y:h-150}, A={x:560,y:h-150}, B={x:420,y:180};
-    svg.append('line').attr('x1',V.x).attr('y1',V.y).attr('x2',A.x).attr('y2',A.y).attr('stroke','#dfe7f3').attr('stroke-width',4);
-    svg.append('line').attr('x1',V.x).attr('y1',V.y).attr('x2',B.x).attr('y2',B.y).attr('stroke','#67e8f9').attr('stroke-width',4);
-    svg.append('path').attr('d',d3.arc()({innerRadius:0,outerRadius:95,startAngle:-1.05,endAngle:0}))
-      .attr('transform',`translate(${V.x},${V.y})`).attr('fill','rgba(255,200,87,.16)');
-    svg.append('line').attr('x1',V.x).attr('y1',V.y).attr('x2',385).attr('y2',280).attr('stroke','#ffc857').attr('stroke-width',3).attr('stroke-dasharray','6 4');
-    svg.append('text').attr('x',400).attr('y',290).attr('fill','#ffc857').attr('font-size','14px').attr('font-weight',700).text('bisector');
-  } else if (scene === 'angle60') {
-    svgTitle(svg, w, 'Constructions · 60° Angle');
-    const A={x:250,y:h-170}, B={x:520,y:h-170}, C={x:385,y:220};
-    svg.append('polygon').attr('points',`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`).attr('fill','rgba(121,242,179,.08)').attr('stroke','#79f2b3').attr('stroke-width',3);
-    svg.append('text').attr('x',A.x+30).attr('y',A.y-18).attr('fill','#ffc857').attr('font-size','14px').attr('font-weight',700).text('60°');
-    [A,B,C].forEach((p,i)=>svg.append('circle').attr('cx',p.x).attr('cy',p.y).attr('r',8).attr('fill',['#67e8f9','#ffc857','#ff89c6'][i]));
-  } else if (scene === 'angle90') {
-    svgTitle(svg, w, 'Constructions · 90° Angle');
-    svg.append('line').attr('x1',cx-170).attr('y1',cy+90).attr('x2',cx+150).attr('y2',cy+90).attr('stroke','#dfe7f3').attr('stroke-width',4);
-    svg.append('line').attr('x1',cx-60).attr('y1',cy+90).attr('x2',cx-60).attr('y2',cy-170).attr('stroke','#67e8f9').attr('stroke-width',4);
-    svg.append('rect').attr('x',cx-60).attr('y',cy+66).attr('width',24).attr('height',24).attr('fill','none').attr('stroke','#ffc857').attr('stroke-width',2);
-    svg.append('text').attr('x',cx-20).attr('y',cy+78).attr('fill','#ffc857').attr('font-size','14px').attr('font-weight',700).text('90°');
-  } else if (scene === 'triangle_construct') {
-    svgTitle(svg, w, 'Constructions · Constructing a Triangle');
-    const A={x:220,y:h-140}, B={x:560,y:h-140}, C={x:410,y:180};
-    svg.append('polygon').attr('points',`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`).attr('fill','rgba(103,232,249,.06)').attr('stroke','#67e8f9').attr('stroke-width',3);
-    svg.append('text').attr('x',w/2).attr('y',h-80).attr('text-anchor','middle').attr('fill','#95a4c4').attr('font-size','14px').text('Use base, given angles, and compass arcs to locate the third vertex');
-  } else {
-    svgTitle(svg, w, 'Constructions · Perpendicular Bisector');
-    const a={x:w/2-165,y:h/2}, b={x:w/2+165,y:h/2};
-    svg.append('line').attr('x1',a.x).attr('y1',a.y).attr('x2',b.x).attr('y2',b.y).attr('stroke','#dfe7f3').attr('stroke-width',4);
-    [a,b].forEach((p,i)=>svg.append('circle').attr('cx',p.x).attr('cy',p.y).attr('r',10).attr('fill',i?'#ffc857':'#67e8f9'));
-    const arcFn=d3.arc();
-    [a,b].forEach((p,i)=>{
-      svg.append('path').attr('d',arcFn({innerRadius:186,outerRadius:187,startAngle:i===0?-1.15:2.0,endAngle:i===0?1.15:4.3}))
-        .attr('transform',`translate(${p.x},${p.y})`).attr('fill','none').attr('stroke',i?'rgba(255,200,87,.8)':'rgba(103,232,249,.8)').attr('stroke-width',3);
-    });
-    svg.append('line').attr('x1',w/2).attr('y1',h/2-190).attr('x2',w/2).attr('y2',h/2+190).attr('stroke','#79f2b3').attr('stroke-dasharray','7 6').attr('stroke-width',3);
-  }
-}
-
-/* ── Ch 12: Heron's Formula ── */
-function drawHeron(svg, w, h) {
-  svgTitle(svg, w, "Heron's Formula · Area without height");
-  const pts=[[w/2-20,90],[w/2-175,h-110],[w/2+165,h-110]];
-  const pathD=d3.line().curve(d3.curveLinearClosed);
-  const path=svg.append('path').attr('d',pathD(pts)).attr('fill','rgba(255,200,87,.10)').attr('stroke','#ffc857').attr('stroke-width',3.5);
-  pts.forEach((p,i)=>svg.append('circle').attr('cx',p[0]).attr('cy',p[1]).attr('r',8).attr('fill','#67e8f9'));
-  // side labels
-  const sides=[['a=5',pts[0],pts[1]],['b=6',pts[1],pts[2]],['c=7',pts[0],pts[2]]];
-  sides.forEach(([l,p1,p2])=>{
-    const mx=(p1[0]+p2[0])/2, my=(p1[1]+p2[1])/2;
-    svg.append('text').attr('x',mx+(mx>w/2?14:-28)).attr('y',my).attr('fill','#95a4c4').attr('font-size','13px').attr('font-weight',700).text(l);
+  const cx = w/2, cy = h/2 + 20;
+  [90, 130, 170, 210].forEach((r, i) => {
+    circle(svg, cx, cy, r, 'none', ['#9d8cff','#ff89c6','#ffc857','#67e8f9'][i], 2);
   });
-  // formula box
-  const fx=w-290, fy=100;
-  svg.append('rect').attr('x',fx).attr('y',fy).attr('width',240).attr('height',160).attr('rx',18)
-    .attr('fill','rgba(255,255,255,.04)').attr('stroke','rgba(255,255,255,.1)');
-  [['s = (a+b+c)/2',fy+38,'#dce8ff',14],
-   ['s = (5+6+7)/2 = 9',fy+62,'#95a4c4',13],
-   ['Area = √[s(s−a)(s−b)(s−c)]',fy+90,'#dce8ff',13],
-   ['= √[9×4×3×2]',fy+114,'#95a4c4',13],
-   ['= √216 ≈ 14.7 sq units',fy+140,'#ffd68a',15],
-  ].forEach(([t,y,c,fs])=>svg.append('text').attr('x',fx+120).attr('y',y).attr('text-anchor','middle').attr('fill',c).attr('font-size',`${fs}px`).attr('font-weight',fs===15?700:500).text(t));
+  label(svg, cx-10, cy+6, 'N', '#9d8cff', 16, 800);
+  label(svg, cx+32, cy-12, 'Whole', '#79f2b3', 13, 700);
+  label(svg, cx+82, cy-38, 'Integer', '#ff89c6', 13, 700);
+  label(svg, cx+128, cy-64, 'Rational', '#ffc857', 13, 700);
+  label(svg, cx-10, cy-196, 'ℝ Real', '#67e8f9', 13, 700);
+  circle(svg, cx-140, cy-40, 16, 'rgba(255,200,87,.12)', '#ffc857', 2); label(svg, cx-148, cy-36, '√2', '#ffc857', 13, 800);
+  circle(svg, cx-160, cy+4, 14, 'rgba(255,200,87,.10)', '#ffc857', 2); label(svg, cx-166, cy+8, 'π', '#ffc857', 12, 800);
+  circle(svg, cx-122, cy+34, 15, 'rgba(255,200,87,.10)', '#ffc857', 2); label(svg, cx-128, cy+38, '1/3', '#ffc857', 11, 800);
+  note(svg, w, h, 'N ⊂ W ⊂ Z ⊂ Q ⊂ R');
+}
+function drawPolynomials(svg, w, h, mode='overview') {
+  title(svg, w, 'Polynomials · Shapes of Expressions');
+  const x = d3.scaleLinear().domain([-5,5]).range([140,w-140]);
+  const y = d3.scaleLinear().domain([-5,15]).range([h-120,120]);
+  line(svg, 140, y(0), w-140, y(0), '#95a4c4', 2);
+  line(svg, x(0), 120, x(0), h-120, '#95a4c4', 2);
+  const curve = d3.line().x(d=>x(d.x)).y(d=>y(d.y)).curve(d3.curveCatmullRom.alpha(0.5));
+  const pts1 = d3.range(-5,5.1,0.1).map(v=>({x:v,y:0.4*v*v-2}));
+  const pts2 = d3.range(-5,5.1,0.1).map(v=>({x:v,y:0.08*(v+2)*(v-1)*(v-3)}));
+  svg.append('path').attr('d', curve(pts1)).attr('fill','none').attr('stroke','#67e8f9').attr('stroke-width',3);
+  svg.append('path').attr('d', curve(pts2)).attr('fill','none').attr('stroke','#ffc857').attr('stroke-width',3);
+  label(svg, w-210, 160, 'Quadratic', '#67e8f9', 16, 800);
+  label(svg, w-210, 188, 'Cubic', '#ffc857', 16, 800);
+  note(svg, w, h, 'Higher degree polynomials can have more turning points');
 }
 
-/* ── Ch 13: Surface Areas & Volumes ── */
-function drawSurfaces(svg, w, h, scene = 'cylinder') {
-  if (scene === 'cone') {
-    svgTitle(svg, w, 'Cone · CSA = πrl · TSA = πr(l+r)');
-    const cx=w/2, btm=h-80, ht=240, r=100;
-    svg.append('ellipse').attr('cx',cx).attr('cy',btm).attr('rx',r).attr('ry',34)
-      .attr('fill','rgba(255,137,198,.15)').attr('stroke','#ff89c6').attr('stroke-width',3);
-    svg.append('line').attr('x1',cx-r).attr('y1',btm).attr('x2',cx).attr('y2',btm-ht).attr('stroke','#dfe7f3').attr('stroke-width',3);
-    svg.append('line').attr('x1',cx+r).attr('y1',btm).attr('x2',cx).attr('y2',btm-ht).attr('stroke','#dfe7f3').attr('stroke-width',3);
-    const slant=Math.sqrt(r*r+ht*ht);
-    svg.append('line').attr('x1',cx).attr('y1',btm-ht).attr('x2',cx).attr('y2',btm)
-      .attr('stroke','rgba(255,200,87,.7)').attr('stroke-width',2).attr('stroke-dasharray','6 4');
-    svg.append('text').attr('x',cx+12).attr('y',btm-ht/2).attr('fill','#ffc857').attr('font-size','14px').attr('font-weight',700).text('h');
-    svg.append('text').attr('x',cx+r/2+14).attr('y',btm-ht/2+20).attr('fill','#67e8f9').attr('font-size','14px').attr('font-weight',700).text(`l≈${Math.round(slant/10)*10/100}`);
+function drawCoordinateGeometry(svg, w, h, mode='coordinate-plane', text='') {
+  title(svg, w, mode === 'plot-point' ? 'Coordinate Geometry · Plotting a Point'
+    : mode === 'quadrant' ? 'Coordinate Geometry · Quadrants'
+    : 'Coordinate Geometry · Coordinate Plane');
+
+  const left=140, right=w-140, top=130, bottom=h-110;
+  const cx=(left+right)/2, cy=(top+bottom)/2;
+  line(svg,left,cy,right,cy,'#eef4ff',2);
+  line(svg,cx,top,cx,bottom,'#eef4ff',2);
+
+  for(let i=1;i<=5;i++){
+    line(svg,cx+i*55,cy-6,cx+i*55,cy+6,'#95a4c4',2);
+    line(svg,cx-i*55,cy-6,cx-i*55,cy+6,'#95a4c4',2);
+    line(svg,cx-6,cy+i*55,cx+6,cy+i*55,'#95a4c4',2);
+    line(svg,cx-6,cy-i*55,cx+6,cy-i*55,'#95a4c4',2);
+    label(svg,cx+i*55-5,cy+28,String(i),'#95a4c4',13,700);
+    label(svg,cx-i*55-8,cy+28,String(-i),'#95a4c4',13,700);
+    label(svg,cx+14,cy-i*55+4,String(i),'#95a4c4',13,700);
+    label(svg,cx+14,cy+i*55+4,String(-i),'#95a4c4',13,700);
   }
-  else if (scene === 'sphere') {
-    svgTitle(svg, w, 'Sphere · SA = 4πr² · V = (4/3)πr³');
-    const cx=w/2, cy=h/2;
-    svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',0).attr('fill','rgba(157,140,255,.12)')
-      .attr('stroke','#9d8cff').attr('stroke-width',3.5).transition().duration(700).attr('r',150);
-    svg.append('ellipse').attr('cx',cx).attr('cy',cy).attr('rx',150).attr('ry',42)
-      .attr('fill','none').attr('stroke','rgba(157,140,255,.4)').attr('stroke-width',2).attr('stroke-dasharray','6 4');
-    svg.append('line').attr('x1',cx).attr('y1',cy).attr('x2',cx+150).attr('y2',cy).attr('stroke','#ffc857').attr('stroke-width',2.5);
-    svg.append('text').attr('x',cx+80).attr('y',cy-12).attr('fill','#ffc857').attr('font-size','14px').attr('font-weight',700).text('r');
+
+  if (mode === 'quadrant') {
+    label(svg,cx+90,cy-90,'Quadrant I','#79f2b3',18,800);
+    label(svg,cx-180,cy-90,'Quadrant II','#ffc857',18,800);
+    label(svg,cx-180,cy+110,'Quadrant III','#ff89c6',18,800);
+    label(svg,cx+90,cy+110,'Quadrant IV','#67e8f9',18,800);
+    note(svg,w,h,'Signs of coordinates: (+,+), (-,+), (-,-), (+,-)');
+    return;
   }
-  else if (scene === 'cuboid') {
-    svgTitle(svg, w, 'Cuboid · SA = 2(lb + bh + lh)');
-    const x0=w/2-120,y0=h/2-80,W=200,H=140,D=70;
-    [[x0,y0,x0+W,y0,x0+W,y0+H,x0,y0+H],[x0+D,y0-D,x0+W+D,y0-D,x0+W,y0,x0,y0],
-     [x0+W,y0,x0+W+D,y0-D,x0+W+D,y0-D+H,x0+W,y0+H]].forEach((pts,i)=>{
-      const path=`M${pts[0]},${pts[1]}L${pts[2]},${pts[3]}L${pts[4]},${pts[5]}L${pts[6]},${pts[7]}Z`;
-      svg.append('path').attr('d',path).attr('fill',`rgba(103,232,249,${0.04+i*0.03})`).attr('stroke','#67e8f9').attr('stroke-width',2);
+
+  if (mode === 'plot-point') {
+    let px=3, py=2;
+    const m = text.match(/(-?\d+)\s*,\s*(-?\d+)/);
+    if (m) { px = Number(m[1]); py = Number(m[2]); }
+    const X = cx + px*55, Y = cy - py*55;
+    circle(svg,X,Y,7,'#ffc857');
+    line(svg,X,cy,X,Y,'rgba(255,200,87,.55)',2,'6 6');
+    line(svg,cx,Y,X,Y,'rgba(255,200,87,.55)',2,'6 6');
+    label(svg,X+12,Y-10,`(${px}, ${py})`,'#ffc857',18,800);
+    note(svg,w,h,'The x-coordinate tells left/right; the y-coordinate tells up/down');
+    return;
+  }
+
+  circle(svg,cx+110,cy-110,7,'#67e8f9'); label(svg,cx+124,cy-122,'(2, 2)','#67e8f9',16,800);
+  circle(svg,cx-165,cy-55,7,'#ffc857'); label(svg,cx-224,cy-68,'(-3, 1)','#ffc857',16,800);
+  note(svg,w,h,'Every point is located by an ordered pair (x, y)');
+}
+
+function drawLinearEquations(svg, w, h) {
+  title(svg, w, 'Linear Equations in Two Variables');
+  const x = d3.scaleLinear().domain([-2,8]).range([150,w-140]);
+  const y = d3.scaleLinear().domain([-2,8]).range([h-120,120]);
+  line(svg, 150, y(0), w-140, y(0), '#95a4c4', 2);
+  line(svg, x(0), 120, x(0), h-120, '#95a4c4', 2);
+  line(svg, x(0), y(4), x(4), y(0), '#67e8f9', 4);
+  circle(svg, x(0), y(4), 6, '#67e8f9'); label(svg, x(0)+8, y(4)-8, '(0,4)', '#67e8f9', 15, 800);
+  circle(svg, x(4), y(0), 6, '#67e8f9'); label(svg, x(4)+8, y(0)-8, '(4,0)', '#67e8f9', 15, 800);
+  label(svg, w-260, 160, 'x + y = 4', '#67e8f9', 24, 800);
+  note(svg, w, h, 'A linear equation in two variables is represented by a straight line');
+}
+
+function drawEuclid(svg, w, h, mode='overview', text='') {
+  title(svg, w,
+    mode === 'primitives' ? "Euclid's Geometry · Point, Line, Plane"
+    : mode === 'postulates' ? "Euclid's Geometry · Postulates and Definitions"
+    : mode === 'axioms' ? "Euclid's Geometry · Axioms / Common Notions"
+    : "Euclid's Geometry · Overview"
+  );
+
+  if (mode === 'primitives') {
+    const wantPoint = text.includes('point') && !text.includes('line') && !text.includes('plane');
+    const wantLine  = text.includes('line') && !text.includes('plane') && !text.includes('point');
+    const wantPlane = text.includes('plane') && !text.includes('line') && !text.includes('point');
+
+    if (wantPoint) {
+      circle(svg, w/2, h/2-20, 10, '#79f2b3');
+      label(svg, w/2+18, h/2-18, 'A Point has position but no size', '#79f2b3', 22, 800);
+      note(svg, w, h, 'A point marks an exact location');
+      return;
+    }
+    if (wantLine) {
+      line(svg, 180, h/2, w-180, h/2, '#67e8f9', 5);
+      svg.append('polygon')
+        .attr('points', `${w-180},${h/2} ${w-205},${h/2-12} ${w-205},${h/2+12}`)
+        .attr('fill','#67e8f9');
+      svg.append('polygon')
+        .attr('points', `180,${h/2} 205,${h/2-12} 205,${h/2+12}`)
+        .attr('fill','#67e8f9');
+      label(svg, w/2-55, h/2-28, 'A line extends endlessly in both directions', '#67e8f9', 20, 800);
+      note(svg, w, h, 'A line has length but no thickness');
+      return;
+    }
+    if (wantPlane) {
+      svg.append('polygon')
+        .attr('points', `${w/2-180},${h/2+80} ${w/2+140},${h/2+80} ${w/2+220},${h/2-20} ${w/2-100},${h/2-20}`)
+        .attr('fill','rgba(255,200,87,.12)')
+        .attr('stroke','#ffc857')
+        .attr('stroke-width',2);
+      label(svg, w/2-42, h/2+34, 'Plane', '#ffc857', 22, 800);
+      note(svg, w, h, 'A plane is a flat surface extending in all directions');
+      return;
+    }
+
+    circle(svg, 220, h/2-10, 9, '#79f2b3'); label(svg, 242, h/2-6, 'Point', '#79f2b3', 18, 800);
+    line(svg, w/2-30, h/2-10, w/2+90, h/2-10, '#67e8f9', 4); label(svg, w/2+106, h/2-6, 'Line', '#67e8f9', 18, 800);
+    svg.append('polygon')
+      .attr('points', `${w-300},${h/2+65} ${w-150},${h/2+65} ${w-110},${h/2+15} ${w-260},${h/2+15}`)
+      .attr('fill','rgba(255,200,87,.12)')
+      .attr('stroke','#ffc857')
+      .attr('stroke-width',2);
+    label(svg, w-240, h/2+48, 'Plane', '#ffc857', 18, 800);
+    note(svg, w, h, 'Euclid builds geometry from definitions, axioms, and postulates.');
+    return;
+  }
+
+  if (mode === 'postulates') {
+    circle(svg, 180, h/2+10, 10, '#79f2b3'); label(svg, 156, h/2-8, 'A', '#79f2b3', 18, 800);
+    circle(svg, w-180, h/2-40, 10, '#ffc857'); label(svg, w-170, h/2-58, 'B', '#ffc857', 18, 800);
+    line(svg, 180, h/2+10, w-180, h/2-40, '#67e8f9', 5);
+    label(svg, 150, h-130, 'Postulate 1: A straight line may be drawn from any point to any point.', '#67e8f9', 15, 700);
+    label(svg, 150, h-100, 'Postulate 2: A line segment can be extended indefinitely.', '#95a4c4', 15, 700);
+    label(svg, 150, h-70, 'Postulate 3: A circle can be drawn with any centre and radius.', '#95a4c4', 15, 700);
+    return;
+  }
+
+  if (mode === 'axioms') {
+    label(svg, 150, 180, 'Axioms / Common Notions', '#ffc857', 26, 800);
+    label(svg, 150, 240, '• Things equal to the same thing are equal to one another', '#eef4ff', 18, 700);
+    label(svg, 150, 285, '• If equals are added to equals, the wholes are equal', '#eef4ff', 18, 700);
+    label(svg, 150, 330, '• The whole is greater than the part', '#eef4ff', 18, 700);
+    label(svg, 150, 375, '• Things which coincide with one another are equal', '#eef4ff', 18, 700);
+    note(svg, w, h, 'Axioms are general truths used in all of mathematics');
+    return;
+  }
+
+  label(svg, w/2-140, h/2, 'Point', '#79f2b3', 22, 800);
+  label(svg, w/2-12, h/2, 'Line', '#67e8f9', 22, 800);
+  label(svg, w/2+140, h/2, 'Plane', '#ffc857', 22, 800);
+  note(svg, w, h, 'Euclid\'s geometry begins with basic objects and simple truths');
+}
+
+function drawLinesAngles(svg, w, h, mode='types-of-angles') {
+  title(svg, w,
+    mode === 'transversal' ? 'Lines & Angles · Parallel Lines and Transversal'
+    : mode === 'angle-pairs' ? 'Lines & Angles · Angle Pairs'
+    : 'Lines & Angles · Types of Angles');
+
+  if (mode === 'transversal') {
+    line(svg, 160, 210, w-160, 210, '#eef4ff', 4);
+    line(svg, 160, 380, w-160, 380, '#eef4ff', 4);
+    line(svg, 320, 40, 700, 520, '#67e8f9', 5);
+    label(svg, 470, 205, '//', '#95a4c4', 26, 800);
+    label(svg, 470, 375, '//', '#95a4c4', 26, 800);
+    svg.append('path').attr('d', `M560,210 A70,70 0 0 1 605,175`).attr('fill','rgba(255,200,87,.20)');
+    svg.append('path').attr('d', `M650,380 A70,70 0 0 1 605,345`).attr('fill','rgba(103,232,249,.20)');
+    label(svg, 640, 196, 'Corresponding angles equal', '#ffc857', 15, 800);
+    label(svg, 640, 412, 'Alternate angles equal', '#67e8f9', 15, 800);
+    return;
+  }
+
+  if (mode === 'angle-pairs') {
+    const ox=w/2, oy=h/2;
+    line(svg, ox-180, oy, ox+180, oy, '#eef4ff', 4);
+    line(svg, ox, oy-180, ox, oy+180, '#67e8f9', 4);
+    svg.append('path').attr('d', `M${ox},${oy} A80,80 0 0 1 ${ox+80},${oy}`).attr('fill','rgba(255,200,87,.20)');
+    svg.append('path').attr('d', `M${ox},${oy} A80,80 0 0 0 ${ox},${oy-80}`).attr('fill','rgba(255,137,198,.20)');
+    label(svg, ox+92, oy-10, 'Linear pair', '#ffc857', 18, 800);
+    label(svg, ox+16, oy-92, 'Adjacent angle', '#ff89c6', 18, 800);
+    note(svg, w, h, 'Adjacent angles share a common arm and vertex');
+    return;
+  }
+
+  const baseY = h/2 + 55;
+  const starts = [200, 410, 620, 830];
+  const labelsList = [
+    ['Acute < 90°','#79f2b3'],
+    ['Right = 90°','#67e8f9'],
+    ['Obtuse > 90°','#ffc857'],
+    ['Straight = 180°','#ff89c6'],
+  ];
+  starts.forEach((sx, i) => {
+    const color = labelsList[i][1];
+    circle(svg, sx, baseY, 6, color);
+    if (i===0) { line(svg, sx, baseY, sx+70, baseY, color,4); line(svg, sx, baseY, sx-50, baseY-50, color,4); }
+    if (i===1) { line(svg, sx, baseY, sx+70, baseY, color,4); line(svg, sx, baseY, sx, baseY-70, color,4); }
+    if (i===2) { line(svg, sx, baseY, sx+70, baseY, color,4); line(svg, sx, baseY, sx+50, baseY-50, color,4); }
+    if (i===3) { line(svg, sx, baseY, sx+70, baseY, color,4); line(svg, sx, baseY, sx-70, baseY, color,4); }
+    label(svg, sx-42, baseY+52, labelsList[i][0], color, 16, 800);
+  });
+}
+function drawTriangles(svg, w, h, mode='overview') {
+  title(svg, w,
+    mode === 'pythagoras' ? 'Triangles · Pythagoras Theorem'
+    : mode === 'congruence' ? 'Triangles · Congruence'
+    : mode === 'similarity' ? 'Triangles · Similarity'
+    : mode === 'centres' ? 'Triangles · Medians / Altitudes / Bisectors'
+    : 'Triangles · Basics');
+
+  if (mode === 'pythagoras') {
+    const A=[280,390], B=[280,190], C=[560,390];
+    line(svg,A[0],A[1],B[0],B[1],'#67e8f9',5);
+    line(svg,A[0],A[1],C[0],C[1],'#ffc857',5);
+    line(svg,B[0],B[1],C[0],C[1],'#ff89c6',5);
+    svg.append('rect').attr('x',280).attr('y',372).attr('width',18).attr('height',18).attr('fill','rgba(255,255,255,.06)').attr('stroke','#eef4ff');
+    label(svg,250,298,'a','#67e8f9',20,800);
+    label(svg,412,420,'b','#ffc857',20,800);
+    label(svg,430,278,'c','#ff89c6',20,800);
+    label(svg,690,250,'c² = a² + b²','#eef4ff',28,800);
+    note(svg,w,h,'In a right triangle, the square on the hypotenuse equals the sum of the squares on the other two sides');
+    return;
+  }
+
+  if (mode === 'congruence') {
+    const leftX=230, rightX=620, baseY=380;
+    const t1=[[leftX,baseY],[leftX+90,180],[leftX+200,baseY]];
+    const t2=[[rightX,baseY],[rightX+90,180],[rightX+200,baseY]];
+    [t1,t2].forEach((pts, idx)=>{
+      line(svg,pts[0][0],pts[0][1],pts[1][0],pts[1][1], idx? '#ffc857':'#67e8f9',5);
+      line(svg,pts[1][0],pts[1][1],pts[2][0],pts[2][1], idx? '#ffc857':'#67e8f9',5);
+      line(svg,pts[2][0],pts[2][1],pts[0][0],pts[0][1], idx? '#ffc857':'#67e8f9',5);
     });
+    label(svg, w/2-34, 250, 'SSS / SAS / ASA / RHS', '#eef4ff', 24, 800);
+    note(svg,w,h,'Congruent triangles have exactly the same shape and size');
+    return;
   }
-  else { // cylinder default
-    svgTitle(svg, w, 'Cylinder · CSA = 2πrh · TSA = 2πr(h+r)');
-    const cx=w/2, top=100, ht=220, r=100;
-    svg.append('ellipse').attr('cx',cx).attr('cy',top).attr('rx',r).attr('ry',34).attr('fill','rgba(103,232,249,.18)').attr('stroke','#67e8f9').attr('stroke-width',3);
-    svg.append('rect').attr('x',cx-r).attr('y',top).attr('width',r*2).attr('height',ht).attr('fill','rgba(121,242,179,.10)').attr('stroke','#dfe7f3').attr('stroke-width',2.5);
-    svg.append('ellipse').attr('cx',cx).attr('cy',top+ht).attr('rx',r).attr('ry',34).attr('fill','rgba(103,232,249,.10)').attr('stroke','#67e8f9').attr('stroke-width',3);
-    svg.append('line').attr('x1',cx).attr('y1',top).attr('x2',cx).attr('y2',top+ht).attr('stroke','rgba(255,200,87,.7)').attr('stroke-dasharray','6 4').attr('stroke-width',2);
-    svg.append('text').attr('x',cx+12).attr('y',top+ht/2).attr('fill','#ffc857').attr('font-size','14px').attr('font-weight',700).text('h');
-    svg.append('line').attr('x1',cx).attr('y1',top).attr('x2',cx+r).attr('y2',top).attr('stroke','#ff89c6').attr('stroke-width',2.5);
-    svg.append('text').attr('x',cx+r/2).attr('y',top-12).attr('text-anchor','middle').attr('fill','#ff89c6').attr('font-size','14px').attr('font-weight',700).text('r');
+
+  if (mode === 'similarity') {
+    const t1=[[260,400],[350,200],[520,400]];
+    const t2=[[650,400],[720,260],[840,400]];
+    line(svg,t1[0][0],t1[0][1],t1[1][0],t1[1][1],'#67e8f9',5);
+    line(svg,t1[1][0],t1[1][1],t1[2][0],t1[2][1],'#67e8f9',5);
+    line(svg,t1[2][0],t1[2][1],t1[0][0],t1[0][1],'#67e8f9',5);
+    line(svg,t2[0][0],t2[0][1],t2[1][0],t2[1][1],'#ffc857',5);
+    line(svg,t2[1][0],t2[1][1],t2[2][0],t2[2][1],'#ffc857',5);
+    line(svg,t2[2][0],t2[2][1],t2[0][0],t2[0][1],'#ffc857',5);
+    label(svg, w/2-40, 250, 'Same shape · Different size', '#eef4ff', 24, 800);
+    note(svg,w,h,'In similar triangles, corresponding angles are equal and sides are proportional');
+    return;
   }
+
+  if (mode === 'centres') {
+    const A=[320,410], B=[500,190], C=[710,410];
+    line(svg,A[0],A[1],B[0],B[1],'#67e8f9',5);
+    line(svg,B[0],B[1],C[0],C[1],'#67e8f9',5);
+    line(svg,C[0],C[1],A[0],A[1],'#67e8f9',5);
+    const G=[510,337];
+    line(svg,B[0],B[1],(A[0]+C[0])/2,(A[1]+C[1])/2,'#ffc857',3,'8 6');
+    line(svg,A[0],A[1],(B[0]+C[0])/2,(B[1]+C[1])/2,'#ff89c6',3,'8 6');
+    line(svg,C[0],C[1],(A[0]+B[0])/2,(A[1]+B[1])/2,'#79f2b3',3,'8 6');
+    circle(svg,G[0],G[1],7,'#eef4ff');
+    label(svg,G[0]+10,G[1]-10,'Centroid','#eef4ff',18,800);
+    note(svg,w,h,'Important lines in a triangle meet at special points like centroid, orthocentre, and incentre');
+    return;
+  }
+
+  const A=[300,390], B=[470,200], C=[680,390];
+  line(svg,A[0],A[1],B[0],B[1],'#67e8f9',5);
+  line(svg,B[0],B[1],C[0],C[1],'#67e8f9',5);
+  line(svg,C[0],C[1],A[0],A[1],'#67e8f9',5);
+  label(svg, A[0]-10,A[1]+24,'A','#eef4ff',18,800);
+  label(svg, B[0]-8,B[1]-14,'B','#eef4ff',18,800);
+  label(svg, C[0]+8,C[1]+24,'C','#eef4ff',18,800);
+  note(svg,w,h,'A triangle has 3 sides, 3 angles, and rich geometric properties');
 }
 
-/* ── Ch 14: Statistics ── */
-function drawStatistics(svg, w, h, scene = 'mean') {
-  const vals=[12,18,9,14,21,16,11,19];
-  const mean=vals.reduce((a,b)=>a+b,0)/vals.length;
-
-  if (scene === 'histogram') {
-    svgTitle(svg, w, 'Statistics · Frequency Histogram');
-    const bins=[{range:'0–5',freq:4},{range:'5–10',freq:7},{range:'10–15',freq:12},{range:'15–20',freq:9},{range:'20–25',freq:6}];
-    const x=d3.scaleBand().domain(bins.map(b=>b.range)).range([80,w-60]).padding(.06);
-    const y=d3.scaleLinear().domain([0,15]).range([h-70,70]);
-    svg.append('g').attr('transform',`translate(0,${h-70})`).call(d3.axisBottom(x)).selectAll('text').attr('fill','#95a4c4').attr('font-size','11px');
-    svg.append('g').attr('transform','translate(80,0)').call(d3.axisLeft(y).ticks(5)).selectAll('text').attr('fill','#95a4c4');
-    svg.selectAll('.hbar').data(bins).join('rect')
-      .attr('x',d=>x(d.range)).attr('y',h-70).attr('width',x.bandwidth()).attr('height',0)
-      .attr('rx',6).attr('fill','rgba(103,232,249,.82)')
-      .transition().delay((_,i)=>i*100).duration(500).attr('y',d=>y(d.freq)).attr('height',d=>y(0)-y(d.freq));
+function drawQuadrilaterals(svg, w, h, mode='types') {
+  title(svg, w, mode === 'angle-sum' ? 'Quadrilaterals · Angle Sum'
+    : 'Quadrilaterals · Types');
+  if (mode === 'angle-sum') {
+    const pts=[[300,220],[640,220],[720,400],[220,400]];
+    line(svg,...pts[0],...pts[1],'#67e8f9',4); line(svg,...pts[1],...pts[2],'#67e8f9',4);
+    line(svg,...pts[2],...pts[3],'#67e8f9',4); line(svg,...pts[3],...pts[0],'#67e8f9',4);
+    line(svg,...pts[0],...pts[2],'#ffc857',3,'8 6');
+    label(svg, 720, 140, '∠A + ∠B + ∠C + ∠D = 360°', '#eef4ff', 26, 800);
+    note(svg,w,h,'A quadrilateral can be split into two triangles');
+    return;
   }
-  else if (scene === 'median') {
-    svgTitle(svg, w, 'Statistics · Mean, Median, Mode');
-    const sorted=[...vals].sort((a,b)=>a-b);
-    const x=d3.scaleBand().domain(sorted.map((_,i)=>i)).range([80,w-60]).padding(.1);
-    const y=d3.scaleLinear().domain([0,24]).range([h-80,80]);
-    svg.append('g').attr('transform',`translate(0,${h-80})`).call(d3.axisBottom(x).tickFormat((_,i)=>sorted[i])).selectAll('text').attr('fill','#95a4c4');
-    svg.append('g').attr('transform','translate(80,0)').call(d3.axisLeft(y).ticks(5)).selectAll('text').attr('fill','#95a4c4');
-    const midIdx=[3,4]; // median between index 3 and 4 for 8 values
-    svg.selectAll('.sbar').data(sorted).join('rect')
-      .attr('x',(_,i)=>x(i)).attr('y',d=>y(d)).attr('width',x.bandwidth()).attr('height',d=>y(0)-y(d)).attr('rx',8)
-      .attr('fill',(_,i)=>midIdx.includes(i)?'#ffc857':'rgba(103,232,249,.7)').attr('opacity',0)
-      .transition().delay((_,i)=>i*80).duration(400).attr('opacity',1);
-    const med=(sorted[3]+sorted[4])/2;
-    svg.append('text').attr('x',w/2).attr('y',h-25).attr('text-anchor','middle')
-      .attr('fill','#ffc857').attr('font-size','13px').attr('font-weight',700).text(`Median = (${sorted[3]}+${sorted[4]})/2 = ${med}`);
-  }
-  else { // mean bars
-    svgTitle(svg, w, 'Statistics · Bar Graph and Mean');
-    const x=d3.scaleBand().domain(d3.range(vals.length)).range([80,w-60]).padding(.18);
-    const y=d3.scaleLinear().domain([0,24]).range([h-70,70]);
-    svg.append('g').attr('transform',`translate(0,${h-70})`).call(d3.axisBottom(x).tickFormat(i=>`S${+i+1}`)).selectAll('text').attr('fill','#95a4c4');
-    svg.append('g').attr('transform','translate(80,0)').call(d3.axisLeft(y).ticks(5)).selectAll('text').attr('fill','#95a4c4');
-    svg.selectAll('.bar').data(vals).join('rect')
-      .attr('x',(_,i)=>x(i)).attr('y',h-70).attr('width',x.bandwidth()).attr('height',0).attr('rx',9)
-      .attr('fill','rgba(103,232,249,.86)')
-      .transition().delay((_,i)=>i*80).duration(500).attr('y',d=>y(d)).attr('height',d=>y(0)-y(d));
-    const meanLine=svg.append('line').attr('x1',80).attr('x2',80).attr('y1',y(mean)).attr('y2',y(mean))
-      .attr('stroke','#ffc857').attr('stroke-dasharray','8 5').attr('stroke-width',2.5);
-    meanLine.transition().delay(800).duration(500).attr('x2',w-60);
-    svg.append('text').attr('x',w-54).attr('y',y(mean)-8).attr('fill','#ffc857').attr('font-size','12px').attr('font-weight',700).text(`Mean=${mean.toFixed(1)}`);
-  }
+  const cards = [
+    ['Rectangle','#67e8f9'],['Square','#ffc857'],['Rhombus','#ff89c6'],['Parallelogram','#79f2b3']
+  ];
+  cards.forEach((c,i)=>{
+    const x=170+i*220,y=250;
+    svg.append('rect').attr('x',x).attr('y',y).attr('width',120).attr('height',80).attr('rx',8)
+      .attr('fill','none').attr('stroke',c[1]).attr('stroke-width',4);
+    if (i===1) svg.selectAll(null);
+    if (i===2) {
+      svg.append('polygon').attr('points',`${x+60},${y-10} ${x+115},${y+40} ${x+60},${y+90} ${x+5},${y+40}`)
+        .attr('fill','none').attr('stroke',c[1]).attr('stroke-width',4);
+    }
+    if (i===3) {
+      svg.append('polygon').attr('points',`${x+20},${y} ${x+120},${y} ${x+100},${y+80} ${x},${y+80}`)
+        .attr('fill','none').attr('stroke',c[1]).attr('stroke-width',4);
+    }
+    label(svg,x-4,y+120,c[0],c[1],18,800);
+  });
+  note(svg,w,h,'Different quadrilaterals are classified by sides, angles, and diagonals');
 }
 
-/* ── Ch 15: Probability ── */
-function drawProbability(svg, w, h, scene = 'spinner') {
-  if (scene === 'tree') {
-    svgTitle(svg, w, 'Probability · Sample Space (Coin Toss)');
-    const root={x:120,y:h/2};
-    const branches=[{y:h/2-110,label:'H',prob:'1/2',col:'#67e8f9'},{y:h/2+110,label:'T',prob:'1/2',col:'#ffc857'}];
-    const leaves=[[-80,'HH','1/4','#79f2b3'],[0,'HT','1/4','#9d8cff'],[0,'TH','1/4','#9d8cff'],[80,'TT','1/4','#ff89c6']];
-    branches.forEach((b,bi)=>{
-      svg.append('line').attr('x1',root.x).attr('y1',root.y).attr('x2',root.x+160).attr('y2',b.y)
-        .attr('stroke',b.col).attr('stroke-width',2.5);
-      svg.append('circle').attr('cx',root.x+160).attr('cy',b.y).attr('r',20).attr('fill',b.col.replace('#','rgba(').replace(/$/,', 0.2)'));
-      svg.append('text').attr('x',root.x+160).attr('y',b.y+5).attr('text-anchor','middle').attr('fill',b.col).attr('font-size','15px').attr('font-weight',800).text(b.label);
-      svg.append('text').attr('x',root.x+80).attr('y',b.y+(bi===0?-10:18)).attr('text-anchor','middle').attr('fill',b.col).attr('font-size','12px').text(b.prob);
-      // second level
-      const lPair=bi===0?leaves.slice(0,2):leaves.slice(2,4);
-      lPair.forEach(([dy,lbl,prob,col])=>{
-        const ly=b.y+dy/2;
-        svg.append('line').attr('x1',root.x+160).attr('y1',b.y).attr('x2',root.x+330).attr('y2',ly)
-          .attr('stroke',col).attr('stroke-width',1.8);
-        svg.append('text').attr('x',root.x+330+14).attr('y',ly+5).attr('fill',col).attr('font-size','14px').attr('font-weight',700).text(lbl);
-        svg.append('text').attr('x',root.x+330+55).attr('y',ly+5).attr('fill','#95a4c4').attr('font-size','12px').text(prob);
-      });
+function drawAreas(svg, w, h, mode='overview') {
+  title(svg, w,
+    mode === 'area-parallelogram' ? 'Areas · Parallelogram'
+    : mode === 'area-triangle' ? 'Areas · Triangle'
+    : mode === 'same-base-same-parallels' ? 'Areas · Same Base and Same Parallels'
+    : 'Areas · Parallelograms and Triangles');
+
+  if (mode === 'area-parallelogram') {
+    svg.append('polygon')
+      .attr('points', `280,360 560,360 650,220 370,220`)
+      .attr('fill','rgba(103,232,249,.10)').attr('stroke','#67e8f9').attr('stroke-width',4);
+    line(svg, 370,220,370,360,'#ffc857',3,'6 6');
+    label(svg, 600, 305, 'base', '#67e8f9', 18, 800);
+    label(svg, 382, 300, 'height', '#ffc857', 18, 800);
+    label(svg, 720, 260, 'Area = base × height', '#eef4ff', 28, 800);
+    return;
+  }
+
+  if (mode === 'area-triangle') {
+    const A=[320,380], B=[700,380], C=[520,200];
+    line(svg,A[0],A[1],B[0],B[1],'#67e8f9',5);
+    line(svg,A[0],A[1],C[0],C[1],'#67e8f9',5);
+    line(svg,C[0],C[1],B[0],B[1],'#67e8f9',5);
+    line(svg,C[0],C[1],C[0],B[1],'#ffc857',3,'6 6');
+    label(svg, 475, 410, 'base', '#67e8f9', 18, 800);
+    label(svg, 528, 300, 'height', '#ffc857', 18, 800);
+    label(svg, 710, 260, 'Area = ½ × base × height', '#eef4ff', 28, 800);
+    return;
+  }
+
+  if (mode === 'same-base-same-parallels') {
+    svg.append('polygon')
+      .attr('points', `280,370 520,370 600,260 360,260`)
+      .attr('fill','rgba(103,232,249,.08)').attr('stroke','#67e8f9').attr('stroke-width',4);
+    svg.append('polygon')
+      .attr('points', `280,370 520,370 650,190 410,190`)
+      .attr('fill','rgba(255,200,87,.08)').attr('stroke','#ffc857').attr('stroke-width',4);
+    label(svg, 680, 250, 'Same base and between same parallels', '#eef4ff', 24, 800);
+    note(svg,w,h,'Parallelograms on the same base and between the same parallels have equal area');
+    return;
+  }
+
+  svg.append('polygon')
+    .attr('points', `250,370 490,370 570,250 330,250`)
+    .attr('fill','rgba(103,232,249,.08)').attr('stroke','#67e8f9').attr('stroke-width',4);
+  svg.append('polygon')
+    .attr('points', `670,370 830,370 750,220`)
+    .attr('fill','rgba(255,200,87,.08)').attr('stroke','#ffc857').attr('stroke-width',4);
+  label(svg, 320, 210, 'Parallelogram', '#67e8f9', 20, 800);
+  label(svg, 700, 210, 'Triangle', '#ffc857', 20, 800);
+  note(svg,w,h,'Area depends on the shape, base, and perpendicular height');
+}
+
+function drawCircles(svg, w, h, mode='circle-parts') {
+  title(svg, w,
+    mode === 'angle-at-centre' ? 'Circles · Angle at Centre'
+    : mode === 'equal-chords' ? 'Circles · Equal Chords'
+    : 'Circles · Parts of a Circle');
+
+  const cx=w/2, cy=h/2+20, r=170;
+  circle(svg,cx,cy,r,'none','#67e8f9',4);
+
+  if (mode === 'angle-at-centre') {
+    line(svg,cx,cy,cx+r*Math.cos(-1.1),cy+r*Math.sin(-1.1),'#ffc857',4);
+    line(svg,cx,cy,cx+r*Math.cos(0.6),cy+r*Math.sin(0.6),'#ffc857',4);
+    svg.append('path').attr('d',`M${cx+45},${cy} A45,45 0 0 1 ${cx+24},${cy-38}`)
+      .attr('fill','rgba(255,200,87,.18)');
+    label(svg,cx+62,cy-18,'∠ at centre','#ffc857',18,800);
+    note(svg,w,h,'The angle subtended by an arc at the centre is double the angle at the circumference');
+    return;
+  }
+
+  if (mode === 'equal-chords') {
+    line(svg,cx-110,cy-60,cx+110,cy-60,'#ffc857',4);
+    line(svg,cx-110,cy+60,cx+110,cy+60,'#ff89c6',4);
+    line(svg,cx,cy,cx,cy-60,'rgba(255,255,255,.5)',2,'6 6');
+    line(svg,cx,cy,cx,cy+60,'rgba(255,255,255,.5)',2,'6 6');
+    label(svg,cx+130,cy-55,'Equal chords','#eef4ff',22,800);
+    note(svg,w,h,'Equal chords are equidistant from the centre');
+    return;
+  }
+
+  circle(svg,cx,cy,6,'#eef4ff');
+  label(svg,cx+10,cy-10,'O', '#eef4ff', 18, 800);
+  line(svg,cx,cy,cx+r,cy,'#ffc857',4); label(svg,cx+82,cy-10,'Radius','#ffc857',18,800);
+  line(svg,cx-r,cy,cx+r,cy,'#ff89c6',3); label(svg,cx-35,cy+26,'Diameter','#ff89c6',18,800);
+  line(svg,cx-120,cy-95,cx+80,cy-30,'#79f2b3',4); label(svg,cx+96,cy-28,'Chord','#79f2b3',18,800);
+  note(svg,w,h,'Radius, diameter, chord, arc, and centre are basic parts of a circle');
+function drawConstructions(svg, w, h, mode='overview') {
+  title(svg, w,
+    mode === 'perpendicular-bisector' ? 'Constructions · Perpendicular Bisector'
+    : mode === 'angle-bisector' ? 'Constructions · Angle Bisector'
+    : mode === 'construction-60-degree' ? 'Constructions · 60° Angle'
+    : mode === 'construction-90-degree' ? 'Constructions · 90° Angle'
+    : 'Constructions · Overview');
+
+  if (mode === 'perpendicular-bisector') {
+    const A=[320,320], B=[640,320], M=[480,320];
+    line(svg,A[0],A[1],B[0],B[1],'#eef4ff',4);
+    circle(svg,A[0],A[1],9,'#67e8f9'); circle(svg,B[0],B[1],9,'#ffc857');
+    svg.append('path').attr('d',`M${A[0]},${A[1]} A180,180 0 0 1 ${M[0]},${A[1]-140}`)
+      .attr('fill','none').attr('stroke','#67e8f9').attr('stroke-width',4);
+    svg.append('path').attr('d',`M${B[0]},${B[1]} A180,180 0 0 0 ${M[0]},${B[1]-140}`)
+      .attr('fill','none').attr('stroke','#ffc857').attr('stroke-width',4);
+    line(svg,M[0],140,M[0],460,'#79f2b3',3,'8 6');
+    label(svg,M[0]+16,188,'Perpendicular bisector','#79f2b3',18,800);
+    return;
+  }
+
+  if (mode === 'angle-bisector') {
+    const O=[350,360];
+    line(svg,O[0],O[1],650,360,'#67e8f9',4);
+    line(svg,O[0],O[1],520,180,'#ffc857',4);
+    line(svg,O[0],O[1],540,265,'#ff89c6',3,'8 6');
+    svg.append('path').attr('d',`M${O[0]+60},${O[1]} A60,60 0 0 0 ${O[0]+45},${O[1]-40}`)
+      .attr('fill','rgba(255,200,87,.18)');
+    svg.append('path').attr('d',`M${O[0]+45},${O[1]-40} A45,45 0 0 0 ${O[0]+40},${O[1]-10}`)
+      .attr('fill','rgba(255,137,198,.18)');
+    label(svg,570,250,'Bisector splits the angle equally','#ff89c6',18,800);
+    return;
+  }
+
+  if (mode === 'construction-60-degree') {
+    const O=[360,360], A=[620,360];
+    line(svg,O[0],O[1],A[0],A[1],'#eef4ff',4);
+    circle(svg,O[0],O[1],9,'#67e8f9'); circle(svg,A[0],A[1],9,'#ffc857');
+    svg.append('circle').attr('cx',O[0]).attr('cy',O[1]).attr('r',260).attr('fill','none').attr('stroke','#67e8f9').attr('stroke-width',3).attr('opacity',.45);
+    svg.append('circle').attr('cx',A[0]).attr('cy',A[1]).attr('r',260).attr('fill','none').attr('stroke','#ffc857').attr('stroke-width',3).attr('opacity',.45);
+    const P=[490,135];
+    line(svg,O[0],O[1],P[0],P[1],'#ff89c6',4);
+    label(svg,520,210,'60°','#ff89c6',24,800);
+    note(svg,w,h,'Use equal-radius arcs to form an equilateral triangle');
+    return;
+  }
+
+  if (mode === 'construction-90-degree') {
+    const O=[360,360];
+    line(svg,O[0],O[1],660,360,'#67e8f9',4);
+    line(svg,O[0],O[1],360,120,'#ffc857',4);
+    svg.append('rect').attr('x',360).attr('y',340).attr('width',20).attr('height',20)
+      .attr('fill','rgba(255,255,255,.05)').attr('stroke','#eef4ff');
+    label(svg,430,245,'90°','#ffc857',24,800);
+    note(svg,w,h,'A right angle is constructed using a perpendicular line');
+    return;
+  }
+
+  label(svg,220,220,'Perpendicular bisector','#67e8f9',20,800);
+  label(svg,220,270,'Angle bisector','#ffc857',20,800);
+  label(svg,220,320,'60° and 90° constructions','#ff89c6',20,800);
+  note(svg,w,h,'Construction scenes change when Diya requests a specific construction');
+}
+
+function drawHeron(svg, w, h) {
+  title(svg, w, "Heron's Formula");
+  const A=[280,390], B=[710,390], C=[510,180];
+  line(svg,A[0],A[1],B[0],B[1],'#67e8f9',5);
+  line(svg,A[0],A[1],C[0],C[1],'#67e8f9',5);
+  line(svg,C[0],C[1],B[0],B[1],'#67e8f9',5);
+  label(svg, 740, 200, 's = (a + b + c) / 2', '#ffc857', 26, 800);
+  label(svg, 640, 250, 'Area = √[ s(s-a)(s-b)(s-c) ]', '#eef4ff', 24, 800);
+  note(svg,w,h,'Use Heron when all three sides are known but height is not directly available');
+}
+
+function drawSurfaceVolume(svg, w, h, mode='overview') {
+  title(svg, w,
+    mode === 'cylinder' ? 'Surface Areas & Volumes · Cylinder'
+    : mode === 'cone' ? 'Surface Areas & Volumes · Cone'
+    : mode === 'sphere' ? 'Surface Areas & Volumes · Sphere'
+    : 'Surface Areas & Volumes');
+
+  if (mode === 'cylinder') {
+    svg.append('ellipse').attr('cx',430).attr('cy',170).attr('rx',90).attr('ry',28)
+      .attr('fill','rgba(103,232,249,.10)').attr('stroke','#67e8f9').attr('stroke-width',4);
+    svg.append('ellipse').attr('cx',430).attr('cy',390).attr('rx',90).attr('ry',28)
+      .attr('fill','rgba(103,232,249,.06)').attr('stroke','#67e8f9').attr('stroke-width',4);
+    line(svg,340,170,340,390,'#67e8f9',4); line(svg,520,170,520,390,'#67e8f9',4);
+    label(svg,610,250,'CSA = 2πrh', '#ffc857', 24, 800);
+    label(svg,610,290,'Volume = πr²h', '#eef4ff', 24, 800);
+    return;
+  }
+
+  if (mode === 'cone') {
+    line(svg,430,140,320,390,'#ffc857',4);
+    line(svg,430,140,540,390,'#ffc857',4);
+    svg.append('ellipse').attr('cx',430).attr('cy',390).attr('rx',110).attr('ry',26)
+      .attr('fill','rgba(255,200,87,.08)').attr('stroke','#ffc857').attr('stroke-width',4);
+    label(svg,610,250,'CSA = πrl', '#ffc857', 24, 800);
+    label(svg,610,290,'Volume = ⅓πr²h', '#eef4ff', 24, 800);
+    return;
+  }
+
+  if (mode === 'sphere') {
+    circle(svg,430,270,130,'rgba(255,137,198,.08)','#ff89c6',4);
+    line(svg,300,270,560,270,'rgba(255,255,255,.35)',2,'6 6');
+    label(svg,610,250,'Surface area = 4πr²', '#ffc857', 24, 800);
+    label(svg,610,290,'Volume = 4/3 πr³', '#eef4ff', 24, 800);
+    return;
+  }
+
+  svg.append('rect').attr('x',220).attr('y',180).attr('width',120).attr('height',170)
+    .attr('fill','none').attr('stroke','#67e8f9').attr('stroke-width',4);
+  svg.append('ellipse').attr('cx',470).attr('cy',200).attr('rx',70).attr('ry',22)
+    .attr('fill','none').attr('stroke','#ffc857').attr('stroke-width',4);
+  svg.append('ellipse').attr('cx',470).attr('cy',350).attr('rx',70).attr('ry',22)
+    .attr('fill','none').attr('stroke','#ffc857').attr('stroke-width',4);
+  line(svg,400,200,400,350,'#ffc857',4); line(svg,540,200,540,350,'#ffc857',4);
+  line(svg,710,160,620,350,'#ff89c6',4); line(svg,710,160,800,350,'#ff89c6',4);
+  svg.append('ellipse').attr('cx',710).attr('cy',350).attr('rx',90).attr('ry',18)
+    .attr('fill','none').attr('stroke','#ff89c6').attr('stroke-width',4);
+  note(svg,w,h,'Compare cuboid, cylinder, cone, and sphere by surface area and volume');
+}
+
+function drawStatistics(svg, w, h, mode='bar-graph') {
+  title(svg, w,
+    mode === 'histogram' ? 'Statistics · Histogram'
+    : mode === 'frequency-table' ? 'Statistics · Frequency Table'
+    : 'Statistics · Bar Graph');
+
+  if (mode === 'frequency-table') {
+    const x=260, y=160, rowH=58, colW=[220,220];
+    ['Class Interval','Frequency'].forEach((t,i)=>{
+      svg.append('rect').attr('x',x + (i?colW[0]:0)).attr('y',y).attr('width',colW[i]).attr('height',rowH)
+        .attr('fill','rgba(255,255,255,.04)').attr('stroke','rgba(255,255,255,.1)');
+      label(svg,x+(i?colW[0]:0)+18,y+36,t,'#eef4ff',18,800);
     });
-    svg.append('circle').attr('cx',root.x).attr('cy',root.y).attr('r',10).attr('fill','#dfe7f3');
-  }
-  else {
-    svgTitle(svg, w, 'Probability · Spinner and Bar Chart');
-    const cx=210, cy=h/2, r=125;
-    const pie=d3.pie().value(1)(['Red','Blue','Green','Yellow']);
-    const arc=d3.arc().innerRadius(0).outerRadius(r);
-    const colors=['#ff8d8d','#67e8f9','#79f2b3','#ffc857'];
-    svg.selectAll('.slice').data(pie).join('path')
-      .attr('transform',`translate(${cx},${cy})`).attr('d',arc)
-      .attr('fill',(_,i)=>colors[i]).attr('opacity',0)
-      .transition().delay((_,i)=>i*120).duration(400).attr('opacity',1);
-    svg.append('line').attr('x1',cx).attr('y1',cy).attr('x2',cx+4).attr('y2',cy-r-22)
-      .attr('stroke','#fff').attr('stroke-width',5).attr('stroke-linecap','round');
-    // bar chart
-    const xb=d3.scaleBand().domain(['R','B','G','Y']).range([400,w-50]).padding(.2);
-    const yb=d3.scaleLinear().domain([0,30]).range([h-70,70]);
-    svg.append('g').attr('transform',`translate(0,${h-70})`).call(d3.axisBottom(xb)).selectAll('text').attr('fill','#95a4c4');
-    svg.append('g').attr('transform','translate(400,0)').call(d3.axisLeft(yb).ticks(5)).selectAll('text').attr('fill','#95a4c4');
-    [28,24,26,22].forEach((v,i)=>{
-      svg.append('rect').attr('x',xb(['R','B','G','Y'][i])).attr('y',h-70).attr('width',xb.bandwidth()).attr('height',0).attr('rx',8)
-        .attr('fill',colors[i]).attr('opacity',0.85)
-        .transition().delay(400+i*100).duration(500).attr('y',yb(v)).attr('height',yb(0)-yb(v));
+    const rows=[['0–10','3'],['10–20','6'],['20–30','9'],['30–40','5']];
+    rows.forEach((r,idx)=>{
+      const yy=y+rowH*(idx+1);
+      svg.append('rect').attr('x',x).attr('y',yy).attr('width',colW[0]).attr('height',rowH)
+        .attr('fill','rgba(103,232,249,.05)').attr('stroke','rgba(255,255,255,.06)');
+      svg.append('rect').attr('x',x+colW[0]).attr('y',yy).attr('width',colW[1]).attr('height',rowH)
+        .attr('fill','rgba(255,200,87,.05)').attr('stroke','rgba(255,255,255,.06)');
+      label(svg,x+18,yy+36,r[0],'#67e8f9',18,800);
+      label(svg,x+colW[0]+18,yy+36,r[1],'#ffc857',18,800);
     });
+    return;
   }
+
+  const left=180, bottom=h-110;
+  line(svg,left,bottom,w-150,bottom,'#95a4c4',2);
+  line(svg,left,120,left,bottom,'#95a4c4',2);
+
+  const values = mode === 'histogram' ? [5,9,7,11,6] : [4,7,10,6,8];
+  values.forEach((v,i)=>{
+    const x=240+i*130, barH=v*25;
+    svg.append('rect')
+      .attr('x',x).attr('y',bottom-barH)
+      .attr('width',mode==='histogram'?110:74).attr('height',barH)
+      .attr('rx',mode==='histogram'?0:12)
+      .attr('fill', i%2 ? 'rgba(255,200,87,.75)' : 'rgba(103,232,249,.75)');
+    label(svg,x+(mode==='histogram'?35:24),bottom+26,String(i+1),'#95a4c4',14,700);
+  });
+  note(svg,w,h, mode==='histogram' ? 'A histogram is used for continuous grouped data' : 'A bar graph compares categories using rectangular bars');
 }
+
+function drawProbability(svg, w, h) {
+  title(svg, w, 'Probability · Favourable Outcomes / Total Outcomes');
+  const cx=420, cy=300, r=130;
+  const pie = d3.pie().value(d=>d.value)([{label:'Favourable',value:3,color:'#67e8f9'},{label:'Unfavourable',value:5,color:'#ffc857'}]);
+  const arc = d3.arc().innerRadius(0).outerRadius(r);
+  const g = svg.append('g').attr('transform',`translate(${cx},${cy})`);
+  g.selectAll('path').data(pie).enter().append('path')
+    .attr('d',arc).attr('fill',d=>d.data.color).attr('opacity',0.85)
+    .each(function(){this._current={startAngle:0,endAngle:0};})
+    .transition().duration(900)
+    .attrTween('d',function(d){
+      const i=d3.interpolate(this._current,d); this._current=i(1); return t=>arc(i(t));
+    });
+  label(svg,650,250,'Probability = favourable / total', '#eef4ff', 28, 800);
+  label(svg,650,300,'Example: P(Head) = 1/2', '#ffc857', 24, 800);
+  note(svg,w,h,'Probability is a number between 0 and 1');
+}
+
+function drawFallback(svg, w, h, chapterName='Maths') {
+  title(svg, w, chapterName + ' · Overview');
+  label(svg, w/2-120, h/2, 'Visual is ready for this chapter', '#67e8f9', 26, 800);
+  note(svg,w,h,'Diya will switch to a more specific scene during explanation');
+}
+}
+function updateModeLabel() {
+  const mode = S.currentState === 1 ? 'Intake · First Session'
+    : S.currentState === 2 ? 'Question · Practice'
+    : `Teaching · Chapter ${S.activeChapterNum}`;
+  document.getElementById('infoMode').textContent = mode;
+}
+
+function replayCurrentScene() {
+  renderD3Scene(
+    S.activeChapterNum,
+    'overview',
+    S.activeChapterName,
+    S.activeChapterName,
+    'overview'
+  );
+}
+
+function qs(id){ return document.getElementById(id); }
+
+/* ===== optional utility if Diya sends manual text updates later ===== */
+function setEquationText(lines = []) {
+  const stage = qs('visualCanvas');
+  const existing = stage.querySelector('.equation-layer');
+  if (existing) existing.remove();
+  if (!Array.isArray(lines) || !lines.length) return;
+
+  const wrap = document.createElement('div');
+  wrap.className = 'equation-layer';
+  wrap.style.position = 'absolute';
+  wrap.style.top = '24px';
+  wrap.style.right = '24px';
+  wrap.style.maxWidth = '320px';
+  wrap.style.padding = '14px 16px';
+  wrap.style.borderRadius = '18px';
+  wrap.style.background = 'rgba(8,13,24,.82)';
+  wrap.style.border = '1px solid rgba(255,255,255,.08)';
+  wrap.style.backdropFilter = 'blur(10px)';
+  wrap.style.boxShadow = '0 16px 30px rgba(0,0,0,.28)';
+  wrap.innerHTML = lines.map(l => `<div style="font-family:'Space Grotesk',sans-serif;font-size:18px;line-height:1.45;color:#eef4ff;margin:4px 0;">${l}</div>`).join('');
+  stage.appendChild(wrap);
+}
+
+/* ===== visual scene helpers for future extension ===== */
+window.KarkaFrontendBridge = {
+  openChapter(chapterName){
+    const ch = CHAPTERS.find(c =>
+      c.name.toLowerCase() === String(chapterName).toLowerCase() ||
+      c.short.toLowerCase() === String(chapterName).toLowerCase()
+    );
+    if (ch) setActiveChapter(ch.num, ch.name, true);
+  },
+  showScene({chapter_num, content_hint, topic, visual_type}){
+    showVisualCanvas();
+    renderD3Scene(
+      chapter_num || S.activeChapterNum,
+      content_hint || 'overview',
+      (CHAPTERS.find(c => c.num === Number(chapter_num || S.activeChapterNum)) || {}).name || S.activeChapterName,
+      topic || '',
+      visual_type || 'overview'
+    );
+  },
+  replayVisual(){
+    replayCurrentScene();
+  },
+  getStudentContext(){
+    return {
+      studentId: S.studentId,
+      studentName: S.studentName,
+      chapter: S.activeChapterName,
+      chapter_num: S.activeChapterNum,
+      quotaRemaining: S.quotaRemaining,
+      mode: S.currentState
+    };
+  }
+};
+
+/* ===== bootstrapping ===== */
+function initializeApp() {
+  updateModeLabel();
+  updateQuota();
+}
+
+window.addEventListener('resize', () => {
+  if (!document.getElementById('appScreen').classList.contains('hidden') && S.currentState !== 1) {
+    clearTimeout(window.__karkaResizeTimer);
+    window.__karkaResizeTimer = setTimeout(() => {
+      renderD3Scene(
+        S.activeChapterNum,
+        'overview',
+        S.activeChapterName,
+        S.activeChapterName,
+        'overview'
+      );
+    }, 180);
+  }
+});
+
+document.addEventListener('DOMContentLoaded', initializeApp);
+
+/* ===== conservative favicon fallback ===== */
+(function ensureFavicon(){
+  const existing = document.querySelector('link[rel="icon"]');
+  if (!existing) {
+    const link = document.createElement('link');
+    link.rel = 'icon';
+    link.href = 'logo_01.jpg';
+    document.head.appendChild(link);
+  }
+})();
+initializeApp();
 </script>
 </body>
 </html>
